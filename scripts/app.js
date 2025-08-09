@@ -250,6 +250,16 @@ function removeEquipmentAdmin() {
 }
 
 /* ---------- Record Filtering & Export ---------- */
+// Escape HTML entities to prevent script injection in dynamic table
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/'/g, '&#39;')
+    .replace(/"/g, '&quot;');
+}
+
 function displayRecords(recArray) {
   const container = document.getElementById('recordsTable');
   if (!recArray.length) {
@@ -258,13 +268,14 @@ function displayRecords(recArray) {
   }
   let html = "<table><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
   recArray.forEach(rec => {
+    // Escape record fields before injecting into the table
     html += `<tr>
-          <td>${rec.timestamp}</td>
-          <td>${rec.badge}</td>
-          <td>${rec.employeeName}</td>
-          <td>${rec.equipmentBarcodes.join('; ')}</td>
-          <td>${rec.equipmentNames.join('; ')}</td>
-          <td>${rec.action}</td>
+          <td>${escapeHtml(rec.timestamp)}</td>
+          <td>${escapeHtml(rec.badge)}</td>
+          <td>${escapeHtml(rec.employeeName)}</td>
+          <td>${escapeHtml(rec.equipmentBarcodes.join('; '))}</td>
+          <td>${escapeHtml(rec.equipmentNames.join('; '))}</td>
+          <td>${escapeHtml(rec.action)}</td>
         </tr>`;
   });
   html += "</table>";
