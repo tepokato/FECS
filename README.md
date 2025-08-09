@@ -56,10 +56,25 @@ localStorage – Used by browser to persist employee/equipment data
 
 CSV Export – Output file on record export
 
+🏁 Getting Started
 
-🧪 Usage
+### Prerequisites
 
-Simply open index.html in a web browser. No installation necessary.
+- Modern desktop browser (Chrome, Firefox, Edge, etc.)
+- Optional: USB or Bluetooth barcode scanner
+
+### Run locally
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/FECS.git
+   cd FECS
+   ```
+2. Open `index.html` directly in your browser or serve the project with a simple local server:
+   ```bash
+   python -m http.server
+   ```
+   Then visit [http://localhost:8000](http://localhost:8000) in your browser.
 
 🧑‍💼 Ideal For
 
