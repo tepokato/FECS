@@ -52,9 +52,7 @@ Dynamic CSV export for records
 
 index.html – Main app UI
 
-localStorage – Used by browser to persist employee/equipment data
-
-CSV Export – Output file on record export
+Data is stored in the browser's `localStorage`, and CSV files are generated at runtime when records are exported.
 
 🏁 Getting Started
 
