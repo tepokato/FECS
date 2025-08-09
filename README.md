@@ -19,19 +19,19 @@ A lightweight, browser-based web application to manage FedEx equipment check-out
 
 📦 How It Works
 
-1. Scan or input an employee badge — displays their name.
+1. Scan or input an employee badge — display the employee’s name.
 
 
-2. Scan multiple equipment items — automatically links to display names.
+2. Scan multiple equipment items — automatically link each to display names.
 
 
-3. Click "Check Out" — logs the entry with timestamp.
+3. Click "Check Out" — log the entry with a timestamp.
 
 
-4. All records are saved in-browser — and can be exported to CSV.
+4. Save all records in-browser — export them to CSV as needed.
 
 
-5. Admins can add/remove employees and equipment as needed.
+5. Add or remove employees and equipment as needed.
 
 
 
