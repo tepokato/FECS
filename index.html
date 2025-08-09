@@ -22,9 +22,9 @@
 
   <!-- Navigation -->
   <nav>
-    <a href="#" onclick="showSection('checkout')">Check-Out</a>
-    <a href="#" onclick="showSection('admin')">Admin</a>
-    <a href="#" onclick="showSection('records')">Records</a>
+    <a href="#" id="navCheckout">Check-Out</a>
+    <a href="#" id="navAdmin">Admin</a>
+    <a href="#" id="navRecords">Records</a>
   </nav>
 
   <!-- Check-Out Section -->
@@ -33,20 +33,20 @@
     <form id="checkoutForm">
       <label for="badge">Employee Badge ID:</label>
       <div class="employeeRow">
-        <input type="text" id="badge" placeholder="Scan Employee Badge" required autofocus oninput="lookupEmployee()">
+        <input type="text" id="badge" placeholder="Scan Employee Badge" required autofocus>
         <span id="employeeName"></span>
       </div>
       <label for="equipment">Equipment Barcodes:</label>
       <div id="equipmentList">
         <div class="equipment-item">
           <div class="equipmentRow">
-            <input type="text" name="equipment" placeholder="Scan Equipment Barcode" required oninput="lookupEquipment(this)">
+            <input type="text" name="equipment" placeholder="Scan Equipment Barcode" required>
             <span class="equipmentNameDisplay"></span>
           </div>
-          <button type="button" class="removeEquipment" onclick="removeEquipmentField(this)" style="display: none;">Remove</button>
+          <button type="button" class="removeEquipment" style="display: none;">Remove</button>
         </div>
       </div>
-      <button type="button" onclick="addEquipmentField()">Add Another Barcode</button>
+      <button type="button" id="addEquipmentBtn">Add Another Barcode</button>
       <label for="action">Action:</label>
       <select id="action" required>
         <option value="">Select Action</option>
@@ -69,8 +69,8 @@
         <label for="empBadge">Employee Badge ID:</label>
         <input type="text" id="empBadge" placeholder="Enter Badge ID" required>
       </div>
-      <button type="button" onclick="addEmployee()">Add Employee</button>
-      <button type="button" onclick="removeEmployee()">Remove Employee</button>
+      <button type="button" id="addEmployeeBtn">Add Employee</button>
+      <button type="button" id="removeEmployeeBtn">Remove Employee</button>
     </form>
     <h3>Current Employees</h3>
     <ul id="employeeList"></ul>
@@ -85,8 +85,8 @@
         <label for="equipSerial">Equipment Serial Number:</label>
         <input type="text" id="equipSerial" placeholder="Enter Equipment Serial" required>
       </div>
-      <button type="button" onclick="addEquipmentAdmin()">Add Equipment</button>
-      <button type="button" onclick="removeEquipmentAdmin()">Remove Equipment</button>
+      <button type="button" id="addEquipmentAdminBtn">Add Equipment</button>
+      <button type="button" id="removeEquipmentAdminBtn">Remove Equipment</button>
     </form>
     <h3>Current Equipment</h3>
     <ul id="equipmentListAdmin"></ul>
@@ -96,17 +96,17 @@
     <h2>Inventory Import/Export</h2>
     <div style="margin-bottom:15px;">
       <h3>Employees</h3>
-      <button type="button" class="btn-inline" onclick="exportEmployeesCSV()">Export Employees to CSV</button>
-      <button type="button" class="btn-inline" onclick="triggerImportEmployees()">Import Employees CSV</button>
+      <button type="button" class="btn-inline" id="exportEmployeesBtn">Export Employees to CSV</button>
+      <button type="button" class="btn-inline" id="importEmployeesBtn">Import Employees CSV</button>
       <!-- Hidden file input for employees -->
-      <input type="file" id="importEmployeesFile" accept=".csv" style="display:none;" onchange="handleImportEmployees(this)">
+      <input type="file" id="importEmployeesFile" accept=".csv" style="display:none;">
     </div>
     <div style="margin-bottom:15px;">
       <h3>Equipment</h3>
-      <button type="button" class="btn-inline" onclick="exportEquipmentCSV()">Export Equipment to CSV</button>
-      <button type="button" class="btn-inline" onclick="triggerImportEquipment()">Import Equipment CSV</button>
+      <button type="button" class="btn-inline" id="exportEquipmentBtn">Export Equipment to CSV</button>
+      <button type="button" class="btn-inline" id="importEquipmentBtn">Import Equipment CSV</button>
       <!-- Hidden file input for equipment -->
-      <input type="file" id="importEquipmentFile" accept=".csv" style="display:none;" onchange="handleImportEquipment(this)">
+      <input type="file" id="importEquipmentFile" accept=".csv" style="display:none;">
     </div>
   </section>
 
@@ -118,436 +118,15 @@
         <input type="text" id="recordSearch" placeholder="Search by name or badge">
         <input type="text" id="recordEquipment" placeholder="Search by equipment name or serial">
         <input type="date" id="recordDate">
-        <button type="button" onclick="filterRecords()">Search/Filter</button>
-        <button type="button" onclick="clearFilters()">Clear Filters</button>
+        <button type="button" id="filterRecordsBtn">Search/Filter</button>
+        <button type="button" id="clearFiltersBtn">Clear Filters</button>
       </form>
-      <button type="button" onclick="exportRecordsCSV()">Export Records to CSV</button>
+      <button type="button" id="exportRecordsBtn">Export Records to CSV</button>
       <div id="recordsTable"></div>
     </div>
   </section>
 
   <!-- JavaScript -->
-  <script>
-    /* ---------- Initialization ---------- */
-    let employees = JSON.parse(localStorage.getItem('employees')) || {};
-    let equipmentItems = JSON.parse(localStorage.getItem('equipmentItems')) || {};
-    let records = JSON.parse(localStorage.getItem('records')) || [];
-
-    function saveToStorage(key, data) {
-      localStorage.setItem(key, JSON.stringify(data));
-    }
-
-    /* ---------- Notification System ---------- */
-    function updateNotifications() {
-      const notificationDiv = document.getElementById('notifications');
-      const status = {};
-      records.forEach(rec => {
-        rec.equipmentBarcodes.forEach(code => {
-          if (!status[code]) status[code] = 0;
-          if (rec.action === "Check-Out") {
-            status[code]++;
-          } else if (rec.action === "Check-In") {
-            status[code]--;
-          }
-        });
-      });
-      const overdue = [];
-      for (let code in status) {
-        if (status[code] > 0) {
-          const name = equipmentItems[code] || "Unknown Equipment";
-          overdue.push(`${code} (${name})`);
-        }
-      }
-      if (overdue.length > 0) {
-        notificationDiv.style.display = "block";
-        notificationDiv.textContent = "Overdue Equipment: " + overdue.join(", ");
-      } else {
-        notificationDiv.style.display = "none";
-      }
-    }
-    updateNotifications();
-
-    /* ---------- Navigation ---------- */
-    function showSection(section) {
-      document.querySelectorAll('.section').forEach(el => el.classList.add('hidden'));
-      document.getElementById(section).classList.remove('hidden');
-      if (section === 'admin') {
-        displayEmployeeList();
-        displayEquipmentListAdmin();
-      }
-      if (section === 'records') {
-        displayRecords(records);
-      }
-    }
-
-    /* ---------- Check-Out Functions ---------- */
-    function addEquipmentField() {
-      const equipmentList = document.getElementById('equipmentList');
-      const container = document.createElement('div');
-      container.className = 'equipment-item';
-      
-      const rowDiv = document.createElement('div');
-      rowDiv.className = 'equipmentRow';
-      
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.name = 'equipment';
-      input.placeholder = 'Scan Equipment Barcode';
-      input.required = true;
-      input.setAttribute('oninput', 'lookupEquipment(this)');
-      
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'equipmentNameDisplay';
-      
-      rowDiv.appendChild(input);
-      rowDiv.appendChild(nameSpan);
-      
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.className = 'removeEquipment';
-      removeBtn.textContent = 'Remove';
-      removeBtn.onclick = () => removeEquipmentField(removeBtn);
-      
-      container.appendChild(rowDiv);
-      container.appendChild(removeBtn);
-      equipmentList.appendChild(container);
-      updateRemoveButtons();
-    }
-
-    function removeEquipmentField(button) {
-      const equipmentList = document.getElementById('equipmentList');
-      if (equipmentList.children.length > 1) {
-        button.parentElement.remove();
-      }
-      updateRemoveButtons();
-    }
-
-    function updateRemoveButtons() {
-      const items = document.querySelectorAll('#equipmentList .equipment-item');
-      items.forEach(item => {
-        const btn = item.querySelector('.removeEquipment');
-        btn.style.display = (items.length > 1) ? 'block' : 'none';
-      });
-    }
-
-    function lookupEmployee() {
-      const badge = document.getElementById('badge').value.trim();
-      const employeeNameSpan = document.getElementById('employeeName');
-      if (employees[badge]) {
-        employeeNameSpan.textContent = employees[badge];
-        // Auto-focus first available equipment input that is not disabled
-        const equipmentInput = document.querySelector('input[name="equipment"]:not([disabled])');
-        if (equipmentInput) {
-          equipmentInput.focus();
-        }
-      } else {
-        employeeNameSpan.textContent = "";
-      }
-    }
-
-    function lookupEquipment(input) {
-      const value = input.value.trim();
-      const display = input.parentElement.querySelector('.equipmentNameDisplay');
-      const equipmentName = equipmentItems[value];
-      display.textContent = equipmentName || "";
-      
-      if (equipmentName) {
-        // Mark this input as processed
-        input.disabled = true;
-        // If this is the last equipment input, add a new one and focus it
-        const equipmentList = document.getElementById('equipmentList');
-        const inputs = equipmentList.querySelectorAll('input[name="equipment"]');
-        if (inputs[inputs.length - 1] === input) {
-          addEquipmentField();
-          equipmentList.lastElementChild.querySelector('input[name="equipment"]').focus();
-        }
-      }
-    }
-
-    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const badge = document.getElementById('badge').value.trim();
-      if (!employees[badge]) {
-        alert("Error: Employee badge not recognized. Please scan a valid badge.");
-        return;
-      }
-      
-      // Validate each equipment field before creating the record
-      const equipmentInputs = document.querySelectorAll('#equipmentList input[name="equipment"]');
-      for (const input of equipmentInputs) {
-        const code = input.value.trim();
-        if (!equipmentItems[code]) {
-          alert("Error: Equipment barcode '" + code + "' not recognized. Please scan a valid equipment barcode.");
-          return;
-        }
-      }
-      
-      const employeeName = employees[badge] || "Unknown";
-      const action = document.getElementById('action').value;
-      const now = new Date();
-      const timeString = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true});
-      const recordDate = now.toISOString().substring(0,10);
-      const timestamp = `${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}/${now.getFullYear()} ${timeString}`;
-      
-      const equipmentBarcodes = [];
-      const equipmentNames = [];
-      equipmentInputs.forEach(input => {
-        const code = input.value.trim();
-        if (code) {
-          equipmentBarcodes.push(code);
-          equipmentNames.push(equipmentItems[code] || "");
-        }
-      });
-      
-      const record = { timestamp, recordDate, badge, employeeName, equipmentBarcodes, equipmentNames, action };
-      records.push(record);
-      saveToStorage('records', records);
-      alert('Record saved locally!');
-      updateNotifications();
-      this.reset();
-      document.getElementById('employeeName').textContent = "";
-      document.getElementById('equipmentList').innerHTML = `
-        <div class="equipment-item">
-          <div class="equipmentRow">
-            <input type="text" name="equipment" placeholder="Scan Equipment Barcode" required oninput="lookupEquipment(this)">
-            <span class="equipmentNameDisplay"></span>
-          </div>
-          <button type="button" class="removeEquipment" onclick="removeEquipmentField(this)" style="display: none;">Remove</button>
-        </div>`;
-    });
-
-    /* ---------- Admin Panel Functions ---------- */
-    function displayEmployeeList() {
-      const list = document.getElementById('employeeList');
-      list.innerHTML = "";
-      for (let [badge, name] of Object.entries(employees)) {
-        const li = document.createElement('li');
-        li.textContent = `${badge}: ${name}`;
-        list.appendChild(li);
-      }
-    }
-    function addEmployee() {
-      const badge = document.getElementById('empBadge').value.trim();
-      const name = document.getElementById('empName').value.trim();
-      if (badge && name) {
-        employees[badge] = name;
-        saveToStorage('employees', employees);
-        alert('Employee added successfully!');
-        displayEmployeeList();
-        document.getElementById('adminForm').reset();
-      } else {
-        alert('Please enter both employee name and badge ID!');
-      }
-    }
-    function removeEmployee() {
-      const badge = document.getElementById('empBadge').value.trim();
-      if (badge && employees[badge]) {
-        delete employees[badge];
-        saveToStorage('employees', employees);
-        alert('Employee removed successfully!');
-        displayEmployeeList();
-        document.getElementById('adminForm').reset();
-      } else {
-        alert('Invalid badge ID or employee not found!');
-      }
-    }
-    function displayEquipmentListAdmin() {
-      const list = document.getElementById('equipmentListAdmin');
-      list.innerHTML = "";
-      for (let [serial, name] of Object.entries(equipmentItems)) {
-        const li = document.createElement('li');
-        li.textContent = `${serial}: ${name}`;
-        list.appendChild(li);
-      }
-    }
-    function addEquipmentAdmin() {
-      const serial = document.getElementById('equipSerial').value.trim();
-      const name = document.getElementById('equipName').value.trim();
-      if (serial && name) {
-        equipmentItems[serial] = name;
-        saveToStorage('equipmentItems', equipmentItems);
-        alert('Equipment added successfully!');
-        displayEquipmentListAdmin();
-        document.getElementById('equipmentAdminForm').reset();
-      } else {
-        alert('Please enter both equipment name and serial number!');
-      }
-    }
-    function removeEquipmentAdmin() {
-      const serial = document.getElementById('equipSerial').value.trim();
-      if (serial && equipmentItems[serial]) {
-        delete equipmentItems[serial];
-        saveToStorage('equipmentItems', equipmentItems);
-        alert('Equipment removed successfully!');
-        displayEquipmentListAdmin();
-        document.getElementById('equipmentAdminForm').reset();
-      } else {
-        alert('Invalid equipment serial or equipment not found!');
-      }
-    }
-
-    /* ---------- Record Filtering & Export ---------- */
-    function displayRecords(recArray) {
-      const container = document.getElementById('recordsTable');
-      if (!recArray.length) {
-        container.innerHTML = "<p>No records found.</p>";
-        return;
-      }
-      let html = "<table><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
-      recArray.forEach(rec => {
-        html += `<tr>
-          <td>${rec.timestamp}</td>
-          <td>${rec.badge}</td>
-          <td>${rec.employeeName}</td>
-          <td>${rec.equipmentBarcodes.join('; ')}</td>
-          <td>${rec.equipmentNames.join('; ')}</td>
-          <td>${rec.action}</td>
-        </tr>`;
-      });
-      html += "</table>";
-      container.innerHTML = html;
-    }
-    function filterRecords() {
-      const search = document.getElementById('recordSearch').value.trim().toLowerCase();
-      const equipSearch = document.getElementById('recordEquipment').value.trim().toLowerCase();
-      const date = document.getElementById('recordDate').value;
-      let filtered = records;
-      if (search) {
-        filtered = filtered.filter(rec =>
-          rec.badge.toLowerCase().includes(search) ||
-          rec.employeeName.toLowerCase().includes(search)
-        );
-      }
-      if (equipSearch) {
-        filtered = filtered.filter(rec => {
-          const combinedEquip = rec.equipmentBarcodes.join(" ").toLowerCase() + " " + rec.equipmentNames.join(" ").toLowerCase();
-          return combinedEquip.includes(equipSearch);
-        });
-      }
-      if (date) {
-        filtered = filtered.filter(rec => rec.recordDate === date);
-      }
-      displayRecords(filtered);
-    }
-    function clearFilters() {
-      document.getElementById('recordSearch').value = "";
-      document.getElementById('recordEquipment').value = "";
-      document.getElementById('recordDate').value = "";
-      displayRecords(records);
-    }
-    function exportRecordsCSV() {
-      if (!records.length) {
-        alert("No records to export.");
-        return;
-      }
-      const header = "Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n";
-      const rows = records.map(rec =>
-        `"${rec.timestamp}","${rec.badge}","${rec.employeeName}","${rec.equipmentBarcodes.join('; ')}","${rec.equipmentNames.join('; ')}","${rec.action}"`
-      );
-      const csvContent = 'data:text/csv;charset=utf-8,' + header + rows.join("\n");
-      const link = document.createElement('a');
-      link.href = encodeURI(csvContent);
-      link.download = `Records_${new Date().toISOString().substring(0,10)}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    /* ---------- CSV Import/Export Functions ---------- */
-    function exportEmployeesCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,";
-      csvContent += "Badge ID,Employee Name\n";
-      for (let badge in employees) {
-        csvContent += `"${badge}","${employees[badge]}"\n`;
-      }
-      const link = document.createElement("a");
-      link.href = encodeURI(csvContent);
-      link.download = "employees.csv";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function exportEquipmentCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,";
-      csvContent += "Equipment Serial,Equipment Name\n";
-      for (let serial in equipmentItems) {
-        csvContent += `"${serial}","${equipmentItems[serial]}"\n`;
-      }
-      const link = document.createElement("a");
-      link.href = encodeURI(csvContent);
-      link.download = "equipment.csv";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Trigger the hidden file input for employees
-    function triggerImportEmployees() {
-      document.getElementById("importEmployeesFile").click();
-    }
-
-    // Handle automatic import when file is chosen for employees
-    function handleImportEmployees(input) {
-      if (input.files.length === 0) {
-        return;
-      }
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result;
-        const lines = text.split("\n");
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (line === "") continue;
-          const parts = line.split(",");
-          let badge = parts[0].replace(/^"|"$/g, '').trim();
-          let name = parts[1].replace(/^"|"$/g, '').trim();
-          if (badge && name) {
-            employees[badge] = name;
-          }
-        }
-        saveToStorage("employees", employees);
-        alert("Employees imported successfully!");
-        displayEmployeeList();
-        input.value = "";
-      };
-      reader.readAsText(file);
-    }
-
-    // Trigger the hidden file input for equipment
-    function triggerImportEquipment() {
-      document.getElementById("importEquipmentFile").click();
-    }
-
-    // Handle automatic import when file is chosen for equipment
-    function handleImportEquipment(input) {
-      if (input.files.length === 0) {
-        return;
-      }
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result;
-        const lines = text.split("\n");
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (line === "") continue;
-          const parts = line.split(",");
-          let serial = parts[0].replace(/^"|"$/g, '').trim();
-          let name = parts[1].replace(/^"|"$/g, '').trim();
-          if (serial && name) {
-            equipmentItems[serial] = name;
-          }
-        }
-        saveToStorage("equipmentItems", equipmentItems);
-        alert("Equipment imported successfully!");
-        displayEquipmentListAdmin();
-        input.value = "";
-      };
-      reader.readAsText(file);
-    }
-  </script>
+  <script src="scripts/app.js"></script>
 </body>
 </html>
