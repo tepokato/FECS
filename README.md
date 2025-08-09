@@ -76,6 +76,33 @@ CSV Export – Output file on record export
    ```
    Then visit [http://localhost:8000](http://localhost:8000) in your browser.
 
+📖 Usage
+
+### Checking Out Equipment
+1. Open the application in your browser.
+2. Scan or manually enter an employee badge to load their profile.
+3. Scan each piece of equipment; items appear in the pending list.
+4. Select **Check Out** to save the transaction with a timestamp.
+
+### Returning Equipment
+1. Scan the employee badge to view their checked-out gear.
+2. Scan equipment being returned or remove it from the list.
+3. Click **Return** to finalize the check-in.
+
+### Admin Panel
+- Access the Admin panel from the gear icon to add, edit, or remove employees and equipment.
+- Changes are persisted in the browser's local storage and are available even when offline.
+
+### CSV Import/Export
+- Export the activity log as a CSV file from the records view.
+- Import existing employee or equipment lists via CSV through the Admin panel.
+
+### Record Filtering
+- Use the search box to filter records by employee, equipment, or date.
+- Filtering happens entirely in the browser for quick, offline lookups.
+
+> FECS stores all data in your browser's local storage, enabling full offline use and automatic persistence between sessions.
+
 🧑‍💼 Ideal For
 
 FedEx Ground/Express operations teams
