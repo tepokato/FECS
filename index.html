@@ -580,15 +580,23 @@
         container.innerHTML = "<p>No records found.</p>";
         return;
       }
+      // Escape special characters to prevent HTML injection in record fields
+      const escapeHtml = (str) =>
+        String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/'/g, '&#39;')
+          .replace(/"/g, '&quot;');
       let html = "<table><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
       recArray.forEach(rec => {
         html += `<tr>
-          <td>${rec.timestamp}</td>
-          <td>${rec.badge}</td>
-          <td>${rec.employeeName}</td>
-          <td>${rec.equipmentBarcodes.join('; ')}</td>
-          <td>${rec.equipmentNames.join('; ')}</td>
-          <td>${rec.action}</td>
+          <td>${escapeHtml(rec.timestamp)}</td>
+          <td>${escapeHtml(rec.badge)}</td>
+          <td>${escapeHtml(rec.employeeName)}</td>
+          <td>${escapeHtml(rec.equipmentBarcodes.join('; '))}</td>
+          <td>${escapeHtml(rec.equipmentNames.join('; '))}</td>
+          <td>${escapeHtml(rec.action)}</td>
         </tr>`;
       });
       html += "</table>";
