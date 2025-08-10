@@ -109,3 +109,20 @@ test('exportRecordsCSV doubles newlines in fields', () => {
   expect(csv).toBe(expected);
   spy.mockRestore();
 });
+
+test('exportRecordsCSV leaves blank cells for missing fields', () => {
+  const records = [{
+    timestamp: '2023-01-01T00:00:00',
+    equipmentBarcodes: [],
+    equipmentNames: [],
+    recordDate: '2023-01-01'
+  }];
+  const win = setupDom({ records });
+  const spy = jest.spyOn(document.body, 'appendChild');
+  win.exportRecordsCSV();
+  const link = spy.mock.calls[0][0];
+  const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+  const row = csv.split('\n')[1];
+  expect(row).toBe('"2023-01-01T00:00:00","","","","",""');
+  spy.mockRestore();
+});
