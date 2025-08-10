@@ -438,6 +438,10 @@ function handleImportEmployees(event) {
   }
   const file = input.files[0];
   const reader = new FileReader();
+  reader.onerror = function() {
+    showError("Failed to read employees file.");
+    input.value = "";
+  };
   reader.onload = function(e) {
     const text = e.target.result;
     const lines = text.split("\n");
@@ -445,6 +449,10 @@ function handleImportEmployees(event) {
       const line = lines[i].trim();
       if (line === "") continue;
       const parts = parseCSVLine(line);
+      if (parts.length < 2) {
+        showError(`Skipping malformed line ${i + 1}: ${line}`);
+        continue;
+      }
       let badge = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
       if (badge && name) {
@@ -470,6 +478,10 @@ function handleImportEquipment(event) {
   }
   const file = input.files[0];
   const reader = new FileReader();
+  reader.onerror = function() {
+    showError("Failed to read equipment file.");
+    input.value = "";
+  };
   reader.onload = function(e) {
     const text = e.target.result;
     const lines = text.split("\n");
@@ -477,6 +489,10 @@ function handleImportEquipment(event) {
       const line = lines[i].trim();
       if (line === "") continue;
       const parts = parseCSVLine(line);
+      if (parts.length < 2) {
+        showError(`Skipping malformed line ${i + 1}: ${line}`);
+        continue;
+      }
       let serial = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
       if (serial && name) {
