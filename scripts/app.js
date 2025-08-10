@@ -588,12 +588,29 @@ document.getElementById('addEquipmentBtn').addEventListener('click', addEquipmen
 document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
 document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEquipmentAdmin);
 
-document.getElementById('exportEmployeesBtn').addEventListener('click', exportEmployeesCSV);
-document.getElementById('importEmployeesBtn').addEventListener('click', triggerImportEmployees);
-document.getElementById('importEmployeesFile').addEventListener('change', handleImportEmployees);
+const importExportBtn = document.getElementById('importExportBtn');
+const importExportMenu = document.getElementById('importExportMenu');
+importExportBtn.addEventListener('click', () => {
+  importExportMenu.classList.toggle('hidden');
+});
 
-document.getElementById('exportEquipmentBtn').addEventListener('click', exportEquipmentCSV);
-document.getElementById('importEquipmentBtn').addEventListener('click', triggerImportEquipment);
+document.getElementById('exportEmployeesAction').addEventListener('click', () => {
+  exportEmployeesCSV();
+  importExportMenu.classList.add('hidden');
+});
+document.getElementById('importEmployeesAction').addEventListener('click', () => {
+  triggerImportEmployees();
+  importExportMenu.classList.add('hidden');
+});
+document.getElementById('exportEquipmentAction').addEventListener('click', () => {
+  exportEquipmentCSV();
+  importExportMenu.classList.add('hidden');
+});
+document.getElementById('importEquipmentAction').addEventListener('click', () => {
+  triggerImportEquipment();
+  importExportMenu.classList.add('hidden');
+});
+document.getElementById('importEmployeesFile').addEventListener('change', handleImportEmployees);
 document.getElementById('importEquipmentFile').addEventListener('change', handleImportEquipment);
 
 document.getElementById('employeeSearch').addEventListener('input', (e) => {

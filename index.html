@@ -110,20 +110,18 @@
     
     <!-- New Import/Export Section -->
     <hr>
-    <h2>Inventory Import/Export</h2>
-      <div class="mb-15">
-      <h3>Employees</h3>
-      <button type="button" class="btn-inline" id="exportEmployeesBtn">Export Employees to CSV</button>
-      <button type="button" class="btn-inline" id="importEmployeesBtn">Import Employees CSV</button>
-        <!-- Hidden file input for employees -->
-        <input type="file" id="importEmployeesFile" accept=".csv" class="hidden">
-    </div>
-      <div class="mb-15">
-      <h3>Equipment</h3>
-      <button type="button" class="btn-inline" id="exportEquipmentBtn">Export Equipment to CSV</button>
-      <button type="button" class="btn-inline" id="importEquipmentBtn">Import Equipment CSV</button>
-        <!-- Hidden file input for equipment -->
-        <input type="file" id="importEquipmentFile" accept=".csv" class="hidden">
+    <div class="mb-15">
+      <div class="dropdown">
+        <button type="button" class="btn-inline" id="importExportBtn">Import/Export</button>
+        <div id="importExportMenu" class="dropdown-menu hidden">
+          <button type="button" id="exportEmployeesAction">Export Employees to CSV</button>
+          <button type="button" id="importEmployeesAction">Import Employees CSV</button>
+          <button type="button" id="exportEquipmentAction">Export Equipment to CSV</button>
+          <button type="button" id="importEquipmentAction">Import Equipment CSV</button>
+        </div>
+      </div>
+      <input type="file" id="importEmployeesFile" accept=".csv" class="hidden">
+      <input type="file" id="importEquipmentFile" accept=".csv" class="hidden">
     </div>
   </section>
 
