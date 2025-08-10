@@ -225,3 +225,25 @@
       white-space: nowrap;
       border: 0;
     }
+
+    @media (max-width: 600px) {
+      .employeeRow,
+      .equipmentRow {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .employeeRow input,
+      .employeeRow button,
+      .equipmentRow input,
+      .equipmentRow button {
+        width: 100%;
+      }
+
+      .records-container,
+      form {
+        max-width: 100%;
+        margin: 10px auto;
+        padding: 10px;
+      }
+    }
