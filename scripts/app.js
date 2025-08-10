@@ -8,8 +8,44 @@ function saveToStorage(key, data) {
 }
 
 /* ---------- Notification System ---------- */
-function updateNotifications() {
+let notificationTimer;
+let tempNotificationActive = false;
+
+function showNotification(message, type, delay = 3000) {
   const notificationDiv = document.getElementById('notifications');
+  if (notificationTimer) {
+    clearTimeout(notificationTimer);
+  }
+
+  tempNotificationActive = true;
+  notificationDiv.className = type;
+  notificationDiv.textContent = message;
+  notificationDiv.style.display = 'block';
+
+  if (delay > 0) {
+    notificationTimer = setTimeout(() => {
+      notificationDiv.style.display = 'none';
+      notificationDiv.className = '';
+      notificationDiv.textContent = '';
+      tempNotificationActive = false;
+      updateNotifications();
+    }, delay);
+  }
+}
+
+function showSuccess(message, delay) {
+  showNotification(message, 'success', delay);
+}
+
+function showError(message, delay) {
+  showNotification(message, 'error', delay);
+}
+
+function updateNotifications() {
+  if (tempNotificationActive) return;
+
+  const notificationDiv = document.getElementById('notifications');
+  notificationDiv.className = '';
   const status = {};
   records.forEach(rec => {
     rec.equipmentBarcodes.forEach(code => {
@@ -147,15 +183,14 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
 
   const badge = document.getElementById('badge').value.trim();
   if (!employees[badge]) {
-    alert("Error: Employee badge not recognized. Please scan a valid badge.");
+    showError("Error: Employee badge not recognized. Please scan a valid badge.");
     return;
   }
-
   const equipmentInputs = document.querySelectorAll('#equipmentList input[name="equipment"]');
   for (const input of equipmentInputs) {
     const code = input.value.trim();
     if (!equipmentItems[code]) {
-      alert("Error: Equipment barcode '" + code + "' not recognized. Please scan a valid equipment barcode.");
+      showError("Error: Equipment barcode '" + code + "' not recognized. Please scan a valid equipment barcode.");
       return;
     }
   }
@@ -180,8 +215,7 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   const record = { timestamp, recordDate, badge, employeeName, equipmentBarcodes, equipmentNames, action };
   records.push(record);
   saveToStorage('records', records);
-  alert('Record saved locally!');
-  updateNotifications();
+  showSuccess('Record saved locally!');
   this.reset();
   document.getElementById('employeeName').textContent = "";
   const equipmentList = document.getElementById('equipmentList');
@@ -205,11 +239,11 @@ function addEmployee() {
   if (badge && name) {
     employees[badge] = name;
     saveToStorage('employees', employees);
-    alert('Employee added successfully!');
+    showSuccess('Employee added successfully!');
     displayEmployeeList();
     document.getElementById('adminForm').reset();
   } else {
-    alert('Please enter both employee name and badge ID!');
+    showError('Please enter both employee name and badge ID!');
   }
 }
 function removeEmployee() {
@@ -217,11 +251,11 @@ function removeEmployee() {
   if (badge && employees[badge]) {
     delete employees[badge];
     saveToStorage('employees', employees);
-    alert('Employee removed successfully!');
+    showSuccess('Employee removed successfully!');
     displayEmployeeList();
     document.getElementById('adminForm').reset();
   } else {
-    alert('Invalid badge ID or employee not found!');
+    showError('Invalid badge ID or employee not found!');
   }
 }
 function displayEquipmentListAdmin() {
@@ -239,11 +273,11 @@ function addEquipmentAdmin() {
   if (serial && name) {
     equipmentItems[serial] = name;
     saveToStorage('equipmentItems', equipmentItems);
-    alert('Equipment added successfully!');
+    showSuccess('Equipment added successfully!');
     displayEquipmentListAdmin();
     document.getElementById('equipmentAdminForm').reset();
   } else {
-    alert('Please enter both equipment name and serial number!');
+    showError('Please enter both equipment name and serial number!');
   }
 }
 function removeEquipmentAdmin() {
@@ -251,11 +285,11 @@ function removeEquipmentAdmin() {
   if (serial && equipmentItems[serial]) {
     delete equipmentItems[serial];
     saveToStorage('equipmentItems', equipmentItems);
-    alert('Equipment removed successfully!');
+    showSuccess('Equipment removed successfully!');
     displayEquipmentListAdmin();
     document.getElementById('equipmentAdminForm').reset();
   } else {
-    alert('Invalid equipment serial or equipment not found!');
+    showError('Invalid equipment serial or equipment not found!');
   }
 }
 
@@ -321,7 +355,7 @@ function clearFilters() {
 }
 function exportRecordsCSV() {
   if (!records.length) {
-    alert("No records to export.");
+    showError("No records to export.");
     return;
   }
   const header = "Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n";
@@ -391,7 +425,7 @@ function handleImportEmployees(event) {
       }
     }
     saveToStorage("employees", employees);
-    alert("Employees imported successfully!");
+    showSuccess("Employees imported successfully!");
     displayEmployeeList();
     input.value = "";
   };
@@ -423,7 +457,7 @@ function handleImportEquipment(event) {
       }
     }
     saveToStorage("equipmentItems", equipmentItems);
-    alert("Equipment imported successfully!");
+    showSuccess("Equipment imported successfully!");
     displayEquipmentListAdmin();
     input.value = "";
   };
