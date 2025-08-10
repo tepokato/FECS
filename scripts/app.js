@@ -268,7 +268,15 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   const start = page * pageSize;
   filtered.slice(start, start + pageSize).forEach(([badge, name]) => {
     const li = document.createElement('li');
-    li.textContent = `${badge}: ${name}`;
+    const textSpan = document.createElement('span');
+    textSpan.textContent = `${badge}: ${name}`;
+    const del = document.createElement('span');
+    del.className = 'deleteEmployee';
+    del.textContent = '❌';
+    del.title = 'Remove Employee';
+    del.addEventListener('click', () => removeEmployee(badge));
+    li.appendChild(textSpan);
+    li.appendChild(del);
     list.appendChild(li);
   });
   employeePage = page;
@@ -291,14 +299,12 @@ function addEmployee() {
     showError('Please enter both employee name and badge ID!');
   }
 }
-function removeEmployee() {
-  const badge = document.getElementById('empBadge').value.trim();
+function removeEmployee(badge) {
   if (badge && employees[badge]) {
     delete employees[badge];
     saveToStorage('employees', employees);
     showSuccess('Employee removed successfully!');
     displayEmployeeList();
-    document.getElementById('adminForm').reset();
   } else {
     showError('Invalid badge ID or employee not found!');
   }
@@ -574,7 +580,6 @@ if (initialEquipmentInput) {
 
 document.getElementById('addEquipmentBtn').addEventListener('click', addEquipmentField);
 document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
-document.getElementById('removeEmployeeBtn').addEventListener('click', removeEmployee);
 document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEquipmentAdmin);
 document.getElementById('removeEquipmentAdminBtn').addEventListener('click', removeEquipmentAdmin);
 

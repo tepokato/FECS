@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="styles/main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FedEx Equipment Check-Out System</title>
+  <style>
+    #employeeList .deleteEmployee {
+      margin-left: 0.5rem;
+      cursor: pointer;
+      color: red;
+    }
+  </style>
 </head>
 <body>
 
@@ -71,7 +78,6 @@
         <input type="text" id="empBadge" placeholder="Enter Badge ID" required>
       </div>
       <button type="button" id="addEmployeeBtn">Add Employee</button>
-      <button type="button" id="removeEmployeeBtn">Remove Employee</button>
     </form>
     <h3>Current Employees</h3>
     <input type="text" id="employeeSearch" placeholder="Search employees">
