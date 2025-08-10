@@ -7,6 +7,7 @@ function loadFromStorage(key, fallback) {
   } catch (e) {
     console.warn(`Failed to parse ${key} from storage, resetting to defaults`, e);
     setTimeout(() => showError(`Stored data for ${key} was invalid and has been reset.`), 0);
+    saveToStorage(key, fallback);
     return fallback;
   }
 }
