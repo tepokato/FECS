@@ -19,6 +19,10 @@ function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+function csvEscape(value) {
+  return String(value).replace(/"/g, '""');
+}
+
 /* ---------- Notification System ---------- */
 let notificationTimer;
 let tempNotificationActive = false;
@@ -382,7 +386,7 @@ function exportRecordsCSV() {
   }
   const header = "Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n";
   const rows = records.map(rec =>
-    `"${rec.timestamp}","${rec.badge}","${rec.employeeName}","${rec.equipmentBarcodes.join('; ')}","${rec.equipmentNames.join('; ')}","${rec.action}"`
+    `"${csvEscape(rec.timestamp)}","${csvEscape(rec.badge)}","${csvEscape(rec.employeeName)}","${csvEscape(rec.equipmentBarcodes.join('; '))}","${csvEscape(rec.equipmentNames.join('; '))}","${csvEscape(rec.action)}"`
   );
   const csvContent = 'data:text/csv;charset=utf-8,' + header + rows.join("\n");
   const link = document.createElement('a');
@@ -398,7 +402,7 @@ function exportEmployeesCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
   csvContent += "Badge ID,Employee Name\n";
   for (let badge in employees) {
-    csvContent += `"${badge}","${employees[badge]}"\n`;
+    csvContent += `"${csvEscape(badge)}","${csvEscape(employees[badge])}"\n`;
   }
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
@@ -412,7 +416,7 @@ function exportEquipmentCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
   csvContent += "Equipment Serial,Equipment Name\n";
   for (let serial in equipmentItems) {
-    csvContent += `"${serial}","${equipmentItems[serial]}"\n`;
+    csvContent += `"${csvEscape(serial)}","${csvEscape(equipmentItems[serial])}"\n`;
   }
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);

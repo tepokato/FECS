@@ -1,0 +1,69 @@
+const fs = require('fs');
+const path = require('path');
+const { JSDOM } = require('jsdom');
+
+const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
+const script = fs.readFileSync(path.resolve(__dirname, '../scripts/app.js'), 'utf8');
+
+function setupDom({ employees = {}, equipmentItems = {}, records = [] } = {}) {
+  const dom = new JSDOM(html, { url: 'http://localhost', runScripts: 'dangerously' });
+  const { window } = dom;
+  global.window = window;
+  global.document = window.document;
+  global.localStorage = window.localStorage;
+  window.alert = jest.fn();
+  localStorage.setItem('employees', JSON.stringify(employees));
+  localStorage.setItem('equipmentItems', JSON.stringify(equipmentItems));
+  localStorage.setItem('records', JSON.stringify(records));
+  window.eval(script);
+  window.HTMLAnchorElement.prototype.click = jest.fn();
+  return window;
+}
+
+afterEach(() => {
+  delete global.window;
+  delete global.document;
+  delete global.localStorage;
+});
+
+test('exportEmployeesCSV escapes quotes in names', () => {
+  const win = setupDom({ employees: { '1': 'John "JJ" Doe' } });
+  const spy = jest.spyOn(document.body, 'appendChild');
+  win.exportEmployeesCSV();
+  const link = spy.mock.calls[0][0];
+  const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+  const row = csv.trim().split('\n')[1];
+  expect(row).toBe('"1","John ""JJ"" Doe"');
+  spy.mockRestore();
+});
+
+test('exportEquipmentCSV escapes quotes in names', () => {
+  const win = setupDom({ equipmentItems: { 'EQ1': 'Hammer "XL"' } });
+  const spy = jest.spyOn(document.body, 'appendChild');
+  win.exportEquipmentCSV();
+  const link = spy.mock.calls[0][0];
+  const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+  const row = csv.trim().split('\n')[1];
+  expect(row).toBe('"EQ1","Hammer ""XL"""');
+  spy.mockRestore();
+});
+
+test('exportRecordsCSV escapes quotes in fields', () => {
+  const records = [{
+    timestamp: '2023-01-01T00:00:00',
+    badge: '1',
+    employeeName: 'John "JJ" Doe',
+    equipmentBarcodes: ['EQ1'],
+    equipmentNames: ['Hammer "XL"'],
+    action: 'Check-Out',
+    recordDate: '2023-01-01'
+  }];
+  const win = setupDom({ records });
+  const spy = jest.spyOn(document.body, 'appendChild');
+  win.exportRecordsCSV();
+  const link = spy.mock.calls[0][0];
+  const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+  const row = csv.split('\n')[1];
+  expect(row).toBe('"2023-01-01T00:00:00","1","John ""JJ"" Doe","EQ1","Hammer ""XL""","Check-Out"');
+  spy.mockRestore();
+});
