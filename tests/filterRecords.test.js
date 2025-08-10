@@ -112,4 +112,32 @@ describe('filterRecords', () => {
     expect(rows).toHaveLength(2);
     expect(rows[1].children[2].textContent).toBe('Daisy');
   });
+
+  test('clearFilters resets inputs and displays all records', () => {
+    const records = [
+      { timestamp: 't1', recordDate: '2023-01-01', badge: '123', employeeName: 'Alice', equipmentBarcodes: ['EQ1'], equipmentNames: ['Laptop'], action: 'Check-Out' },
+      { timestamp: 't2', recordDate: '2023-01-02', badge: '456', employeeName: 'Bob', equipmentBarcodes: ['EQ2'], equipmentNames: ['Tablet'], action: 'Check-In' }
+    ];
+    const win = loadDom(records);
+
+    document.getElementById('recordSearch').value = 'bob';
+    document.getElementById('recordEquipment').value = 'eq2 tablet';
+    document.getElementById('recordDate').value = '2023-01-02';
+    win.filterRecords();
+
+    let rows = document.querySelectorAll('#recordsTable table tr');
+    expect(rows).toHaveLength(2);
+    expect(rows[1].children[2].textContent).toBe('Bob');
+
+    win.clearFilters();
+
+    expect(document.getElementById('recordSearch').value).toBe('');
+    expect(document.getElementById('recordEquipment').value).toBe('');
+    expect(document.getElementById('recordDate').value).toBe('');
+
+    rows = document.querySelectorAll('#recordsTable table tr');
+    expect(rows).toHaveLength(3);
+    expect(rows[1].children[2].textContent).toBe('Alice');
+    expect(rows[2].children[2].textContent).toBe('Bob');
+  });
 });
