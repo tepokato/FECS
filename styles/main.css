@@ -58,6 +58,8 @@
       padding: 10px 15px;
     }
     .hidden { display: none; }
+    .mb-15 { margin-bottom: 15px; }
+    #notifications.visible { display: block; }
 
     /* Header / Logo */
     .site-header {

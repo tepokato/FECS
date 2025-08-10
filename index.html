@@ -43,7 +43,7 @@
             <input type="text" name="equipment" placeholder="Scan Equipment Barcode" required>
             <span class="equipmentNameDisplay"></span>
           </div>
-          <button type="button" class="removeEquipment" style="display: none;">Remove</button>
+          <button type="button" class="removeEquipment hidden">Remove</button>
         </div>
       </div>
       <button type="button" id="addEquipmentBtn">Add Another Barcode</button>
@@ -94,19 +94,19 @@
     <!-- New Import/Export Section -->
     <hr>
     <h2>Inventory Import/Export</h2>
-    <div style="margin-bottom:15px;">
+      <div class="mb-15">
       <h3>Employees</h3>
       <button type="button" class="btn-inline" id="exportEmployeesBtn">Export Employees to CSV</button>
       <button type="button" class="btn-inline" id="importEmployeesBtn">Import Employees CSV</button>
-      <!-- Hidden file input for employees -->
-      <input type="file" id="importEmployeesFile" accept=".csv" style="display:none;">
+        <!-- Hidden file input for employees -->
+        <input type="file" id="importEmployeesFile" accept=".csv" class="hidden">
     </div>
-    <div style="margin-bottom:15px;">
+      <div class="mb-15">
       <h3>Equipment</h3>
       <button type="button" class="btn-inline" id="exportEquipmentBtn">Export Equipment to CSV</button>
       <button type="button" class="btn-inline" id="importEquipmentBtn">Import Equipment CSV</button>
-      <!-- Hidden file input for equipment -->
-      <input type="file" id="importEquipmentFile" accept=".csv" style="display:none;">
+        <!-- Hidden file input for equipment -->
+        <input type="file" id="importEquipmentFile" accept=".csv" class="hidden">
     </div>
   </section>
 

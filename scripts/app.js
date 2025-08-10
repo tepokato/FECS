@@ -20,11 +20,11 @@ function showNotification(message, type, delay = 3000) {
   tempNotificationActive = true;
   notificationDiv.className = type;
   notificationDiv.textContent = message;
-  notificationDiv.style.display = 'block';
+  notificationDiv.classList.add('visible');
 
   if (delay > 0) {
     notificationTimer = setTimeout(() => {
-      notificationDiv.style.display = 'none';
+      notificationDiv.classList.remove('visible');
       notificationDiv.className = '';
       notificationDiv.textContent = '';
       tempNotificationActive = false;
@@ -46,6 +46,7 @@ function updateNotifications() {
 
   const notificationDiv = document.getElementById('notifications');
   notificationDiv.className = '';
+  notificationDiv.classList.remove('visible');
   const status = {};
   records.forEach(rec => {
     rec.equipmentBarcodes.forEach(code => {
@@ -65,10 +66,11 @@ function updateNotifications() {
     }
   }
   if (overdue.length > 0) {
-    notificationDiv.style.display = "block";
     notificationDiv.textContent = "Overdue Equipment: " + overdue.join(", ");
+    notificationDiv.classList.add('visible');
   } else {
-    notificationDiv.style.display = "none";
+    notificationDiv.textContent = "";
+    notificationDiv.classList.remove('visible');
   }
 }
 updateNotifications();
@@ -120,7 +122,7 @@ function addEquipmentField() {
 
   const removeBtn = document.createElement('button');
   removeBtn.type = 'button';
-  removeBtn.className = 'removeEquipment';
+  removeBtn.className = 'removeEquipment hidden';
   removeBtn.textContent = 'Remove';
   removeBtn.addEventListener('click', () => removeEquipmentField(removeBtn));
 
@@ -142,7 +144,11 @@ function updateRemoveButtons() {
   const items = document.querySelectorAll('#equipmentList .equipment-item');
   items.forEach(item => {
     const btn = item.querySelector('.removeEquipment');
-    btn.style.display = (items.length > 1) ? 'block' : 'none';
+    if (items.length > 1) {
+      btn.classList.remove('hidden');
+    } else {
+      btn.classList.add('hidden');
+    }
   });
 }
 
