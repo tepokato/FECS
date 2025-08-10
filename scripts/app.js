@@ -214,6 +214,8 @@ async function initCameraScanner(targetInputId) {
   const overlay = document.createElement('div');
   overlay.id = 'scannerOverlay';
   const video = document.createElement('video');
+  video.autoplay = true;
+  video.playsInline = true;
   overlay.appendChild(video);
   const cancelBtn = document.createElement('button');
   cancelBtn.type = 'button';
@@ -244,7 +246,7 @@ async function initCameraScanner(targetInputId) {
           input.dispatchEvent(new Event('input', { bubbles: true }));
         }
         cleanup();
-      } else if (err && !(err instanceof ZXingLib.NotFoundException)) {
+      } else if (err && err.name !== 'NotFoundException') {
         console.error('Scanner error', err);
         cleanup();
         showError('Barcode scanning isn’t supported in this browser.');
