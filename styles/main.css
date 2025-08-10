@@ -261,6 +261,17 @@
         width: 100%;
       }
 
+      #recordsTable table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      #recordsTable th,
+      #recordsTable td {
+        text-align: left;
+        white-space: normal;
+      }
+
       .records-container,
       form {
         max-width: 100%;
