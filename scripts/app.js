@@ -129,21 +129,14 @@ function addEquipmentField() {
   input.type = 'text';
   input.name = 'equipment';
   input.id = `equipment${equipmentIdCounter++}`;
-  input.placeholder = 'Scan Equipment Barcode';
+  input.placeholder = 'Enter Equipment Barcode';
   input.required = true;
   input.addEventListener('input', lookupEquipment);
-
-  const scanBtn = document.createElement('button');
-  scanBtn.type = 'button';
-  scanBtn.className = 'scanBtn';
-  scanBtn.textContent = 'Scan';
-  scanBtn.dataset.target = input.id;
 
   const nameSpan = document.createElement('span');
   nameSpan.className = 'equipmentNameDisplay';
 
   rowDiv.appendChild(input);
-  rowDiv.appendChild(scanBtn);
   rowDiv.appendChild(nameSpan);
 
   const removeBtn = document.createElement('button');
@@ -207,55 +200,6 @@ function lookupEquipment(event) {
       addEquipmentField();
       equipmentList.lastElementChild.querySelector('input[name="equipment"]').focus();
     }
-  }
-}
-
-async function initCameraScanner(targetInputId) {
-  const overlay = document.createElement('div');
-  overlay.id = 'scannerOverlay';
-  const video = document.createElement('video');
-  video.autoplay = true;
-  video.playsInline = true;
-  overlay.appendChild(video);
-  const cancelBtn = document.createElement('button');
-  cancelBtn.type = 'button';
-  cancelBtn.textContent = 'Cancel';
-  overlay.appendChild(cancelBtn);
-  document.body.appendChild(overlay);
-
-  const ZXingLib = window.ZXingBrowser || window.ZXing;
-  const codeReader = new ZXingLib.BrowserMultiFormatReader();
-
-  function cleanup() {
-    codeReader.reset();
-    if (video.srcObject) {
-      video.srcObject.getTracks().forEach(track => track.stop());
-    }
-    overlay.remove();
-  }
-
-  cancelBtn.addEventListener('click', cleanup);
-
-  try {
-    await codeReader.decodeFromVideoDevice(null, video, (result, err) => {
-      if (result) {
-        const input = document.getElementById(targetInputId);
-        if (input) {
-          const text = result.getText ? result.getText() : result;
-          input.value = text;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        cleanup();
-      } else if (err && err.name !== 'NotFoundException') {
-        console.error('Scanner error', err);
-        cleanup();
-        showError('Barcode scanning isn’t supported in this browser.');
-      }
-    });
-  } catch (err) {
-    console.error('Scanner error', err);
-    showError('Barcode scanning isn’t supported in this browser.');
-    cleanup();
   }
 }
 
@@ -583,16 +527,6 @@ if (navToggle && nav) {
     nav.classList.toggle('show');
   });
 }
-
-document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.scanBtn');
-  if (btn) {
-    const target = btn.dataset.target;
-    if (target) {
-      initCameraScanner(target);
-    }
-  }
-});
 
 document.getElementById('badge').addEventListener('input', lookupEmployee);
 
