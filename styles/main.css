@@ -62,6 +62,9 @@
       margin: 0.3125rem;
       padding: 0.625rem 0.9375rem;
     }
+    #checkoutForm .dropdown .btn-inline {
+      margin: 0.625rem 0;
+    }
     .hidden { display: none; }
     .mb-15 { margin-bottom: 0.9375rem; }
     .dropdown {
