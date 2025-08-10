@@ -115,8 +115,11 @@
     <h2>Check-Out/In Records</h2>
     <div class="records-container">
       <form id="recordFilterForm">
+        <label for="recordSearch" class="sr-only">Search by name or badge</label>
         <input type="text" id="recordSearch" placeholder="Search by name or badge">
+        <label for="recordEquipment" class="sr-only">Search by equipment name or serial</label>
         <input type="text" id="recordEquipment" placeholder="Search by equipment name or serial">
+        <label for="recordDate" class="sr-only">Filter by date</label>
         <input type="date" id="recordDate">
         <button type="button" id="filterRecordsBtn">Search/Filter</button>
         <button type="button" id="clearFiltersBtn">Clear Filters</button>
