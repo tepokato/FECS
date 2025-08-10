@@ -35,13 +35,15 @@
       <label for="badge">Employee Badge ID:</label>
       <div class="employeeRow">
         <input type="text" id="badge" placeholder="Scan Employee Badge" required autofocus>
+        <button type="button" class="scanBtn" data-target="badge">Scan</button>
         <span id="employeeName"></span>
       </div>
       <label for="equipment">Equipment Barcodes:</label>
       <div id="equipmentList">
         <div class="equipment-item">
           <div class="equipmentRow">
-            <input type="text" name="equipment" placeholder="Scan Equipment Barcode" required>
+            <input type="text" id="equipment0" name="equipment" placeholder="Scan Equipment Barcode" required>
+            <button type="button" class="scanBtn" data-target="equipment0">Scan</button>
             <span class="equipmentNameDisplay"></span>
           </div>
           <button type="button" class="removeEquipment hidden">Remove</button>
@@ -142,5 +144,6 @@
   </script>
   <script src="scripts/csvParser.js"></script>
   <script src="scripts/app.js"></script>
+  <script src="scripts/zxing.js"></script>
 </body>
 </html>
