@@ -423,7 +423,7 @@ function handleImportEmployees(event) {
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
       if (line === "") continue;
-      const parts = line.split(",");
+      const parts = parseCSVLine(line);
       let badge = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
       if (badge && name) {
@@ -455,7 +455,7 @@ function handleImportEquipment(event) {
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
       if (line === "") continue;
-      const parts = line.split(",");
+      const parts = parseCSVLine(line);
       let serial = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
       if (serial && name) {
