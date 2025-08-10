@@ -39,8 +39,18 @@ updateNotifications();
 
 /* ---------- Navigation ---------- */
 function showSection(section) {
+  // Hide all sections
   document.querySelectorAll('.section').forEach(el => el.classList.add('hidden'));
+  // Show the requested section
   document.getElementById(section).classList.remove('hidden');
+
+  // Update active navigation link
+  document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+  const activeLink = document.getElementById('nav' + section.charAt(0).toUpperCase() + section.slice(1));
+  if (activeLink) {
+    activeLink.classList.add('active');
+  }
+
   if (section === 'admin') {
     displayEmployeeList();
     displayEquipmentListAdmin();
@@ -453,4 +463,7 @@ document.getElementById('importEquipmentFile').addEventListener('change', handle
 document.getElementById('filterRecordsBtn').addEventListener('click', filterRecords);
 document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
 document.getElementById('exportRecordsBtn').addEventListener('click', exportRecordsCSV);
+
+// Set initial active section
+showSection('checkout');
 
