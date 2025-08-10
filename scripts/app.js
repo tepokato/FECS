@@ -1,7 +1,19 @@
 /* ---------- Initialization ---------- */
-let employees = JSON.parse(localStorage.getItem('employees')) || {};
-let equipmentItems = JSON.parse(localStorage.getItem('equipmentItems')) || {};
-let records = JSON.parse(localStorage.getItem('records')) || [];
+function loadFromStorage(key, fallback) {
+  const item = localStorage.getItem(key);
+  if (!item) return fallback;
+  try {
+    return JSON.parse(item);
+  } catch (e) {
+    console.warn(`Failed to parse ${key} from storage, resetting to defaults`, e);
+    setTimeout(() => showError(`Stored data for ${key} was invalid and has been reset.`), 0);
+    return fallback;
+  }
+}
+
+let employees = loadFromStorage('employees', {});
+let equipmentItems = loadFromStorage('equipmentItems', {});
+let records = loadFromStorage('records', []);
 
 function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
