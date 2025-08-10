@@ -1,4 +1,7 @@
 function parseCSVLine(line) {
+  if (line.endsWith('\r')) {
+    line = line.slice(0, -1);
+  }
   const result = [];
   let current = '';
   let inQuotes = false;
