@@ -349,14 +349,18 @@ function filterRecords() {
   const date = document.getElementById('recordDate').value;
   let filtered = records;
   if (search) {
-    filtered = filtered.filter(rec =>
-      rec.badge.toLowerCase().includes(search) ||
-      rec.employeeName.toLowerCase().includes(search)
-    );
+    filtered = filtered.filter(rec => {
+      const badge = String(rec?.badge ?? "");
+      const name = String(rec?.employeeName ?? "");
+      return badge.toLowerCase().includes(search) ||
+             name.toLowerCase().includes(search);
+    });
   }
   if (equipSearch) {
     filtered = filtered.filter(rec => {
-      const combinedEquip = rec.equipmentBarcodes.join(" ").toLowerCase() + " " + rec.equipmentNames.join(" ").toLowerCase();
+      const barcodes = (rec?.equipmentBarcodes ?? []).join(" ").toLowerCase();
+      const names = (rec?.equipmentNames ?? []).join(" ").toLowerCase();
+      const combinedEquip = `${barcodes} ${names}`.trim();
       return combinedEquip.includes(equipSearch);
     });
   }
