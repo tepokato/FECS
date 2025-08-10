@@ -211,6 +211,11 @@ function lookupEquipment(event) {
 }
 
 async function initCameraScanner(targetInputId) {
+  if (!navigator.mediaDevices || !window.BarcodeDetector) {
+    showError('Barcode scanning isn’t supported in this browser.');
+    return;
+  }
+
   const overlay = document.createElement('div');
   overlay.id = 'scannerOverlay';
   const video = document.createElement('video');
@@ -221,36 +226,34 @@ async function initCameraScanner(targetInputId) {
   overlay.appendChild(cancelBtn);
   document.body.appendChild(overlay);
 
-  let stream;
   const codeReader = new ZXing.BrowserMultiFormatReader();
 
   function cleanup() {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-    }
+    codeReader.reset();
     overlay.remove();
   }
 
   cancelBtn.addEventListener('click', () => {
-    codeReader.cancel();
+    cleanup();
   });
 
   try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-    video.srcObject = stream;
-    await video.play();
-    const result = await codeReader.decodeFromVideo(video);
-    if (result) {
-      const input = document.getElementById(targetInputId);
-      if (input) {
-        const text = result.getText ? result.getText() : result;
-        input.value = text;
-        input.dispatchEvent(new Event('input', { bubbles: true }));
+    await codeReader.decodeFromVideoDevice(null, video, (result, err) => {
+      if (result) {
+        const input = document.getElementById(targetInputId);
+        if (input) {
+          const text = result.getText ? result.getText() : result;
+          input.value = text;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        cleanup();
+      } else if (err && !(err instanceof ZXing.NotFoundException)) {
+        console.error('Scanner error', err);
+        cleanup();
       }
-    }
+    });
   } catch (err) {
     console.error('Scanner error', err);
-  } finally {
     cleanup();
   }
 }
