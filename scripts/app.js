@@ -518,6 +518,14 @@ document.getElementById('navCheckout').addEventListener('click', (e) => { e.prev
 document.getElementById('navAdmin').addEventListener('click', (e) => { e.preventDefault(); showSection('admin'); });
 document.getElementById('navRecords').addEventListener('click', (e) => { e.preventDefault(); showSection('records'); });
 
+const navToggle = document.getElementById('navToggle');
+const nav = document.querySelector('nav');
+if (navToggle && nav) {
+  navToggle.addEventListener('click', () => {
+    nav.classList.toggle('show');
+  });
+}
+
 document.getElementById('badge').addEventListener('input', lookupEmployee);
 
 const initialEquipmentInput = document.querySelector('#equipmentList input[name="equipment"]');
