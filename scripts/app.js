@@ -387,7 +387,12 @@ function exportRecordsCSV() {
   }
   const header = "Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n";
   const rows = records.map(rec =>
-    `"${csvEscape(rec.timestamp)}","${csvEscape(rec.badge)}","${csvEscape(rec.employeeName)}","${csvEscape(rec.equipmentBarcodes.join('; '))}","${csvEscape(rec.equipmentNames.join('; '))}","${csvEscape(rec.action)}"`
+    `"${csvEscape(rec.timestamp ?? '')}",` +
+    `"${csvEscape(rec.badge ?? '')}",` +
+    `"${csvEscape(rec.employeeName ?? '')}",` +
+    `"${csvEscape((rec.equipmentBarcodes ?? []).join('; ') ?? '')}",` +
+    `"${csvEscape((rec.equipmentNames ?? []).join('; ') ?? '')}",` +
+    `"${csvEscape(rec.action ?? '')}"`
   );
   const csvContent = 'data:text/csv;charset=utf-8,' + header + rows.join("\n");
   const link = document.createElement('a');
