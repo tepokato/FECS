@@ -83,11 +83,12 @@
       margin: 0;
       padding: 0.3125rem 0.625rem;
       text-align: left;
-      background: none;
-      border: none;
+      background-color: #f9f9f9;
+      border: 0.0625rem solid #eee;
+      border-radius: 0.25rem;
       cursor: pointer;
-      color: #000;
-    }
+      color: #000 !important;
+      }
     .dropdown-menu button:hover {
       background-color: #f0f0f0;
       color: #000;
