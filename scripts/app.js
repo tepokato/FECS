@@ -322,7 +322,15 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   const start = page * pageSize;
   filtered.slice(start, start + pageSize).forEach(([serial, name]) => {
     const li = document.createElement('li');
-    li.textContent = `${serial}: ${name}`;
+    const textSpan = document.createElement('span');
+    textSpan.textContent = `${serial}: ${name}`;
+    const del = document.createElement('span');
+    del.className = 'deleteEquipment';
+    del.textContent = '❌';
+    del.title = 'Remove Equipment';
+    del.addEventListener('click', () => removeEquipmentAdmin(serial));
+    li.appendChild(textSpan);
+    li.appendChild(del);
     list.appendChild(li);
   });
   equipmentPage = page;
@@ -345,14 +353,12 @@ function addEquipmentAdmin() {
     showError('Please enter both equipment name and serial number!');
   }
 }
-function removeEquipmentAdmin() {
-  const serial = document.getElementById('equipSerial').value.trim();
+function removeEquipmentAdmin(serial) {
   if (serial && equipmentItems[serial]) {
     delete equipmentItems[serial];
     saveToStorage('equipmentItems', equipmentItems);
     showSuccess('Equipment removed successfully!');
     displayEquipmentListAdmin();
-    document.getElementById('equipmentAdminForm').reset();
   } else {
     showError('Invalid equipment serial or equipment not found!');
   }
@@ -581,7 +587,6 @@ if (initialEquipmentInput) {
 document.getElementById('addEquipmentBtn').addEventListener('click', addEquipmentField);
 document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
 document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEquipmentAdmin);
-document.getElementById('removeEquipmentAdminBtn').addEventListener('click', removeEquipmentAdmin);
 
 document.getElementById('exportEmployeesBtn').addEventListener('click', exportEmployeesCSV);
 document.getElementById('importEmployeesBtn').addEventListener('click', triggerImportEmployees);

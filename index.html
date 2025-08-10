@@ -8,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FedEx Equipment Check-Out System</title>
   <style>
-    #employeeList .deleteEmployee {
+    #employeeList .deleteEmployee,
+    #equipmentListAdmin .deleteEquipment {
       margin-left: 0.5rem;
       cursor: pointer;
       color: red;
@@ -98,7 +99,6 @@
         <input type="text" id="equipSerial" placeholder="Enter Equipment Serial" required>
       </div>
       <button type="button" id="addEquipmentAdminBtn">Add Equipment</button>
-      <button type="button" id="removeEquipmentAdminBtn">Remove Equipment</button>
     </form>
     <h3>Current Equipment</h3>
     <input type="text" id="equipmentSearch" placeholder="Search equipment">
