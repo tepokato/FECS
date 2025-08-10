@@ -73,4 +73,43 @@ describe('filterRecords', () => {
     expect(rows[1].children[1].textContent).toBe('456');
     expect(rows[1].children[2].textContent).toBe('Bob');
   });
+
+  test('Search handles numeric badge and name fields', () => {
+    const records = [
+      { timestamp: 't1', recordDate: '2023-01-01', badge: 789, employeeName: 1001, equipmentBarcodes: ['EQ1'], equipmentNames: ['Laptop'], action: 'Check-Out' }
+    ];
+    const win = loadDom(records);
+
+    document.getElementById('recordSearch').value = '789';
+    win.filterRecords();
+    let rows = document.querySelectorAll('#recordsTable table tr');
+    expect(rows).toHaveLength(2);
+    expect(rows[1].children[1].textContent).toBe('789');
+
+    document.getElementById('recordSearch').value = '1001';
+    win.filterRecords();
+    rows = document.querySelectorAll('#recordsTable table tr');
+    expect(rows).toHaveLength(2);
+    expect(rows[1].children[2].textContent).toBe('1001');
+  });
+
+  test('Search handles records missing badge or name', () => {
+    const records = [
+      { timestamp: 't1', recordDate: '2023-01-01', badge: '123', equipmentBarcodes: ['EQ1'], equipmentNames: ['Laptop'], action: 'Check-Out' },
+      { timestamp: 't2', recordDate: '2023-01-01', employeeName: 'Daisy', equipmentBarcodes: ['EQ2'], equipmentNames: ['Tablet'], action: 'Check-In' }
+    ];
+    const win = loadDom(records);
+
+    document.getElementById('recordSearch').value = '123';
+    expect(() => win.filterRecords()).not.toThrow();
+    let rows = document.querySelectorAll('#recordsTable table tr');
+    expect(rows).toHaveLength(2);
+    expect(rows[1].children[1].textContent).toBe('123');
+
+    document.getElementById('recordSearch').value = 'daisy';
+    expect(() => win.filterRecords()).not.toThrow();
+    rows = document.querySelectorAll('#recordsTable table tr');
+    expect(rows).toHaveLength(2);
+    expect(rows[1].children[2].textContent).toBe('Daisy');
+  });
 });
