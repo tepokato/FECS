@@ -15,6 +15,7 @@ function loadFromStorage(key, fallback) {
 let employees = loadFromStorage('employees', {});
 let equipmentItems = loadFromStorage('equipmentItems', {});
 let records = loadFromStorage('records', []);
+let equipmentIdCounter = 1;
 
 function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
@@ -127,14 +128,22 @@ function addEquipmentField() {
   const input = document.createElement('input');
   input.type = 'text';
   input.name = 'equipment';
+  input.id = `equipment${equipmentIdCounter++}`;
   input.placeholder = 'Scan Equipment Barcode';
   input.required = true;
   input.addEventListener('input', lookupEquipment);
+
+  const scanBtn = document.createElement('button');
+  scanBtn.type = 'button';
+  scanBtn.className = 'scanBtn';
+  scanBtn.textContent = 'Scan';
+  scanBtn.dataset.target = input.id;
 
   const nameSpan = document.createElement('span');
   nameSpan.className = 'equipmentNameDisplay';
 
   rowDiv.appendChild(input);
+  rowDiv.appendChild(scanBtn);
   rowDiv.appendChild(nameSpan);
 
   const removeBtn = document.createElement('button');
@@ -198,6 +207,51 @@ function lookupEquipment(event) {
       addEquipmentField();
       equipmentList.lastElementChild.querySelector('input[name="equipment"]').focus();
     }
+  }
+}
+
+async function initCameraScanner(targetInputId) {
+  const overlay = document.createElement('div');
+  overlay.id = 'scannerOverlay';
+  const video = document.createElement('video');
+  overlay.appendChild(video);
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.textContent = 'Cancel';
+  overlay.appendChild(cancelBtn);
+  document.body.appendChild(overlay);
+
+  let stream;
+  const codeReader = new ZXing.BrowserMultiFormatReader();
+
+  function cleanup() {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    overlay.remove();
+  }
+
+  cancelBtn.addEventListener('click', () => {
+    codeReader.cancel();
+  });
+
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    video.srcObject = stream;
+    await video.play();
+    const result = await codeReader.decodeFromVideo(video);
+    if (result) {
+      const input = document.getElementById(targetInputId);
+      if (input) {
+        const text = result.getText ? result.getText() : result;
+        input.value = text;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+  } catch (err) {
+    console.error('Scanner error', err);
+  } finally {
+    cleanup();
   }
 }
 
@@ -525,6 +579,16 @@ if (navToggle && nav) {
     nav.classList.toggle('show');
   });
 }
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.scanBtn');
+  if (btn) {
+    const target = btn.dataset.target;
+    if (target) {
+      initCameraScanner(target);
+    }
+  }
+});
 
 document.getElementById('badge').addEventListener('input', lookupEmployee);
 
