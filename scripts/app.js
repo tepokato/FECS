@@ -211,11 +211,6 @@ function lookupEquipment(event) {
 }
 
 async function initCameraScanner(targetInputId) {
-  if (!navigator.mediaDevices || !window.BarcodeDetector) {
-    showError('Barcode scanning isn’t supported in this browser.');
-    return;
-  }
-
   const overlay = document.createElement('div');
   overlay.id = 'scannerOverlay';
   const video = document.createElement('video');
@@ -226,16 +221,18 @@ async function initCameraScanner(targetInputId) {
   overlay.appendChild(cancelBtn);
   document.body.appendChild(overlay);
 
-  const codeReader = new ZXing.BrowserMultiFormatReader();
+  const ZXingLib = window.ZXingBrowser || window.ZXing;
+  const codeReader = new ZXingLib.BrowserMultiFormatReader();
 
   function cleanup() {
     codeReader.reset();
+    if (video.srcObject) {
+      video.srcObject.getTracks().forEach(track => track.stop());
+    }
     overlay.remove();
   }
 
-  cancelBtn.addEventListener('click', () => {
-    cleanup();
-  });
+  cancelBtn.addEventListener('click', cleanup);
 
   try {
     await codeReader.decodeFromVideoDevice(null, video, (result, err) => {
@@ -247,13 +244,15 @@ async function initCameraScanner(targetInputId) {
           input.dispatchEvent(new Event('input', { bubbles: true }));
         }
         cleanup();
-      } else if (err && !(err instanceof ZXing.NotFoundException)) {
+      } else if (err && !(err instanceof ZXingLib.NotFoundException)) {
         console.error('Scanner error', err);
         cleanup();
+        showError('Barcode scanning isn’t supported in this browser.');
       }
     });
   } catch (err) {
     console.error('Scanner error', err);
+    showError('Barcode scanning isn’t supported in this browser.');
     cleanup();
   }
 }
