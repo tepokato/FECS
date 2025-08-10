@@ -21,7 +21,7 @@ function saveToStorage(key, data) {
 }
 
 function csvEscape(value) {
-  return String(value).replace(/"/g, '""');
+  return String(value).replace(/["\r\n]/g, c => c + c);
 }
 
 /* ---------- Notification System ---------- */
