@@ -17,6 +17,12 @@ let equipmentItems = loadFromStorage('equipmentItems', {});
 let records = loadFromStorage('records', []);
 let equipmentIdCounter = 1;
 
+const pageSize = 10;
+let employeePage = 0;
+let equipmentPage = 0;
+let employeeFilter = '';
+let equipmentFilter = '';
+
 function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
@@ -249,14 +255,28 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
 });
 
 /* ---------- Admin Panel Functions ---------- */
-function displayEmployeeList() {
+function displayEmployeeList(page = employeePage, filter = employeeFilter) {
+  filter = (filter || '').toLowerCase();
   const list = document.getElementById('employeeList');
   list.innerHTML = "";
-  for (let [badge, name] of Object.entries(employees)) {
+  const entries = Object.entries(employees).sort((a, b) => a[0].localeCompare(b[0]));
+  const filtered = entries.filter(([badge, name]) =>
+    badge.toLowerCase().includes(filter) || name.toLowerCase().includes(filter)
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  page = Math.min(Math.max(page, 0), totalPages - 1);
+  const start = page * pageSize;
+  filtered.slice(start, start + pageSize).forEach(([badge, name]) => {
     const li = document.createElement('li');
     li.textContent = `${badge}: ${name}`;
     list.appendChild(li);
-  }
+  });
+  employeePage = page;
+  employeeFilter = filter;
+  const prevBtn = document.getElementById('employeePrev');
+  const nextBtn = document.getElementById('employeeNext');
+  if (prevBtn) prevBtn.disabled = page <= 0;
+  if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
 }
 function addEmployee() {
   const badge = document.getElementById('empBadge').value.trim();
@@ -283,14 +303,28 @@ function removeEmployee() {
     showError('Invalid badge ID or employee not found!');
   }
 }
-function displayEquipmentListAdmin() {
+function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilter) {
+  filter = (filter || '').toLowerCase();
   const list = document.getElementById('equipmentListAdmin');
   list.innerHTML = "";
-  for (let [serial, name] of Object.entries(equipmentItems)) {
+  const entries = Object.entries(equipmentItems).sort((a, b) => a[0].localeCompare(b[0]));
+  const filtered = entries.filter(([serial, name]) =>
+    serial.toLowerCase().includes(filter) || name.toLowerCase().includes(filter)
+  );
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  page = Math.min(Math.max(page, 0), totalPages - 1);
+  const start = page * pageSize;
+  filtered.slice(start, start + pageSize).forEach(([serial, name]) => {
     const li = document.createElement('li');
     li.textContent = `${serial}: ${name}`;
     list.appendChild(li);
-  }
+  });
+  equipmentPage = page;
+  equipmentFilter = filter;
+  const prevBtn = document.getElementById('equipmentPrev');
+  const nextBtn = document.getElementById('equipmentNext');
+  if (prevBtn) prevBtn.disabled = page <= 0;
+  if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
 }
 function addEquipmentAdmin() {
   const serial = document.getElementById('equipSerial').value.trim();
@@ -551,6 +585,26 @@ document.getElementById('importEmployeesFile').addEventListener('change', handle
 document.getElementById('exportEquipmentBtn').addEventListener('click', exportEquipmentCSV);
 document.getElementById('importEquipmentBtn').addEventListener('click', triggerImportEquipment);
 document.getElementById('importEquipmentFile').addEventListener('change', handleImportEquipment);
+
+document.getElementById('employeeSearch').addEventListener('input', (e) => {
+  displayEmployeeList(0, e.target.value.trim().toLowerCase());
+});
+document.getElementById('employeePrev').addEventListener('click', () => {
+  displayEmployeeList(employeePage - 1);
+});
+document.getElementById('employeeNext').addEventListener('click', () => {
+  displayEmployeeList(employeePage + 1);
+});
+
+document.getElementById('equipmentSearch').addEventListener('input', (e) => {
+  displayEquipmentListAdmin(0, e.target.value.trim().toLowerCase());
+});
+document.getElementById('equipmentPrev').addEventListener('click', () => {
+  displayEquipmentListAdmin(equipmentPage - 1);
+});
+document.getElementById('equipmentNext').addEventListener('click', () => {
+  displayEquipmentListAdmin(equipmentPage + 1);
+});
 
 document.getElementById('filterRecordsBtn').addEventListener('click', filterRecords);
 document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);

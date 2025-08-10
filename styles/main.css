@@ -277,10 +277,15 @@
       }
 
       .records-container,
-      form {
+    form {
         max-width: 100%;
         margin: 0.625rem auto;
         padding: 0.625rem;
     }
     }
+
+.list-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
 
