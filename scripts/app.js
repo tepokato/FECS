@@ -227,7 +227,12 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   }
 
   const employeeName = employees[badge] || "Unknown";
-  const action = document.getElementById('action').value;
+  const actionInput = document.getElementById('action');
+  const action = actionInput.value;
+  if (!action) {
+    showError('Please select an action.');
+    return;
+  }
   const now = new Date();
   const timeString = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true});
   const recordDate = now.toISOString().substring(0,10);
@@ -249,6 +254,8 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   showSuccess('Record saved locally!');
   this.reset();
   document.getElementById('employeeName').textContent = "";
+  document.getElementById('actionBtn').textContent = 'Select Action';
+  actionMenu.classList.add('hidden');
   const equipmentList = document.getElementById('equipmentList');
   equipmentList.innerHTML = "";
   addEquipmentField();
@@ -587,6 +594,21 @@ if (initialEquipmentInput) {
 document.getElementById('addEquipmentBtn').addEventListener('click', addEquipmentField);
 document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
 document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEquipmentAdmin);
+
+const actionBtn = document.getElementById('actionBtn');
+const actionMenu = document.getElementById('actionMenu');
+if (actionBtn && actionMenu) {
+  actionBtn.addEventListener('click', () => {
+    actionMenu.classList.toggle('hidden');
+  });
+  actionMenu.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('action').value = btn.dataset.value || btn.textContent;
+      actionBtn.textContent = btn.textContent;
+      actionMenu.classList.add('hidden');
+    });
+  });
+}
 
 const importExportBtn = document.getElementById('importExportBtn');
 const importExportMenu = document.getElementById('importExportMenu');

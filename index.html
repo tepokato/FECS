@@ -56,12 +56,15 @@
         </div>
       </div>
       <button type="button" id="addEquipmentBtn">Add Another Barcode</button>
-      <label for="action">Action:</label>
-      <select id="action" required>
-        <option value="">Select Action</option>
-        <option value="Check-Out">Check-Out</option>
-        <option value="Check-In">Check-In</option>
-      </select>
+      <label for="actionBtn">Action:</label>
+      <div class="dropdown">
+        <button type="button" id="actionBtn" class="btn-inline">Select Action</button>
+        <div id="actionMenu" class="dropdown-menu hidden">
+          <button type="button" data-value="Check-Out">Check-Out</button>
+          <button type="button" data-value="Check-In">Check-In</button>
+        </div>
+      </div>
+      <input type="hidden" id="action">
       <button type="submit">Submit</button>
     </form>
   </section>
