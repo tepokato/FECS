@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <!-- Favicon -->
-  <link id="favicon" rel="icon" href="">
+  <link rel="icon" type="image/png" href="images/image.png">
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="styles/main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
   <!-- Header Section with App Icon and Name -->
   <header class="site-header">
     <h1>FECS</h1>
-    <div class="site-logo"></div>
+    <img class="site-logo" src="images/image.png" alt="FECS logo">
     <div class="app-name">FedEx Equipment Check-Out System</div>
   </header>
 
@@ -140,15 +140,6 @@
   </section>
 
   <!-- JavaScript -->
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const fav = getComputedStyle(document.documentElement)
-        .getPropertyValue('--favicon-data')
-        .replace(/^url("?|"?)$/g, '')
-        .trim();
-      document.getElementById('favicon').href = fav;
-    });
-  </script>
   <script src="scripts/csvParser.js"></script>
   <script src="scripts/app.js"></script>
 </body>
