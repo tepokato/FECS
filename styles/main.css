@@ -321,3 +321,10 @@
   overflow-y: auto;
 }
 
+#employeeList .deleteEmployee,
+#equipmentListAdmin .deleteEquipment {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  color: red;
+}
+
