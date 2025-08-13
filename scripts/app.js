@@ -73,7 +73,7 @@ function updateNotifications() {
   notificationDiv.classList.remove('visible');
   const status = {};
   records.forEach(rec => {
-    rec.equipmentBarcodes.forEach(code => {
+    (rec.equipmentBarcodes || []).forEach(code => {
       if (!status[code]) status[code] = 0;
       if (rec.action === "Check-Out") {
         status[code]++;
