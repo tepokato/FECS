@@ -356,6 +356,11 @@ function addEmployee() {
     hasError = true;
   }
   if (hasError) return;
+  if (employees[badge]) {
+    setFieldError(badgeInput, 'Badge ID already exists.');
+    showError('Employee with this badge ID already exists!');
+    return;
+  }
   employees[badge] = name;
   saveToStorage('employees', employees);
   showSuccess('Employee added successfully!');
@@ -422,6 +427,11 @@ function addEquipmentAdmin() {
     hasError = true;
   }
   if (hasError) return;
+  if (equipmentItems[serial]) {
+    setFieldError(serialInput, 'Equipment serial already exists.');
+    showError('Equipment with this serial already exists!');
+    return;
+  }
   equipmentItems[serial] = name;
   saveToStorage('equipmentItems', equipmentItems);
   showSuccess('Equipment added successfully!');
