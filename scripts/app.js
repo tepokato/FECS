@@ -724,42 +724,104 @@ document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEqu
   }
 });
 
+function setupDropdown(button, menu, onSelect) {
+  const items = Array.from(menu.querySelectorAll('button'));
+
+  const openMenu = () => {
+    menu.classList.remove('hidden');
+    button.setAttribute('aria-expanded', 'true');
+    items[0]?.focus();
+  };
+
+  const closeMenu = () => {
+    menu.classList.add('hidden');
+    button.setAttribute('aria-expanded', 'false');
+    button.focus();
+  };
+
+  const toggleMenu = () => {
+    if (menu.classList.contains('hidden')) {
+      openMenu();
+    } else {
+      closeMenu();
+    }
+  };
+
+  button.addEventListener('click', toggleMenu);
+  button.addEventListener('keydown', (e) => {
+    if (['Enter', ' '].includes(e.key)) {
+      e.preventDefault();
+      toggleMenu();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      openMenu();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      openMenu();
+      items[items.length - 1]?.focus();
+    } else if (e.key === 'Escape') {
+      if (button.getAttribute('aria-expanded') === 'true') {
+        e.preventDefault();
+        closeMenu();
+      }
+    }
+  });
+
+  items.forEach((item, index) => {
+    item.setAttribute('tabindex', '-1');
+    item.addEventListener('click', () => {
+      onSelect?.(item);
+      closeMenu();
+    });
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items[(index + 1) % items.length].focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items[(index - 1 + items.length) % items.length].focus();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMenu();
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && e.target !== button) {
+      if (button.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+      }
+    }
+  });
+}
+
 const actionBtn = document.getElementById('actionBtn');
 const actionMenu = document.getElementById('actionMenu');
 if (actionBtn && actionMenu) {
-  actionBtn.addEventListener('click', () => {
-    actionMenu.classList.toggle('hidden');
-  });
-  actionMenu.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.getElementById('action').value = btn.dataset.value || btn.textContent;
-      actionBtn.textContent = btn.textContent;
-      actionMenu.classList.add('hidden');
-    });
+  setupDropdown(actionBtn, actionMenu, (item) => {
+    document.getElementById('action').value = item.dataset.value || item.textContent;
+    actionBtn.textContent = item.textContent;
   });
 }
 
 const importExportBtn = document.getElementById('importExportBtn');
 const importExportMenu = document.getElementById('importExportMenu');
-importExportBtn.addEventListener('click', () => {
-  importExportMenu.classList.toggle('hidden');
-});
+if (importExportBtn && importExportMenu) {
+  setupDropdown(importExportBtn, importExportMenu);
+}
 
 document.getElementById('exportEmployeesAction').addEventListener('click', () => {
   exportEmployeesCSV();
-  importExportMenu.classList.add('hidden');
 });
 document.getElementById('importEmployeesAction').addEventListener('click', () => {
   triggerImportEmployees();
-  importExportMenu.classList.add('hidden');
 });
 document.getElementById('exportEquipmentAction').addEventListener('click', () => {
   exportEquipmentCSV();
-  importExportMenu.classList.add('hidden');
 });
 document.getElementById('importEquipmentAction').addEventListener('click', () => {
   triggerImportEquipment();
-  importExportMenu.classList.add('hidden');
 });
 document.getElementById('importEmployeesFile').addEventListener('change', handleImportEmployees);
 document.getElementById('importEquipmentFile').addEventListener('change', handleImportEquipment);
