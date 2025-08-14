@@ -52,10 +52,10 @@
       <button type="button" id="addEquipmentBtn">Add Another Barcode</button>
       <label for="actionBtn">Action:</label>
       <div class="dropdown">
-        <button type="button" id="actionBtn" class="btn-inline">Select Action</button>
-        <div id="actionMenu" class="dropdown-menu hidden">
-          <button type="button" data-value="Check-Out">Check-Out</button>
-          <button type="button" data-value="Check-In">Check-In</button>
+        <button type="button" id="actionBtn" class="btn-inline" aria-haspopup="true" aria-expanded="false" aria-controls="actionMenu">Select Action</button>
+        <div id="actionMenu" class="dropdown-menu hidden" role="menu">
+          <button type="button" data-value="Check-Out" role="menuitem">Check-Out</button>
+          <button type="button" data-value="Check-In" role="menuitem">Check-In</button>
         </div>
       </div>
       <input type="hidden" id="action">
@@ -115,12 +115,12 @@
     <hr>
     <div class="mb-15">
       <div class="dropdown">
-        <button type="button" class="btn-inline" id="importExportBtn">Import/Export</button>
-        <div id="importExportMenu" class="dropdown-menu hidden">
-          <button type="button" id="exportEmployeesAction">Export Employees to CSV</button>
-          <button type="button" id="importEmployeesAction">Import Employees CSV</button>
-          <button type="button" id="exportEquipmentAction">Export Equipment to CSV</button>
-          <button type="button" id="importEquipmentAction">Import Equipment CSV</button>
+        <button type="button" class="btn-inline" id="importExportBtn" aria-haspopup="true" aria-expanded="false" aria-controls="importExportMenu">Import/Export</button>
+        <div id="importExportMenu" class="dropdown-menu hidden" role="menu">
+          <button type="button" id="exportEmployeesAction" role="menuitem">Export Employees to CSV</button>
+          <button type="button" id="importEmployeesAction" role="menuitem">Import Employees CSV</button>
+          <button type="button" id="exportEquipmentAction" role="menuitem">Export Equipment to CSV</button>
+          <button type="button" id="importEquipmentAction" role="menuitem">Import Equipment CSV</button>
         </div>
       </div>
       <input type="file" id="importEmployeesFile" accept=".csv" class="hidden">
