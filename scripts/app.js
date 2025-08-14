@@ -826,6 +826,21 @@ if (importExportBtn && importExportMenu) {
   setupDropdown(importExportBtn, importExportMenu);
 }
 
+document.addEventListener('click', (e) => {
+  const clickedInsideDropdown =
+    actionMenu?.contains(e.target) ||
+    actionBtn?.contains(e.target) ||
+    importExportMenu?.contains(e.target) ||
+    importExportBtn?.contains(e.target);
+
+  if (!clickedInsideDropdown) {
+    actionMenu?.classList.add('hidden');
+    actionBtn?.setAttribute('aria-expanded', 'false');
+    importExportMenu?.classList.add('hidden');
+    importExportBtn?.setAttribute('aria-expanded', 'false');
+  }
+});
+
 document.getElementById('exportEmployeesAction').addEventListener('click', () => {
   exportEmployeesCSV();
 });
