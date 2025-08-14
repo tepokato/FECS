@@ -35,6 +35,7 @@
       <label for="badge">Employee Badge ID:</label>
       <div class="employeeRow">
         <input type="text" id="badge" placeholder="Enter Employee Badge ID" required autofocus>
+        <span class="error-message" aria-live="polite"></span>
         <span id="employeeName"></span>
       </div>
       <label for="equipment">Equipment Barcodes:</label>
@@ -42,6 +43,7 @@
         <div class="equipment-item">
           <div class="equipmentRow">
             <input type="text" id="equipment0" name="equipment" placeholder="Enter Equipment Barcode" required>
+            <span class="error-message" aria-live="polite"></span>
             <span class="equipmentNameDisplay"></span>
           </div>
           <button type="button" class="removeEquipment hidden">Remove</button>
@@ -68,10 +70,12 @@
       <div>
         <label for="empName">Employee Name:</label>
         <input type="text" id="empName" placeholder="Enter Employee Name" required>
+        <span class="error-message" aria-live="polite"></span>
       </div>
       <div>
         <label for="empBadge">Employee Badge ID:</label>
         <input type="text" id="empBadge" placeholder="Enter Badge ID" required>
+        <span class="error-message" aria-live="polite"></span>
       </div>
       <button type="button" id="addEmployeeBtn">Add Employee</button>
     </form>
@@ -89,10 +93,12 @@
       <div>
         <label for="equipName">Equipment Name:</label>
         <input type="text" id="equipName" placeholder="Enter Equipment Name" required>
+        <span class="error-message" aria-live="polite"></span>
       </div>
       <div>
         <label for="equipSerial">Equipment Serial Number:</label>
         <input type="text" id="equipSerial" placeholder="Enter Equipment Serial" required>
+        <span class="error-message" aria-live="polite"></span>
       </div>
       <button type="button" id="addEquipmentAdminBtn">Add Equipment</button>
     </form>

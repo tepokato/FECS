@@ -65,6 +65,22 @@ function showError(message, delay) {
   showNotification(message, 'error', delay);
 }
 
+function setFieldError(input, message) {
+  const errorSpan = input.parentElement.querySelector('.error-message');
+  if (errorSpan) {
+    errorSpan.textContent = message;
+  }
+  input.classList.add('error');
+}
+
+function clearFieldError(input) {
+  const errorSpan = input.parentElement.querySelector('.error-message');
+  if (errorSpan) {
+    errorSpan.textContent = '';
+  }
+  input.classList.remove('error');
+}
+
 function updateNotifications() {
   if (tempNotificationActive) return;
 
@@ -139,10 +155,15 @@ function addEquipmentField() {
   // Equipment fields are optional; allow empty inputs
   input.addEventListener('input', lookupEquipment);
 
+  const errorSpan = document.createElement('span');
+  errorSpan.className = 'error-message';
+  errorSpan.setAttribute('aria-live', 'polite');
+
   const nameSpan = document.createElement('span');
   nameSpan.className = 'equipmentNameDisplay';
 
   rowDiv.appendChild(input);
+  rowDiv.appendChild(errorSpan);
   rowDiv.appendChild(nameSpan);
 
   const removeBtn = document.createElement('button');
@@ -178,7 +199,9 @@ function updateRemoveButtons() {
 }
 
 function lookupEmployee() {
-  const badge = document.getElementById('badge').value.trim();
+  const input = document.getElementById('badge');
+  clearFieldError(input);
+  const badge = input.value.trim();
   const employeeNameSpan = document.getElementById('employeeName');
   if (employees[badge]) {
     employeeNameSpan.textContent = employees[badge];
@@ -193,6 +216,7 @@ function lookupEmployee() {
 
 function lookupEquipment(event) {
   const input = event.target;
+  clearFieldError(input);
   const value = input.value.trim();
   const display = input.parentElement.querySelector('.equipmentNameDisplay');
   const equipmentName = equipmentItems[value];
@@ -204,6 +228,7 @@ function lookupEquipment(event) {
 
     for (const other of inputs) {
       if (other !== input && other.value.trim() === value) {
+        setFieldError(input, 'Equipment barcode already entered.');
         showError('Error: Equipment barcode already entered.');
         input.value = '';
         display.textContent = '';
@@ -222,24 +247,33 @@ function lookupEquipment(event) {
 document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   e.preventDefault();
 
-  const badge = document.getElementById('badge').value.trim();
-  if (!employees[badge]) {
-    showError("Error: Employee badge not recognized. Please scan a valid badge.");
+  const badgeInput = document.getElementById('badge');
+  clearFieldError(badgeInput);
+  const badge = badgeInput.value.trim();
+  if (!badge) {
+    setFieldError(badgeInput, 'Badge ID is required.');
     return;
   }
+  if (!employees[badge]) {
+    setFieldError(badgeInput, 'Employee badge not recognized.');
+    return;
+  }
+
   const equipmentInputs = Array.from(document.querySelectorAll('#equipmentList input[name="equipment"]'));
+  equipmentInputs.forEach(clearFieldError);
   const equipmentCodes = equipmentInputs
     .map(input => input.value.trim())
     .filter(code => code !== "");
 
   if (equipmentCodes.length === 0) {
-    showError("Please scan at least one equipment barcode.");
+    setFieldError(equipmentInputs[0], 'Please scan at least one equipment barcode.');
     return;
   }
 
-  for (const code of equipmentCodes) {
-    if (!equipmentItems[code]) {
-      showError("Error: Equipment barcode '" + code + "' not recognized. Please scan a valid equipment barcode.");
+  for (const input of equipmentInputs) {
+    const code = input.value.trim();
+    if (code && !equipmentItems[code]) {
+      setFieldError(input, "Equipment barcode '" + code + "' not recognized.");
       return;
     }
   }
@@ -306,17 +340,29 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
 }
 function addEmployee() {
-  const badge = document.getElementById('empBadge').value.trim();
-  const name = document.getElementById('empName').value.trim();
-  if (badge && name) {
-    employees[badge] = name;
-    saveToStorage('employees', employees);
-    showSuccess('Employee added successfully!');
-    displayEmployeeList();
-    document.getElementById('adminForm').reset();
-  } else {
-    showError('Please enter both employee name and badge ID!');
+  const nameInput = document.getElementById('empName');
+  const badgeInput = document.getElementById('empBadge');
+  clearFieldError(nameInput);
+  clearFieldError(badgeInput);
+  const badge = badgeInput.value.trim();
+  const name = nameInput.value.trim();
+  let hasError = false;
+  if (!name) {
+    setFieldError(nameInput, 'Employee name is required.');
+    hasError = true;
   }
+  if (!badge) {
+    setFieldError(badgeInput, 'Badge ID is required.');
+    hasError = true;
+  }
+  if (hasError) return;
+  employees[badge] = name;
+  saveToStorage('employees', employees);
+  showSuccess('Employee added successfully!');
+  displayEmployeeList();
+  document.getElementById('adminForm').reset();
+  clearFieldError(nameInput);
+  clearFieldError(badgeInput);
 }
 function removeEmployee(badge) {
   if (badge && employees[badge]) {
@@ -360,17 +406,29 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
 }
 function addEquipmentAdmin() {
-  const serial = document.getElementById('equipSerial').value.trim();
-  const name = document.getElementById('equipName').value.trim();
-  if (serial && name) {
-    equipmentItems[serial] = name;
-    saveToStorage('equipmentItems', equipmentItems);
-    showSuccess('Equipment added successfully!');
-    displayEquipmentListAdmin();
-    document.getElementById('equipmentAdminForm').reset();
-  } else {
-    showError('Please enter both equipment name and serial number!');
+  const nameInput = document.getElementById('equipName');
+  const serialInput = document.getElementById('equipSerial');
+  clearFieldError(nameInput);
+  clearFieldError(serialInput);
+  const serial = serialInput.value.trim();
+  const name = nameInput.value.trim();
+  let hasError = false;
+  if (!name) {
+    setFieldError(nameInput, 'Equipment name is required.');
+    hasError = true;
   }
+  if (!serial) {
+    setFieldError(serialInput, 'Equipment serial is required.');
+    hasError = true;
+  }
+  if (hasError) return;
+  equipmentItems[serial] = name;
+  saveToStorage('equipmentItems', equipmentItems);
+  showSuccess('Equipment added successfully!');
+  displayEquipmentListAdmin();
+  document.getElementById('equipmentAdminForm').reset();
+  clearFieldError(nameInput);
+  clearFieldError(serialInput);
 }
 function removeEquipmentAdmin(serial) {
   if (serial && equipmentItems[serial]) {
@@ -623,6 +681,13 @@ if (initialEquipmentInput) {
 document.getElementById('addEquipmentBtn').addEventListener('click', addEquipmentField);
 document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
 document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEquipmentAdmin);
+
+['empName','empBadge','equipName','equipSerial'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('input', () => clearFieldError(el));
+  }
+});
 
 const actionBtn = document.getElementById('actionBtn');
 const actionMenu = document.getElementById('actionMenu');
