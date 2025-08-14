@@ -395,8 +395,8 @@ function displayRecords(recArray) {
           <td>${escapeHtml(rec.timestamp)}</td>
           <td>${escapeHtml(rec.badge)}</td>
           <td>${escapeHtml(rec.employeeName)}</td>
-          <td>${escapeHtml(rec.equipmentBarcodes.join('; '))}</td>
-          <td>${escapeHtml(rec.equipmentNames.join('; '))}</td>
+          <td>${escapeHtml((rec.equipmentBarcodes ?? []).join('; '))}</td>
+          <td>${escapeHtml((rec.equipmentNames ?? []).join('; '))}</td>
           <td>${escapeHtml(rec.action)}</td>
         </tr>`;
   });
