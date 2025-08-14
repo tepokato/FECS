@@ -561,15 +561,34 @@ function triggerImportEmployees() {
   document.getElementById("importEmployeesFile").click();
 }
 
+function setLoading(button, loading, text = 'Importing...') {
+  if (!button) return;
+  if (loading) {
+    button.disabled = true;
+    button.dataset.originalText = button.textContent;
+    button.textContent = text;
+  } else {
+    button.disabled = false;
+    if (button.dataset.originalText) {
+      button.textContent = button.dataset.originalText;
+      delete button.dataset.originalText;
+    }
+  }
+}
+
 function handleImportEmployees(event) {
   const input = event.target;
+  const button = document.getElementById('importEmployeesAction');
+  setLoading(button, true);
   if (input.files.length === 0) {
+    setLoading(button, false);
     return;
   }
   const file = input.files[0];
   const reader = new FileReader();
   reader.onerror = function() {
-    showError("Failed to read employees file.");
+    showError("Unable to read employees CSV file.");
+    setLoading(button, false);
     input.value = "";
   };
   reader.onload = function(e) {
@@ -590,8 +609,9 @@ function handleImportEmployees(event) {
       }
     }
     saveToStorage("employees", employees);
-    showSuccess("Employees imported successfully!");
+    showSuccess("Employee CSV import completed successfully.");
     displayEmployeeList();
+    setLoading(button, false);
     input.value = "";
   };
   reader.readAsText(file);
@@ -603,13 +623,17 @@ function triggerImportEquipment() {
 
 function handleImportEquipment(event) {
   const input = event.target;
+  const button = document.getElementById('importEquipmentAction');
+  setLoading(button, true);
   if (input.files.length === 0) {
+    setLoading(button, false);
     return;
   }
   const file = input.files[0];
   const reader = new FileReader();
   reader.onerror = function() {
-    showError("Failed to read equipment file.");
+    showError("Unable to read equipment CSV file.");
+    setLoading(button, false);
     input.value = "";
   };
   reader.onload = function(e) {
@@ -630,8 +654,9 @@ function handleImportEquipment(event) {
       }
     }
     saveToStorage("equipmentItems", equipmentItems);
-    showSuccess("Equipment imported successfully!");
+    showSuccess("Equipment CSV import completed successfully.");
     displayEquipmentListAdmin();
+    setLoading(button, false);
     input.value = "";
   };
   reader.readAsText(file);
