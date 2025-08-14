@@ -305,6 +305,7 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   const equipmentList = document.getElementById('equipmentList');
   equipmentList.innerHTML = "";
   addEquipmentField();
+  document.getElementById('badge').focus();
 });
 
 /* ---------- Admin Panel Functions ---------- */
