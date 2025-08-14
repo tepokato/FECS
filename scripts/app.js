@@ -379,14 +379,18 @@ function addEmployee() {
   clearFieldError(badgeInput);
 }
 function removeEmployee(badge) {
-  if (badge && employees[badge]) {
-    delete employees[badge];
-    saveToStorage('employees', employees);
-    showSuccess('Employee removed successfully!');
-    displayEmployeeList();
-  } else {
+  if (!badge || !employees[badge]) {
     showError('Invalid badge ID or employee not found!');
+    return;
   }
+  const confirmed = typeof confirm === 'function'
+    ? confirm('Are you sure you want to remove this employee?')
+    : true;
+  if (!confirmed) return;
+  delete employees[badge];
+  saveToStorage('employees', employees);
+  showSuccess('Employee removed successfully!');
+  displayEmployeeList();
 }
 function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilter) {
   filter = (filter || '').toLowerCase();
@@ -458,14 +462,18 @@ function addEquipmentAdmin() {
   clearFieldError(serialInput);
 }
 function removeEquipmentAdmin(serial) {
-  if (serial && equipmentItems[serial]) {
-    delete equipmentItems[serial];
-    saveToStorage('equipmentItems', equipmentItems);
-    showSuccess('Equipment removed successfully!');
-    displayEquipmentListAdmin();
-  } else {
+  if (!serial || !equipmentItems[serial]) {
     showError('Invalid equipment serial or equipment not found!');
+    return;
   }
+  const confirmed = typeof confirm === 'function'
+    ? confirm('Are you sure you want to remove this equipment?')
+    : true;
+  if (!confirmed) return;
+  delete equipmentItems[serial];
+  saveToStorage('equipmentItems', equipmentItems);
+  showSuccess('Equipment removed successfully!');
+  displayEquipmentListAdmin();
 }
 
 /* ---------- Record Filtering & Export ---------- */
