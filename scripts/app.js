@@ -199,9 +199,19 @@ function lookupEquipment(event) {
   display.textContent = equipmentName || "";
 
   if (equipmentName) {
-    input.disabled = true;
     const equipmentList = document.getElementById('equipmentList');
     const inputs = equipmentList.querySelectorAll('input[name="equipment"]');
+
+    for (const other of inputs) {
+      if (other !== input && other.value.trim() === value) {
+        showError('Error: Equipment barcode already entered.');
+        input.value = '';
+        display.textContent = '';
+        return;
+      }
+    }
+
+    input.disabled = true;
     if (inputs[inputs.length - 1] === input) {
       addEquipmentField();
       equipmentList.lastElementChild.querySelector('input[name="equipment"]').focus();
