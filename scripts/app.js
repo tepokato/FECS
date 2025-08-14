@@ -261,6 +261,7 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   const record = { timestamp, recordDate, badge, employeeName, equipmentBarcodes, equipmentNames, action };
   records.push(record);
   saveToStorage('records', records);
+  updateNotifications();
   showSuccess('Record saved locally!');
   this.reset();
   document.getElementById('employeeName').textContent = "";
