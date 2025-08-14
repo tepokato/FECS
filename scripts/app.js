@@ -581,9 +581,24 @@ function handleImportEquipment(event) {
 
 /* ---------- Event Listeners ---------- */
 
-document.getElementById('navCheckout').addEventListener('click', (e) => { e.preventDefault(); showSection('checkout'); });
-document.getElementById('navAdmin').addEventListener('click', (e) => { e.preventDefault(); showSection('admin'); });
-document.getElementById('navRecords').addEventListener('click', (e) => { e.preventDefault(); showSection('records'); });
+document.getElementById('navCheckout').addEventListener('click', (e) => {
+  e.preventDefault();
+  showSection('checkout');
+  nav.classList.remove('show');
+  navToggle.setAttribute('aria-expanded', 'false');
+});
+document.getElementById('navAdmin').addEventListener('click', (e) => {
+  e.preventDefault();
+  showSection('admin');
+  nav.classList.remove('show');
+  navToggle.setAttribute('aria-expanded', 'false');
+});
+document.getElementById('navRecords').addEventListener('click', (e) => {
+  e.preventDefault();
+  showSection('records');
+  nav.classList.remove('show');
+  navToggle.setAttribute('aria-expanded', 'false');
+});
 
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('mainNav');
