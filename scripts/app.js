@@ -674,28 +674,18 @@ function handleImportEquipment(event) {
 
 /* ---------- Event Listeners ---------- */
 
-document.getElementById('navCheckout').addEventListener('click', (e) => {
-  e.preventDefault();
-  showSection('checkout');
-  nav.classList.remove('show');
-  navToggle.setAttribute('aria-expanded', 'false');
-});
-document.getElementById('navAdmin').addEventListener('click', (e) => {
-  e.preventDefault();
-  showSection('admin');
-  nav.classList.remove('show');
-  navToggle.setAttribute('aria-expanded', 'false');
-});
-document.getElementById('navRecords').addEventListener('click', (e) => {
-  e.preventDefault();
-  showSection('records');
-  nav.classList.remove('show');
-  navToggle.setAttribute('aria-expanded', 'false');
-});
-
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('mainNav');
 if (navToggle && nav) {
+  nav.addEventListener('click', (e) => {
+    const link = e.target.closest('a[data-section]');
+    if (!link) return;
+    e.preventDefault();
+    showSection(link.dataset.section);
+    nav.classList.remove('show');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+
   navToggle.addEventListener('click', () => {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';
     navToggle.setAttribute('aria-expanded', String(!expanded));
