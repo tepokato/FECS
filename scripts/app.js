@@ -586,9 +586,11 @@ document.getElementById('navAdmin').addEventListener('click', (e) => { e.prevent
 document.getElementById('navRecords').addEventListener('click', (e) => { e.preventDefault(); showSection('records'); });
 
 const navToggle = document.getElementById('navToggle');
-const nav = document.querySelector('nav');
+const nav = document.getElementById('mainNav');
 if (navToggle && nav) {
   navToggle.addEventListener('click', () => {
+    const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', String(!expanded));
     nav.classList.toggle('show');
   });
 }

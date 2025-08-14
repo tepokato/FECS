@@ -18,11 +18,11 @@
   </header>
 
   <!-- Notification Banner -->
-  <div id="notifications"></div>
+  <div id="notifications" role="alert" aria-live="polite"></div>
 
   <!-- Navigation -->
-  <button id="navToggle" class="nav-toggle">Menu</button>
-  <nav>
+  <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mainNav">Menu</button>
+  <nav id="mainNav">
     <a href="#" id="navCheckout">Check-Out</a>
     <a href="#" id="navAdmin">Admin</a>
     <a href="#" id="navRecords">Records</a>
