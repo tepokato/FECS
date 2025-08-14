@@ -136,7 +136,7 @@ function addEquipmentField() {
   input.name = 'equipment';
   input.id = `equipment${equipmentIdCounter++}`;
   input.placeholder = 'Enter Equipment Barcode';
-  input.required = true;
+  // Equipment fields are optional; allow empty inputs
   input.addEventListener('input', lookupEquipment);
 
   const nameSpan = document.createElement('span');
@@ -227,9 +227,17 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
     showError("Error: Employee badge not recognized. Please scan a valid badge.");
     return;
   }
-  const equipmentInputs = document.querySelectorAll('#equipmentList input[name="equipment"]');
-  for (const input of equipmentInputs) {
-    const code = input.value.trim();
+  const equipmentInputs = Array.from(document.querySelectorAll('#equipmentList input[name="equipment"]'));
+  const equipmentCodes = equipmentInputs
+    .map(input => input.value.trim())
+    .filter(code => code !== "");
+
+  if (equipmentCodes.length === 0) {
+    showError("Please scan at least one equipment barcode.");
+    return;
+  }
+
+  for (const code of equipmentCodes) {
     if (!equipmentItems[code]) {
       showError("Error: Equipment barcode '" + code + "' not recognized. Please scan a valid equipment barcode.");
       return;
@@ -248,15 +256,8 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   const recordDate = now.toISOString().substring(0,10);
   const timestamp = `${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}/${now.getFullYear()} ${timeString}`;
 
-  const equipmentBarcodes = [];
-  const equipmentNames = [];
-  equipmentInputs.forEach(input => {
-    const code = input.value.trim();
-    if (code) {
-      equipmentBarcodes.push(code);
-      equipmentNames.push(equipmentItems[code] || "");
-    }
-  });
+  const equipmentBarcodes = equipmentCodes;
+  const equipmentNames = equipmentCodes.map(code => equipmentItems[code] || "");
 
   const record = { timestamp, recordDate, badge, employeeName, equipmentBarcodes, equipmentNames, action };
   records.push(record);
