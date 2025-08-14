@@ -76,3 +76,45 @@ test('handleImportEmployees surfaces read errors', () => {
   expect(win.showSuccess).not.toHaveBeenCalled();
   expect(localStorage.getItem('employees')).toBeNull();
 });
+
+test('handleImportEmployees shows loading state and restores after success', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEmployeeList = jest.fn();
+  let readerInstance;
+  class MockFileReader {
+    constructor() { readerInstance = this; }
+    readAsText() {}
+  }
+  win.FileReader = MockFileReader;
+  const button = win.document.getElementById('importEmployeesAction');
+  const event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,John' } ], value: '' } };
+  win.handleImportEmployees(event);
+  expect(button.disabled).toBe(true);
+  expect(button.textContent).toBe('Importing...');
+  readerInstance.onload({ target: { result: event.target.files[0].text } });
+  expect(button.disabled).toBe(false);
+  expect(button.textContent).toBe('Import Employees CSV');
+});
+
+test('handleImportEquipment restores button after failure', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEquipmentListAdmin = jest.fn();
+  let readerInstance;
+  class MockFileReader {
+    constructor() { readerInstance = this; }
+    readAsText() {}
+  }
+  win.FileReader = MockFileReader;
+  const button = win.document.getElementById('importEquipmentAction');
+  const event = { target: { files: [ { text: 'ignored' } ], value: '' } };
+  win.handleImportEquipment(event);
+  expect(button.disabled).toBe(true);
+  readerInstance.onerror(new Error('fail'));
+  expect(button.disabled).toBe(false);
+  expect(button.textContent).toBe('Import Equipment CSV');
+  expect(win.showError).toHaveBeenCalled();
+});
