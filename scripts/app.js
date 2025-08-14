@@ -319,19 +319,27 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   page = Math.min(Math.max(page, 0), totalPages - 1);
   const start = page * pageSize;
-  filtered.slice(start, start + pageSize).forEach(([badge, name]) => {
-    const li = document.createElement('li');
-    const textSpan = document.createElement('span');
-    textSpan.textContent = `${badge}: ${name}`;
-    const del = document.createElement('span');
-    del.className = 'deleteEmployee';
-    del.textContent = '❌';
-    del.title = 'Remove Employee';
-    del.addEventListener('click', () => removeEmployee(badge));
-    li.appendChild(textSpan);
-    li.appendChild(del);
-    list.appendChild(li);
-  });
+  const pageItems = filtered.slice(start, start + pageSize);
+  if (pageItems.length === 0) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'placeholder';
+    placeholder.textContent = 'No employees added yet.';
+    list.appendChild(placeholder);
+  } else {
+    pageItems.forEach(([badge, name]) => {
+      const li = document.createElement('li');
+      const textSpan = document.createElement('span');
+      textSpan.textContent = `${badge}: ${name}`;
+      const del = document.createElement('span');
+      del.className = 'deleteEmployee';
+      del.textContent = '❌';
+      del.title = 'Remove Employee';
+      del.addEventListener('click', () => removeEmployee(badge));
+      li.appendChild(textSpan);
+      li.appendChild(del);
+      list.appendChild(li);
+    });
+  }
   employeePage = page;
   employeeFilter = filter;
   const prevBtn = document.getElementById('employeePrev');
@@ -390,19 +398,27 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   page = Math.min(Math.max(page, 0), totalPages - 1);
   const start = page * pageSize;
-  filtered.slice(start, start + pageSize).forEach(([serial, name]) => {
-    const li = document.createElement('li');
-    const textSpan = document.createElement('span');
-    textSpan.textContent = `${serial}: ${name}`;
-    const del = document.createElement('span');
-    del.className = 'deleteEquipment';
-    del.textContent = '❌';
-    del.title = 'Remove Equipment';
-    del.addEventListener('click', () => removeEquipmentAdmin(serial));
-    li.appendChild(textSpan);
-    li.appendChild(del);
-    list.appendChild(li);
-  });
+  const pageItems = filtered.slice(start, start + pageSize);
+  if (pageItems.length === 0) {
+    const placeholder = document.createElement('li');
+    placeholder.className = 'placeholder';
+    placeholder.textContent = 'No equipment added yet.';
+    list.appendChild(placeholder);
+  } else {
+    pageItems.forEach(([serial, name]) => {
+      const li = document.createElement('li');
+      const textSpan = document.createElement('span');
+      textSpan.textContent = `${serial}: ${name}`;
+      const del = document.createElement('span');
+      del.className = 'deleteEquipment';
+      del.textContent = '❌';
+      del.title = 'Remove Equipment';
+      del.addEventListener('click', () => removeEquipmentAdmin(serial));
+      li.appendChild(textSpan);
+      li.appendChild(del);
+      list.appendChild(li);
+    });
+  }
   equipmentPage = page;
   equipmentFilter = filter;
   const prevBtn = document.getElementById('equipmentPrev');
