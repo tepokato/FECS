@@ -352,8 +352,16 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   const prevBtn = document.getElementById('employeePrev');
   const nextBtn = document.getElementById('employeeNext');
   const pageIndicator = document.getElementById('employeePageIndicator');
-  if (prevBtn) prevBtn.classList.toggle('hidden', page <= 0);
-  if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
+  if (prevBtn) {
+    const hidePrev = page <= 0;
+    prevBtn.classList.toggle('hidden', hidePrev);
+    prevBtn.disabled = hidePrev;
+  }
+  if (nextBtn) {
+    const hideNext = page >= totalPages - 1;
+    nextBtn.classList.toggle('hidden', hideNext);
+    nextBtn.disabled = hideNext;
+  }
   if (pageIndicator) pageIndicator.textContent = `Page ${page + 1} of ${totalPages}`;
 }
 function addEmployee() {
@@ -439,8 +447,16 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   const prevBtn = document.getElementById('equipmentPrev');
   const nextBtn = document.getElementById('equipmentNext');
   const pageIndicator = document.getElementById('equipmentPageIndicator');
-  if (prevBtn) prevBtn.classList.toggle('hidden', page <= 0);
-  if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
+  if (prevBtn) {
+    const hidePrev = page <= 0;
+    prevBtn.classList.toggle('hidden', hidePrev);
+    prevBtn.disabled = hidePrev;
+  }
+  if (nextBtn) {
+    const hideNext = page >= totalPages - 1;
+    nextBtn.classList.toggle('hidden', hideNext);
+    nextBtn.disabled = hideNext;
+  }
   if (pageIndicator) pageIndicator.textContent = `Page ${page + 1} of ${totalPages}`;
 }
 function addEquipmentAdmin() {
