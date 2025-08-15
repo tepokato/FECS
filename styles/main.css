@@ -1,3 +1,9 @@
+    :root {
+      --color-primary: #ff6600;
+      --color-accent: #0073e6;
+      --color-danger: #cc0000;
+    }
+
     html {
       font-size: 16px;
     }
@@ -43,7 +49,6 @@
       font-size: 0.875rem;
     }
     button {
-      background-color: #ff6600;
       color: white;
       border: none;
       cursor: pointer;
@@ -51,8 +56,23 @@
       border-radius: 0.5rem;
       width: 100%;
     }
-    button:hover {
+    .btn-primary {
+      background-color: var(--color-primary);
+    }
+    .btn-primary:hover {
       background-color: #e65c00;
+    }
+    .btn-secondary {
+      background-color: var(--color-accent);
+    }
+    .btn-secondary:hover {
+      background-color: #0066cc;
+    }
+    .btn-danger {
+      background-color: var(--color-danger);
+    }
+    .btn-danger:hover {
+      background-color: #990000;
     }
     /* Inline buttons override full width */
     .btn-inline {
@@ -159,7 +179,7 @@
       text-decoration: none;
       color: white;
       font-weight: bold;
-      background-color: #ff6600;
+      background-color: var(--color-primary);
       padding: 0.5rem 0.9375rem;
       border-radius: 0.5rem;
       display: flex;
@@ -200,11 +220,6 @@
     .equipmentRow input { flex: 1; }
     .removeEquipment {
       width: 100%;
-      background-color: #cc0000;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 0.5rem;
     }
 
     /* Admin Panel */
@@ -258,9 +273,6 @@
     }
     #recordFilterForm button {
       padding: 0.5rem 0.9375rem;
-      background-color: #0073e6;
-      border: none;
-      color: white;
       border-radius: 0.5rem;
     }
     #recordsTable {
