@@ -153,7 +153,7 @@
       margin-bottom: 1.25rem;
     }
     nav a {
-      flex-shrink: 0;
+      flex: 0 0 auto;
       white-space: nowrap;
       text-decoration: none;
       color: white;
@@ -176,6 +176,8 @@
         gap: 0.25rem;
         font-weight: bold;
         padding: 0.5rem 0.9375rem;
+        width: auto;
+        flex: 0 0 auto;
       }
 
     .nav-icon {
@@ -290,14 +292,11 @@
       nav {
         flex-direction: column;
         display: none;
+        align-items: flex-start;
       }
 
       nav.show {
         display: flex;
-      }
-
-      nav a {
-        width: 100%;
       }
 
       .nav-toggle {
