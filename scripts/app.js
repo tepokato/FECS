@@ -904,7 +904,10 @@ document.getElementById('equipmentNext').addEventListener('click', () => {
   displayEquipmentListAdmin(equipmentPage + 1);
 });
 
-document.getElementById('filterRecordsBtn').addEventListener('click', filterRecords);
+document.getElementById('recordFilterForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  filterRecords();
+});
 document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
 document.getElementById('exportRecordsBtn').addEventListener('click', exportRecordsCSV);
 
