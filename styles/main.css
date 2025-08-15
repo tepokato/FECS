@@ -161,6 +161,9 @@
       background-color: #ff6600;
       padding: 0.5rem 0.9375rem;
       border-radius: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
     }
     nav a.active {
       background-color: #e65c00;
