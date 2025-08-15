@@ -5,6 +5,7 @@
   <link rel="icon" type="image/png" href="images/image.png">
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FedEx Equipment Check-Out System</title>
 </head>
@@ -85,8 +86,11 @@
     <div class="list-container">
       <ul id="employeeList"><li class="placeholder">No employees added yet.</li></ul>
     </div>
-    <button type="button" id="employeePrev">Prev</button>
-    <button type="button" id="employeeNext">Next</button>
+    <div class="pagination-controls">
+      <button type="button" id="employeePrev" class="btn-inline material-icons hidden" aria-label="Previous page">chevron_left</button>
+      <span id="employeePageIndicator" class="page-indicator"></span>
+      <button type="button" id="employeeNext" class="btn-inline material-icons" aria-label="Next page">chevron_right</button>
+    </div>
     <hr>
     <h2>Manage Equipment</h2>
     <form id="equipmentAdminForm">
@@ -108,9 +112,12 @@
     <div class="list-container">
       <ul id="equipmentListAdmin"><li class="placeholder">No equipment added yet.</li></ul>
     </div>
-    <button type="button" id="equipmentPrev">Prev</button>
-    <button type="button" id="equipmentNext">Next</button>
-    
+    <div class="pagination-controls">
+      <button type="button" id="equipmentPrev" class="btn-inline material-icons hidden" aria-label="Previous page">chevron_left</button>
+      <span id="equipmentPageIndicator" class="page-indicator"></span>
+      <button type="button" id="equipmentNext" class="btn-inline material-icons" aria-label="Next page">chevron_right</button>
+    </div>
+
     <!-- New Import/Export Section -->
     <hr>
     <div class="mb-15">

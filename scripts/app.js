@@ -345,8 +345,10 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   employeeFilter = filter;
   const prevBtn = document.getElementById('employeePrev');
   const nextBtn = document.getElementById('employeeNext');
-  if (prevBtn) prevBtn.disabled = page <= 0;
+  const pageIndicator = document.getElementById('employeePageIndicator');
+  if (prevBtn) prevBtn.classList.toggle('hidden', page <= 0);
   if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
+  if (pageIndicator) pageIndicator.textContent = `Page ${page + 1} of ${totalPages}`;
 }
 function addEmployee() {
   const nameInput = document.getElementById('empName');
@@ -428,8 +430,10 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   equipmentFilter = filter;
   const prevBtn = document.getElementById('equipmentPrev');
   const nextBtn = document.getElementById('equipmentNext');
-  if (prevBtn) prevBtn.disabled = page <= 0;
+  const pageIndicator = document.getElementById('equipmentPageIndicator');
+  if (prevBtn) prevBtn.classList.toggle('hidden', page <= 0);
   if (nextBtn) nextBtn.disabled = page >= totalPages - 1;
+  if (pageIndicator) pageIndicator.textContent = `Page ${page + 1} of ${totalPages}`;
 }
 function addEquipmentAdmin() {
   const nameInput = document.getElementById('equipName');
