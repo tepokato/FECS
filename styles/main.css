@@ -170,11 +170,13 @@
       text-decoration: none;
     }
 
-    .nav-toggle {
-      display: none;
-      align-items: center;
-      gap: 0.25rem;
-    }
+      .nav-toggle {
+        display: none;
+        align-items: center;
+        gap: 0.25rem;
+        font-weight: bold;
+        padding: 0.5rem 0.9375rem;
+      }
 
     .nav-icon {
       font-size: 1.2rem;
