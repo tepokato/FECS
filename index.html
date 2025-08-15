@@ -22,7 +22,7 @@
   <div id="notifications" role="alert" aria-live="polite"></div>
 
   <!-- Navigation -->
-  <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mainNav"><span class="material-symbols-outlined nav-icon">menu</span> Menu</button>
+  <button id="navToggle" class="nav-toggle btn-primary" aria-expanded="false" aria-controls="mainNav"><span class="material-symbols-outlined nav-icon">menu</span> Menu</button>
   <nav id="mainNav">
     <a href="#" id="navCheckout" data-section="checkout"><span class="material-symbols-outlined nav-icon">barcode_reader</span> Check-Out</a>
     <a href="#" id="navAdmin" data-section="admin"><span class="material-symbols-outlined nav-icon">admin_panel_settings</span> Admin</a>
@@ -47,20 +47,20 @@
             <span class="error-message" aria-live="polite"></span>
             <span class="equipmentNameDisplay"></span>
           </div>
-          <button type="button" class="removeEquipment hidden">Remove</button>
+          <button type="button" class="removeEquipment hidden btn-danger">Remove</button>
         </div>
       </div>
-      <button type="button" id="addEquipmentBtn">Add Another Barcode</button>
+      <button type="button" id="addEquipmentBtn" class="btn-primary">Add Another Barcode</button>
       <label for="actionBtn">Action:</label>
       <div class="dropdown">
-        <button type="button" id="actionBtn" class="btn-inline" aria-haspopup="true" aria-expanded="false" aria-controls="actionMenu">Select Action</button>
+        <button type="button" id="actionBtn" class="btn-inline btn-primary" aria-haspopup="true" aria-expanded="false" aria-controls="actionMenu">Select Action</button>
         <div id="actionMenu" class="dropdown-menu hidden" role="menu">
           <button type="button" data-value="Check-Out" role="menuitem">Check-Out</button>
           <button type="button" data-value="Check-In" role="menuitem">Check-In</button>
         </div>
       </div>
       <input type="hidden" id="action">
-      <button type="submit">Submit</button>
+      <button type="submit" class="btn-primary">Submit</button>
     </form>
   </section>
 
@@ -78,7 +78,7 @@
         <input type="text" id="empBadge" placeholder="Enter Badge ID" required>
         <span class="error-message" aria-live="polite"></span>
       </div>
-      <button type="button" id="addEmployeeBtn">Add Employee</button>
+      <button type="button" id="addEmployeeBtn" class="btn-primary">Add Employee</button>
     </form>
     <h3>Current Employees</h3>
     <label for="employeeSearch" class="sr-only">Search employees</label>
@@ -87,9 +87,9 @@
       <ul id="employeeList"><li class="placeholder">No employees added yet.</li></ul>
     </div>
     <div class="pagination-controls">
-      <button type="button" id="employeePrev" class="btn-inline material-symbols-outlined hidden" aria-label="Previous page">chevron_left</button>
+      <button type="button" id="employeePrev" class="btn-inline material-symbols-outlined hidden btn-primary" aria-label="Previous page">chevron_left</button>
       <span id="employeePageIndicator" class="page-indicator"></span>
-      <button type="button" id="employeeNext" class="btn-inline material-symbols-outlined" aria-label="Next page">chevron_right</button>
+      <button type="button" id="employeeNext" class="btn-inline material-symbols-outlined btn-primary" aria-label="Next page">chevron_right</button>
     </div>
     <hr>
     <h2>Manage Equipment</h2>
@@ -104,7 +104,7 @@
         <input type="text" id="equipSerial" placeholder="Enter Equipment Serial" required>
         <span class="error-message" aria-live="polite"></span>
       </div>
-      <button type="button" id="addEquipmentAdminBtn">Add Equipment</button>
+      <button type="button" id="addEquipmentAdminBtn" class="btn-primary">Add Equipment</button>
     </form>
     <h3>Current Equipment</h3>
     <label for="equipmentSearch" class="sr-only">Search equipment</label>
@@ -113,16 +113,16 @@
       <ul id="equipmentListAdmin"><li class="placeholder">No equipment added yet.</li></ul>
     </div>
     <div class="pagination-controls">
-      <button type="button" id="equipmentPrev" class="btn-inline material-symbols-outlined hidden" aria-label="Previous page">chevron_left</button>
+      <button type="button" id="equipmentPrev" class="btn-inline material-symbols-outlined hidden btn-primary" aria-label="Previous page">chevron_left</button>
       <span id="equipmentPageIndicator" class="page-indicator"></span>
-      <button type="button" id="equipmentNext" class="btn-inline material-symbols-outlined" aria-label="Next page">chevron_right</button>
+      <button type="button" id="equipmentNext" class="btn-inline material-symbols-outlined btn-primary" aria-label="Next page">chevron_right</button>
     </div>
 
     <!-- New Import/Export Section -->
     <hr>
     <div class="mb-15">
       <div class="dropdown">
-        <button type="button" class="btn-inline" id="importExportBtn" aria-haspopup="true" aria-expanded="false" aria-controls="importExportMenu">Import/Export</button>
+        <button type="button" class="btn-inline btn-primary" id="importExportBtn" aria-haspopup="true" aria-expanded="false" aria-controls="importExportMenu">Import/Export</button>
         <div id="importExportMenu" class="dropdown-menu hidden" role="menu">
           <button type="button" id="exportEmployeesAction" role="menuitem">Export Employees to CSV</button>
           <button type="button" id="importEmployeesAction" role="menuitem">Import Employees CSV</button>
@@ -147,10 +147,10 @@
         <input type="text" id="recordEquipment" placeholder="Search by equipment name or serial">
         <label for="recordDate" class="sr-only">Filter by date</label>
         <input type="date" id="recordDate">
-        <button type="button" id="filterRecordsBtn">Search/Filter</button>
-        <button type="button" id="clearFiltersBtn">Clear Filters</button>
+        <button type="button" id="filterRecordsBtn" class="btn-secondary">Search/Filter</button>
+        <button type="button" id="clearFiltersBtn" class="btn-secondary">Clear Filters</button>
       </form>
-      <button type="button" id="exportRecordsBtn">Export Records to CSV</button>
+      <button type="button" id="exportRecordsBtn" class="btn-primary">Export Records to CSV</button>
       <div id="recordsTable"></div>
     </div>
   </section>
