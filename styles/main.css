@@ -54,6 +54,10 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
       border-radius: 0.5rem;
+    }
+
+    /* Full-width block buttons */
+    .btn-block {
       width: 100%;
     }
     .btn-primary {
@@ -74,7 +78,7 @@
     .btn-danger:hover {
       background-color: #990000;
     }
-    /* Inline buttons override full width */
+    /* Inline buttons maintain natural width */
     .btn-inline {
       width: auto;
       display: inline-block;
