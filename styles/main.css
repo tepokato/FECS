@@ -166,8 +166,8 @@
       gap: 0.25rem;
     }
     nav a.active {
-      background-color: #e65c00;
-      text-decoration: underline;
+      background-color: #4d148c;
+      text-decoration: none;
     }
 
     .nav-toggle {
