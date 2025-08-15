@@ -24,9 +24,9 @@
   <!-- Navigation -->
   <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mainNav"><span class="material-icons nav-icon">menu</span> Menu</button>
   <nav id="mainNav">
-    <a href="#" id="navCheckout" data-section="checkout">Check-Out</a>
+    <a href="#" id="navCheckout" data-section="checkout"><span class="material-icons nav-icon">barcode_reader</span> Check-Out</a>
     <a href="#" id="navAdmin" data-section="admin"><span class="material-icons nav-icon">folder_managed</span> Admin</a>
-    <a href="#" id="navRecords" data-section="records"><span class="material-icons nav-icon">table</span> Records</a>
+    <a href="#" id="navRecords" data-section="records"><span class="material-icons nav-icon">data_table</span> Records</a>
   </nav>
 
   <!-- Check-Out Section -->
@@ -139,6 +139,7 @@
   <section id="records" class="section hidden">
     <h2>Check-Out/In Records</h2>
     <div class="records-container">
+
       <form id="recordFilterForm">
         <label for="recordSearch" class="sr-only">Search by name or badge</label>
         <input type="text" id="recordSearch" placeholder="Search by name or badge">
