@@ -5,7 +5,7 @@
     }
 
     html {
-      font-size: 16px;
+      font-size: 1rem;
     }
 
     .site-logo {
@@ -361,10 +361,10 @@
     }
     }
 
-.list-container {
-  max-height: 300px;
-  overflow-y: auto;
-}
+  .list-container {
+    max-height: 18.75rem;
+    overflow-y: auto;
+  }
 
 #employeeList .deleteEmployee,
 #equipmentListAdmin .deleteEquipment {
