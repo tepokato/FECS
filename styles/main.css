@@ -153,6 +153,7 @@
       margin-bottom: 1.25rem;
     }
     nav a {
+      flex: 0 0 8rem;
       flex-shrink: 0;
       white-space: nowrap;
       text-decoration: none;
@@ -176,6 +177,8 @@
         gap: 0.25rem;
         font-weight: bold;
         padding: 0.5rem 0.9375rem;
+        width: auto;
+        flex: 0 0 8rem;
       }
 
     .nav-icon {
@@ -297,7 +300,7 @@
       }
 
       nav a {
-        width: 100%;
+        flex: 0 0 8rem;
       }
 
       .nav-toggle {
