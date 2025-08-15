@@ -35,16 +35,16 @@
     <form id="checkoutForm">
       <label for="badge">Employee Badge ID:</label>
       <div class="employeeRow">
-        <input type="text" id="badge" placeholder="Enter Employee Badge ID" required autofocus>
-        <span class="error-message" aria-live="polite"></span>
+        <input type="text" id="badge" placeholder="Enter Employee Badge ID" required autofocus aria-describedby="badgeError">
+        <span id="badgeError" class="error-message" aria-live="polite"></span>
         <span id="employeeName"></span>
       </div>
       <label for="equipment">Equipment Barcodes:</label>
       <div id="equipmentList">
         <div class="equipment-item">
           <div class="equipmentRow">
-            <input type="text" id="equipment0" name="equipment" placeholder="Enter Equipment Barcode" required>
-            <span class="error-message" aria-live="polite"></span>
+            <input type="text" id="equipment0" name="equipment" placeholder="Enter Equipment Barcode" required aria-describedby="equipment0Error">
+            <span id="equipment0Error" class="error-message" aria-live="polite"></span>
             <span class="equipmentNameDisplay"></span>
           </div>
           <button type="button" class="removeEquipment hidden btn-danger">Remove</button>
@@ -70,13 +70,13 @@
     <form id="adminForm">
       <div>
         <label for="empName">Employee Name:</label>
-        <input type="text" id="empName" placeholder="Enter Employee Name" required>
-        <span class="error-message" aria-live="polite"></span>
+        <input type="text" id="empName" placeholder="Enter Employee Name" required aria-describedby="empNameError">
+        <span id="empNameError" class="error-message" aria-live="polite"></span>
       </div>
       <div>
         <label for="empBadge">Employee Badge ID:</label>
-        <input type="text" id="empBadge" placeholder="Enter Badge ID" required>
-        <span class="error-message" aria-live="polite"></span>
+        <input type="text" id="empBadge" placeholder="Enter Badge ID" required aria-describedby="empBadgeError">
+        <span id="empBadgeError" class="error-message" aria-live="polite"></span>
       </div>
       <button type="button" id="addEmployeeBtn" class="btn-primary btn-block">Add Employee</button>
     </form>
@@ -96,13 +96,13 @@
     <form id="equipmentAdminForm">
       <div>
         <label for="equipName">Equipment Name:</label>
-        <input type="text" id="equipName" placeholder="Enter Equipment Name" required>
-        <span class="error-message" aria-live="polite"></span>
+        <input type="text" id="equipName" placeholder="Enter Equipment Name" required aria-describedby="equipNameError">
+        <span id="equipNameError" class="error-message" aria-live="polite"></span>
       </div>
       <div>
         <label for="equipSerial">Equipment Serial Number:</label>
-        <input type="text" id="equipSerial" placeholder="Enter Equipment Serial" required>
-        <span class="error-message" aria-live="polite"></span>
+        <input type="text" id="equipSerial" placeholder="Enter Equipment Serial" required aria-describedby="equipSerialError">
+        <span id="equipSerialError" class="error-message" aria-live="polite"></span>
       </div>
       <button type="button" id="addEquipmentAdminBtn" class="btn-primary btn-block">Add Equipment</button>
     </form>
