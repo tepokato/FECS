@@ -71,6 +71,7 @@ function setFieldError(input, message) {
     errorSpan.textContent = message;
   }
   input.classList.add('error');
+  input.setAttribute('aria-invalid', 'true');
 }
 
 function clearFieldError(input) {
@@ -79,6 +80,7 @@ function clearFieldError(input) {
     errorSpan.textContent = '';
   }
   input.classList.remove('error');
+  input.removeAttribute('aria-invalid');
 }
 
 function updateNotifications() {
@@ -158,6 +160,8 @@ function addEquipmentField() {
   const errorSpan = document.createElement('span');
   errorSpan.className = 'error-message';
   errorSpan.setAttribute('aria-live', 'polite');
+  errorSpan.id = `${input.id}Error`;
+  input.setAttribute('aria-describedby', errorSpan.id);
 
   const nameSpan = document.createElement('span');
   nameSpan.className = 'equipmentNameDisplay';
