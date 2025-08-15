@@ -335,10 +335,12 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
       const li = document.createElement('li');
       const textSpan = document.createElement('span');
       textSpan.textContent = `${badge}: ${name}`;
-      const del = document.createElement('span');
+      const del = document.createElement('button');
+      del.type = 'button';
       del.className = 'deleteEmployee';
       del.textContent = '❌';
       del.title = 'Remove Employee';
+      del.setAttribute('aria-label', 'Remove Employee');
       del.addEventListener('click', () => removeEmployee(badge));
       li.appendChild(textSpan);
       li.appendChild(del);
@@ -420,10 +422,12 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
       const li = document.createElement('li');
       const textSpan = document.createElement('span');
       textSpan.textContent = `${serial}: ${name}`;
-      const del = document.createElement('span');
+      const del = document.createElement('button');
+      del.type = 'button';
       del.className = 'deleteEquipment';
       del.textContent = '❌';
       del.title = 'Remove Equipment';
+      del.setAttribute('aria-label', 'Remove Equipment');
       del.addEventListener('click', () => removeEquipmentAdmin(serial));
       li.appendChild(textSpan);
       li.appendChild(del);
