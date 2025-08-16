@@ -544,7 +544,7 @@ function displayRecords(recArray) {
     container.innerHTML = "<p>No records found.</p>";
     return;
   }
-  let html = "<table><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
+  let html = "<table><caption>Equipment check-in/out records</caption><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
   recArray.forEach(rec => {
     // Escape record fields before injecting into the table
     html += `<tr>

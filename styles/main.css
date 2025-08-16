@@ -292,6 +292,12 @@
       text-align: center;
     }
     #recordsTable th { background-color: #4d148c; color: white; }
+    #recordsTable caption {
+      caption-side: top;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
 
     .sr-only {
       position: absolute;
