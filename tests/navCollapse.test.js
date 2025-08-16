@@ -35,3 +35,20 @@ test('nav collapses when link clicked', () => {
   expect(nav.classList.contains('show')).toBe(false);
   expect(navToggle.getAttribute('aria-expanded')).toBe('false');
 });
+
+test('nav toggle open class reflects menu state', () => {
+  const win = setupDom();
+  const nav = win.document.getElementById('mainNav');
+  const navToggle = win.document.getElementById('navToggle');
+
+  expect(nav.classList.contains('show')).toBe(false);
+  expect(navToggle.classList.contains('open')).toBe(false);
+
+  navToggle.click();
+  expect(nav.classList.contains('show')).toBe(true);
+  expect(navToggle.classList.contains('open')).toBe(true);
+
+  navToggle.click();
+  expect(nav.classList.contains('show')).toBe(false);
+  expect(navToggle.classList.contains('open')).toBe(false);
+});

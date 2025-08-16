@@ -760,12 +760,14 @@ if (navToggle && nav) {
     showSection(link.dataset.section);
     nav.classList.remove('show');
     navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.classList.remove('open');
   });
 
   navToggle.addEventListener('click', () => {
     const expanded = navToggle.getAttribute('aria-expanded') === 'true';
     navToggle.setAttribute('aria-expanded', String(!expanded));
-    nav.classList.toggle('show');
+    nav.classList.toggle('show', !expanded);
+    navToggle.classList.toggle('open', !expanded);
   });
 }
 
