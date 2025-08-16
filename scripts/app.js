@@ -289,6 +289,29 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
     showError('Please select an action.');
     return;
   }
+  const status = {};
+  records.forEach(rec => {
+    (rec.equipmentBarcodes || []).forEach(code => {
+      if (!status[code]) status[code] = 0;
+      if (rec.action === "Check-Out") {
+        status[code]++;
+      } else if (rec.action === "Check-In") {
+        status[code]--;
+      }
+    });
+  });
+  if (action === "Check-Out") {
+    for (const code of equipmentCodes) {
+      if (status[code] > 0) {
+        const offendingInput = equipmentInputs.find(input => input.value.trim() === code);
+        if (offendingInput) {
+          setFieldError(offendingInput, "Equipment barcode '" + code + "' is already checked out.");
+        }
+        showError("Equipment barcode '" + code + "' is already checked out.");
+        return;
+      }
+    }
+  }
   const now = new Date();
   const timeString = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true});
   const recordDate = now.toISOString().substring(0,10);
