@@ -361,8 +361,7 @@
       }
 
       .nav-toggle.open {
-        left: auto;
-        right: 0.5rem;
+        left: 0.5rem;
       }
 
       .nav-icon {
