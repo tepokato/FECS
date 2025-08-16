@@ -74,3 +74,19 @@ test('nav uses white container when menu opened', () => {
   expect(ruleStyle.getPropertyValue('border-radius')).toBe('0.5rem');
   expect(ruleStyle.getPropertyValue('box-shadow')).toBe('0 0 0.625rem rgba(0,0,0,0.1)');
 });
+
+test('nav collapses when viewport enlarges', () => {
+  const win = setupDom();
+  const nav = win.document.getElementById('mainNav');
+  const navToggle = win.document.getElementById('navToggle');
+
+  navToggle.click();
+  expect(nav.classList.contains('show')).toBe(true);
+
+  win.innerWidth = 800;
+  win.dispatchEvent(new win.Event('resize'));
+
+  expect(nav.classList.contains('show')).toBe(false);
+  expect(navToggle.getAttribute('aria-expanded')).toBe('false');
+  expect(navToggle.classList.contains('open')).toBe(false);
+});
