@@ -757,8 +757,16 @@ if (initialEquipmentInput) {
 }
 
 document.getElementById('addEquipmentBtn').addEventListener('click', addEquipmentField);
-document.getElementById('addEmployeeBtn').addEventListener('click', addEmployee);
-document.getElementById('addEquipmentAdminBtn').addEventListener('click', addEquipmentAdmin);
+
+document.getElementById('adminForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  addEmployee();
+});
+
+document.getElementById('equipmentAdminForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  addEquipmentAdmin();
+});
 
 ['empName','empBadge','equipName','equipSerial'].forEach(id => {
   const el = document.getElementById(id);
