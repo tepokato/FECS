@@ -769,6 +769,14 @@ if (navToggle && nav) {
     nav.classList.toggle('show', !expanded);
     navToggle.classList.toggle('open', !expanded);
   });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 600) {
+      nav.classList.remove('show');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.classList.remove('open');
+    }
+  });
 }
 
 document.getElementById('badge').addEventListener('input', lookupEmployee);
