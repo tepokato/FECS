@@ -55,10 +55,9 @@ test('nav toggle open class reflects menu state', () => {
   expect(navToggle.classList.contains('open')).toBe(false);
 });
 
-test('nav overlay styles applied when menu opened', () => {
+test('nav uses white container when menu opened', () => {
   const win = setupDom();
-  const navToggle = win.document.getElementById('navToggle');
-  navToggle.click();
+  win.document.getElementById('navToggle').click();
   const nav = win.document.getElementById('mainNav');
   expect(nav.classList.contains('show')).toBe(true);
 
@@ -66,11 +65,12 @@ test('nav overlay styles applied when menu opened', () => {
   const mediaRule = Array.from(sheet.cssRules).find(
     r => r.type === win.CSSRule.MEDIA_RULE && r.media.mediaText === '(max-width: 37.5rem)'
   );
-  const navRule = Array.from(mediaRule.cssRules).find(r => r.selectorText === 'nav');
-  const ruleStyle = navRule.style;
+  const containerRule = Array.from(mediaRule.cssRules).find(r => r.selectorText === 'nav .nav-container');
+  const ruleStyle = containerRule.style;
 
-  expect(ruleStyle.getPropertyValue('height')).toBe('100vh');
-  expect(ruleStyle.getPropertyValue('overflow-y')).toBe('auto');
-  expect(ruleStyle.getPropertyValue('background-color')).toBe('#fff');
-  expect(ruleStyle.getPropertyValue('box-shadow')).toBe('0 0 1rem rgba(0,0,0,0.2)');
+  expect(ruleStyle.getPropertyValue('background')).toBe('#fff');
+  expect(ruleStyle.getPropertyValue('max-width')).toBe('37.5rem');
+  expect(ruleStyle.getPropertyValue('margin')).toBe('1.25rem auto');
+  expect(ruleStyle.getPropertyValue('border-radius')).toBe('0.5rem');
+  expect(ruleStyle.getPropertyValue('box-shadow')).toBe('0 0 0.625rem rgba(0,0,0,0.1)');
 });
