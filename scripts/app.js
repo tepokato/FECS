@@ -945,6 +945,20 @@ document.getElementById('equipmentNext').addEventListener('click', () => {
   displayEquipmentListAdmin(equipmentPage + 1);
 });
 
+const recordSearchContainer = document.getElementById('recordSearchContainer');
+const recordSearchInput = document.getElementById('recordSearch');
+const recordSearchToggle = document.getElementById('recordSearchToggle');
+recordSearchToggle.addEventListener('click', () => {
+  recordSearchContainer.classList.toggle('expanded');
+  recordSearchInput.classList.toggle('hidden');
+  if (!recordSearchInput.classList.contains('hidden')) {
+    recordSearchInput.focus();
+  } else {
+    recordSearchInput.value = '';
+    filterRecords();
+  }
+});
+
 document.getElementById('recordFilterForm').addEventListener('submit', (e) => {
   e.preventDefault();
   filterRecords();

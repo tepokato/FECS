@@ -270,15 +270,46 @@
       justify-content: center;
       margin-bottom: 0.9375rem;
     }
-    #recordFilterForm input {
-      padding: 0.5rem;
-      flex: 1;
-      min-width: 9.375rem;
-    }
-    #recordFilterForm button {
-      padding: 0.5rem 0.9375rem;
-      border-radius: 0.5rem;
-    }
+#recordFilterForm input {
+  padding: 0.5rem;
+  flex: 1;
+  min-width: 9.375rem;
+}
+#recordFilterForm button {
+  padding: 0.5rem 0.9375rem;
+  border-radius: 0.5rem;
+}
+
+.record-search-container {
+  display: flex;
+  align-items: center;
+}
+
+.record-search-container.expanded {
+  flex: 1;
+}
+
+.search-toggle {
+  background: #fff;
+  border: 0.0625rem solid #ccc;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #4d148c;
+}
+
+.search-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+.record-search-container input {
+  margin-left: 0.5rem;
+  flex: 1;
+}
     #recordsTable {
       overflow-x: auto;
     }

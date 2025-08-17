@@ -6,6 +6,7 @@
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="styles/main.css">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FedEx Equipment Check-Out System</title>
 </head>
@@ -143,8 +144,13 @@
     <div class="records-container">
 
       <form id="recordFilterForm">
-        <label for="recordSearch" class="sr-only">Search by name or badge</label>
-        <input type="text" id="recordSearch" placeholder="Search by name or badge">
+        <div id="recordSearchContainer" class="record-search-container">
+          <button type="button" id="recordSearchToggle" class="search-toggle" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <label for="recordSearch" class="sr-only">Search by name or badge</label>
+          <input type="text" id="recordSearch" class="hidden" placeholder="Search by name or badge">
+        </div>
         <label for="recordEquipment" class="sr-only">Search by equipment name or serial</label>
         <input type="text" id="recordEquipment" placeholder="Search by equipment name or serial">
         <label for="recordDate" class="sr-only">Filter by date</label>
