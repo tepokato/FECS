@@ -89,6 +89,7 @@
       margin: 0.625rem 0;
     }
     .hidden { display: none; }
+    .no-scroll { overflow: hidden; }
     .mb-15 { margin-bottom: 0.9375rem; }
     .dropdown {
       position: relative;
