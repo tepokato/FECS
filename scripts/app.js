@@ -685,8 +685,8 @@ function handleImportEmployees(event) {
     const text = e.target.result;
     const lines = text.split("\n");
     for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line === "") continue;
+      const line = lines[i].replace(/\r$/, '');
+      if (line.trim() === "") continue;
       const parts = parseCSVLine(line);
       if (parts.length < 2) {
         showError(`Skipping malformed line ${i + 1}: ${line}`);
@@ -730,8 +730,8 @@ function handleImportEquipment(event) {
     const text = e.target.result;
     const lines = text.split("\n");
     for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line === "") continue;
+      const line = lines[i].replace(/\r$/, '');
+      if (line.trim() === "") continue;
       const parts = parseCSVLine(line);
       if (parts.length < 2) {
         showError(`Skipping malformed line ${i + 1}: ${line}`);
