@@ -188,6 +188,10 @@ function removeEquipmentField(button) {
     button.parentElement.remove();
   }
   updateRemoveButtons();
+  const enabledInputs = document.querySelectorAll('#equipmentList input[name="equipment"]:not([disabled])');
+  if (enabledInputs.length === 0) {
+    addEquipmentField();
+  }
 }
 
 function updateRemoveButtons() {
