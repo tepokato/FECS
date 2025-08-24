@@ -655,13 +655,13 @@ function setLoading(button, loading, text = 'Importing...') {
   if (!button) return;
   if (loading) {
     button.disabled = true;
-    button.dataset.originalText = button.textContent;
+    button.dataset.originalHtml = button.innerHTML;
     button.textContent = text;
   } else {
     button.disabled = false;
-    if (button.dataset.originalText) {
-      button.textContent = button.dataset.originalText;
-      delete button.dataset.originalText;
+    if (button.dataset.originalHtml) {
+      button.innerHTML = button.dataset.originalHtml;
+      delete button.dataset.originalHtml;
     }
   }
 }
