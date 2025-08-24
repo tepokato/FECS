@@ -90,3 +90,25 @@ test('nav collapses when viewport enlarges', () => {
   expect(navToggle.getAttribute('aria-expanded')).toBe('false');
   expect(navToggle.classList.contains('open')).toBe(false);
 });
+
+test('nav closes when clicking outside', () => {
+  const win = setupDom();
+  const navToggle = win.document.getElementById('navToggle');
+  navToggle.click();
+  const outside = win.document.createElement('div');
+  win.document.body.appendChild(outside);
+  outside.click();
+  expect(win.document.getElementById('mainNav').classList.contains('show')).toBe(false);
+  expect(navToggle.getAttribute('aria-expanded')).toBe('false');
+});
+
+test('nav closes on Escape key', () => {
+  const win = setupDom();
+  const navToggle = win.document.getElementById('navToggle');
+  navToggle.click();
+  const event = new win.KeyboardEvent('keydown', { key: 'Escape' });
+  win.document.dispatchEvent(event);
+  const nav = win.document.getElementById('mainNav');
+  expect(nav.classList.contains('show')).toBe(false);
+  expect(navToggle.getAttribute('aria-expanded')).toBe('false');
+});

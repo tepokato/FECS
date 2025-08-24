@@ -23,12 +23,12 @@
 
   <!-- Navigation -->
   <button id="navToggle" class="nav-toggle btn-primary" aria-expanded="false" aria-controls="mainNav"><span class="material-symbols-outlined nav-icon">menu</span> Menu</button>
-  <nav id="mainNav">
-    <div class="nav-container">
-      <a href="#" id="navCheckout" data-section="checkout"><span class="material-symbols-outlined nav-icon">barcode_reader</span> Check-Out</a>
-      <a href="#" id="navAdmin" data-section="admin"><span class="material-symbols-outlined nav-icon">admin_panel_settings</span> Admin</a>
-      <a href="#" id="navRecords" data-section="records"><span class="material-symbols-outlined nav-icon">data_table</span> Records</a>
-    </div>
+  <nav id="mainNav" aria-hidden="true">
+    <ul class="nav-container">
+      <li><a href="#" id="navCheckout" data-section="checkout"><span class="material-symbols-outlined nav-icon">barcode_reader</span> Check-Out</a></li>
+      <li><a href="#" id="navAdmin" data-section="admin"><span class="material-symbols-outlined nav-icon">admin_panel_settings</span> Admin</a></li>
+      <li><a href="#" id="navRecords" data-section="records"><span class="material-symbols-outlined nav-icon">data_table</span> Records</a></li>
+    </ul>
   </nav>
 
   <!-- Check-Out Section -->
