@@ -761,98 +761,13 @@ function handleImportEquipment(event) {
 
 /* ---------- Event Listeners ---------- */
 
-const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('mainNav');
-let navToggleIcon;
-let navToggleText;
-if (navToggle) {
-  navToggleIcon = navToggle.querySelector('.nav-icon');
-  navToggleText = navToggle.querySelector('.nav-text');
-}
-
-let navFocusHandler;
-let navFocusableElements = [];
-
-function updateNavToggle(isOpen) {
-  navToggle.setAttribute('aria-label', isOpen ? 'Close' : 'Menu');
-  if (navToggleIcon) navToggleIcon.textContent = isOpen ? 'close' : 'menu';
-  if (navToggleText) navToggleText.textContent = isOpen ? 'Close' : 'Menu';
-}
-
-function closeNav() {
-  nav.classList.remove('show');
-  navToggle.setAttribute('aria-expanded', 'false');
-  navToggle.classList.remove('open');
-  nav.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('no-scroll');
-  updateNavToggle(false);
-  if (navFocusHandler) {
-    nav.removeEventListener('keydown', navFocusHandler);
-    navFocusHandler = null;
-    navFocusableElements = [];
-  }
-}
-
-function openNav() {
-  nav.classList.add('show');
-  navToggle.setAttribute('aria-expanded', 'true');
-  navToggle.classList.add('open');
-  nav.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('no-scroll');
-  updateNavToggle(true);
-  navFocusableElements = Array.from(
-    nav.querySelectorAll(
-      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    )
-  );
-  navFocusHandler = (e) => {
-    if (e.key !== 'Tab') return;
-    const first = navFocusableElements[0];
-    const last = navFocusableElements[navFocusableElements.length - 1];
-    if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first?.focus();
-    } else if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last?.focus();
-    }
-  };
-  nav.addEventListener('keydown', navFocusHandler);
-  const firstLink = navFocusableElements[0];
-  if (firstLink) firstLink.focus();
-}
-
-if (navToggle && nav) {
+if (nav) {
   nav.addEventListener('click', (e) => {
     const link = e.target.closest('a[data-section]');
     if (!link) return;
     e.preventDefault();
     showSection(link.dataset.section);
-    closeNav();
-  });
-
-  navToggle.addEventListener('click', () => {
-    const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-    expanded ? closeNav() : openNav();
-  });
-
-  document.addEventListener('click', (e) => {
-    if (nav.classList.contains('show') && !nav.contains(e.target) && e.target !== navToggle) {
-      closeNav();
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('show')) {
-      closeNav();
-      navToggle.focus();
-    }
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 600) {
-      closeNav();
-    }
   });
 }
 
