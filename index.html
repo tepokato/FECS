@@ -22,12 +22,12 @@
   <div id="notifications" role="alert" aria-live="polite"></div>
 
   <!-- Navigation -->
-  <button id="navToggle" class="nav-toggle btn btn-primary" aria-expanded="false" aria-controls="mainNav" aria-label="Menu"><span class="material-symbols-outlined nav-icon">menu</span><span class="nav-text">Menu</span></button>
+  <button id="navToggle" class="nav-toggle btn btn-primary" aria-expanded="false" aria-controls="mainNav" aria-label="Menu"><span class="material-symbols-outlined nav-icon" aria-hidden="true">menu</span><span class="nav-text">Menu</span></button>
   <nav id="mainNav" aria-hidden="true">
     <ul class="nav-container">
-      <li><a href="#" id="navCheckout" data-section="checkout" class="btn btn-primary"><span class="material-symbols-outlined nav-icon">barcode_reader</span> Check-Out</a></li>
-      <li><a href="#" id="navAdmin" data-section="admin" class="btn btn-primary"><span class="material-symbols-outlined nav-icon">admin_panel_settings</span> Admin</a></li>
-      <li><a href="#" id="navRecords" data-section="records" class="btn btn-primary"><span class="material-symbols-outlined nav-icon">data_table</span>Records</a></li>
+      <li><a href="#" id="navCheckout" data-section="checkout" class="btn btn-primary"><span class="material-symbols-outlined nav-icon" aria-hidden="true">barcode_reader</span> Check-Out</a></li>
+      <li><a href="#" id="navAdmin" data-section="admin" class="btn btn-primary"><span class="material-symbols-outlined nav-icon" aria-hidden="true">admin_panel_settings</span> Admin</a></li>
+      <li><a href="#" id="navRecords" data-section="records" class="btn btn-primary"><span class="material-symbols-outlined nav-icon" aria-hidden="true">data_table</span>Records</a></li>
     </ul>
   </nav>
 
@@ -89,9 +89,9 @@
       <ul id="employeeList"><li class="placeholder">No employees added yet.</li></ul>
     </div>
     <div class="pagination-controls">
-      <button type="button" id="employeePrev" class="btn btn-inline material-symbols-outlined hidden btn-primary" aria-label="Previous page">chevron_left</button>
+      <button type="button" id="employeePrev" class="btn btn-inline hidden btn-primary" aria-label="Previous page"><span class="material-symbols-outlined" aria-hidden="true">chevron_left</span></button>
       <span id="employeePageIndicator" class="page-indicator"></span>
-      <button type="button" id="employeeNext" class="btn btn-inline material-symbols-outlined btn-primary" aria-label="Next page">chevron_right</button>
+      <button type="button" id="employeeNext" class="btn btn-inline btn-primary" aria-label="Next page"><span class="material-symbols-outlined" aria-hidden="true">chevron_right</span></button>
     </div>
     <hr>
     <h2>Manage Equipment</h2>
@@ -115,9 +115,9 @@
       <ul id="equipmentListAdmin"><li class="placeholder">No equipment added yet.</li></ul>
     </div>
     <div class="pagination-controls">
-      <button type="button" id="equipmentPrev" class="btn btn-inline material-symbols-outlined hidden btn-primary" aria-label="Previous page">chevron_left</button>
+      <button type="button" id="equipmentPrev" class="btn btn-inline hidden btn-primary" aria-label="Previous page"><span class="material-symbols-outlined" aria-hidden="true">chevron_left</span></button>
       <span id="equipmentPageIndicator" class="page-indicator"></span>
-      <button type="button" id="equipmentNext" class="btn btn-inline material-symbols-outlined btn-primary" aria-label="Next page">chevron_right</button>
+      <button type="button" id="equipmentNext" class="btn btn-inline btn-primary" aria-label="Next page"><span class="material-symbols-outlined" aria-hidden="true">chevron_right</span></button>
     </div>
 
     <!-- New Import/Export Section -->
