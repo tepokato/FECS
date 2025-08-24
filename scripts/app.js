@@ -622,9 +622,9 @@ function exportRecordsCSV() {
 function exportEmployeesCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
   csvContent += "Badge ID,Employee Name\n";
-  for (let badge in employees) {
-    csvContent += `"${csvEscape(badge)}","${csvEscape(employees[badge])}"\n`;
-  }
+  Object.entries(employees).forEach(([badge, name]) => {
+    csvContent += `"${csvEscape(badge)}","${csvEscape(name)}"\n`;
+  });
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
   link.download = "employees.csv";
@@ -636,9 +636,9 @@ function exportEmployeesCSV() {
 function exportEquipmentCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
   csvContent += "Equipment Serial,Equipment Name\n";
-  for (let serial in equipmentItems) {
-    csvContent += `"${csvEscape(serial)}","${csvEscape(equipmentItems[serial])}"\n`;
-  }
+  Object.entries(equipmentItems).forEach(([serial, name]) => {
+    csvContent += `"${csvEscape(serial)}","${csvEscape(name)}"\n`;
+  });
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
   link.download = "equipment.csv";
