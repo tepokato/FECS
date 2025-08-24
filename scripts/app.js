@@ -28,7 +28,10 @@ function saveToStorage(key, data) {
 }
 
 function csvEscape(value) {
-  return String(value).replace(/"/g, '""');
+  return String(value)
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n')
+    .replace(/"/g, '""');
 }
 
 /* ---------- Notification System ---------- */
