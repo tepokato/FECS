@@ -128,10 +128,14 @@ function showSection(section) {
   document.getElementById(section).classList.remove('hidden');
 
   // Update active navigation link
-  document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(link => {
+    link.classList.remove('active');
+    link.removeAttribute('aria-current');
+  });
   const activeLink = document.getElementById('nav' + section.charAt(0).toUpperCase() + section.slice(1));
   if (activeLink) {
     activeLink.classList.add('active');
+    activeLink.setAttribute('aria-current', 'page');
   }
 
   if (section === 'admin') {
