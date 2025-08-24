@@ -759,6 +759,9 @@ if (navToggle) {
   navToggleText = navToggle.querySelector('.nav-text');
 }
 
+let navFocusHandler;
+let navFocusableElements = [];
+
 function updateNavToggle(isOpen) {
   navToggle.setAttribute('aria-label', isOpen ? 'Close' : 'Menu');
   if (navToggleIcon) navToggleIcon.textContent = isOpen ? 'close' : 'menu';
@@ -772,6 +775,11 @@ function closeNav() {
   nav.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('no-scroll');
   updateNavToggle(false);
+  if (navFocusHandler) {
+    nav.removeEventListener('keydown', navFocusHandler);
+    navFocusHandler = null;
+    navFocusableElements = [];
+  }
 }
 
 function openNav() {
@@ -781,7 +789,25 @@ function openNav() {
   nav.setAttribute('aria-hidden', 'false');
   document.body.classList.add('no-scroll');
   updateNavToggle(true);
-  const firstLink = nav.querySelector('a');
+  navFocusableElements = Array.from(
+    nav.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  );
+  navFocusHandler = (e) => {
+    if (e.key !== 'Tab') return;
+    const first = navFocusableElements[0];
+    const last = navFocusableElements[navFocusableElements.length - 1];
+    if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first?.focus();
+    } else if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last?.focus();
+    }
+  };
+  nav.addEventListener('keydown', navFocusHandler);
+  const firstLink = navFocusableElements[0];
   if (firstLink) firstLink.focus();
 }
 
