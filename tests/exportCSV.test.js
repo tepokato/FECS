@@ -126,3 +126,35 @@ test('exportRecordsCSV leaves blank cells for missing fields', () => {
   expect(row).toBe('"2023-01-01T00:00:00","","","","",""');
   spy.mockRestore();
 });
+
+test('exportEmployeesCSV ignores inherited prototype properties', () => {
+  Object.prototype.protoEmployee = 'Prototype';
+  try {
+    const win = setupDom({ employees: { '1': 'John Doe' } });
+    const spy = jest.spyOn(document.body, 'appendChild');
+    win.exportEmployeesCSV();
+    const link = spy.mock.calls[0][0];
+    const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+    const expected = `Badge ID,Employee Name\n"1","John Doe"\n`;
+    expect(csv).toBe(expected);
+    spy.mockRestore();
+  } finally {
+    delete Object.prototype.protoEmployee;
+  }
+});
+
+test('exportEquipmentCSV ignores inherited prototype properties', () => {
+  Object.prototype.protoEquipment = 'Prototype';
+  try {
+    const win = setupDom({ equipmentItems: { 'EQ1': 'Hammer' } });
+    const spy = jest.spyOn(document.body, 'appendChild');
+    win.exportEquipmentCSV();
+    const link = spy.mock.calls[0][0];
+    const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+    const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer"\n`;
+    expect(csv).toBe(expected);
+    spy.mockRestore();
+  } finally {
+    delete Object.prototype.protoEquipment;
+  }
+});
