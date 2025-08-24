@@ -36,7 +36,7 @@
       border-radius: 0.5rem;
       box-shadow: 0 0 0.625rem rgba(0,0,0,0.1);
     }
-    input, select, button, textarea {
+    input, select, .btn, textarea {
       padding: 0.625rem;
       margin: 0.625rem 0;
       box-sizing: border-box;
@@ -48,7 +48,7 @@
       color: red;
       font-size: 0.875rem;
     }
-    button {
+    .btn {
       color: white;
       border: none;
       cursor: pointer;
@@ -186,17 +186,14 @@
       flex: 0 1 auto;
     }
     nav .nav-container a {
-      width: auto;
       white-space: nowrap;
       text-decoration: none;
-      color: white;
       font-weight: bold;
-      background-color: var(--color-primary);
       padding: 0.5rem 0.9375rem;
-      border-radius: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.25rem;
+      margin: 0;
     }
     nav .nav-container a.active {
       background-color: #4d148c;
@@ -211,7 +208,8 @@
         padding: 0.5rem 0.9375rem;
         width: auto;
         flex: 0 1 auto;
-      }
+        margin: 0;
+    }
 
     .nav-icon {
       font-size: 1.2rem;
@@ -283,7 +281,7 @@
       flex: 1;
       min-width: 9.375rem;
     }
-    #recordFilterForm button {
+    #recordFilterForm .btn {
       padding: 0.5rem 0.9375rem;
       border-radius: 0.5rem;
     }
@@ -386,9 +384,9 @@
       }
 
       .employeeRow input,
-      .employeeRow button,
+      .employeeRow .btn,
       .equipmentRow input,
-      .equipmentRow button {
+      .equipmentRow .btn {
         width: 100%;
       }
 
