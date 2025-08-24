@@ -2,6 +2,15 @@
       --color-primary: #ff6600;
       --color-accent: #0073e6;
       --color-danger: #cc0000;
+      --color-brand-purple: #4d148c;
+      --color-notification: #ffcc00;
+      --color-notification-border: #e6b800;
+      --color-success: #155724;
+      --color-success-bg: #d4edda;
+      --color-success-border: #c3e6cb;
+      --color-error: #721c24;
+      --color-error-bg: #f8d7da;
+      --color-error-border: #f5c6cb;
       --focus-ring-inner: #fff;
       --focus-ring-outer: #000;
     }
@@ -34,7 +43,7 @@
     }
     h2 {
       text-align: center;
-      color: #4d148c;
+      color: var(--color-brand-purple);
       margin-top: 0;
     }
     form, #records .records-container {
@@ -148,24 +157,24 @@
       text-align: center;
       margin-bottom: 1.25rem;
       padding-bottom: 0.625rem;
-      border-bottom: 0.125rem solid #4d148c;
+      border-bottom: 0.125rem solid var(--color-brand-purple);
     }
     .site-header h1 {
       margin: 0 0 0.3125rem 0;
       font-size: 1.75rem;
-      color: #4d148c;
+      color: var(--color-brand-purple);
     }
     .app-name {
       text-align: center;
       font-size: 1.25rem;
-      color: #4d148c;
+      color: var(--color-brand-purple);
       margin-top: 0.3125rem;
     }
 
     /* Notification Banner */
     #notifications {
-      background-color: #ffcc00;
-      border: 0.0625rem solid #e6b800;
+      background-color: var(--color-notification);
+      border: 0.0625rem solid var(--color-notification-border);
       padding: 0.625rem;
       border-radius: 0.3125rem;
       margin: 0.625rem auto;
@@ -176,14 +185,14 @@
       display: none;
     }
     #notifications.success {
-      background-color: #d4edda;
-      border: 0.0625rem solid #c3e6cb;
-      color: #155724;
+      background-color: var(--color-success-bg);
+      border: 0.0625rem solid var(--color-success-border);
+      color: var(--color-success);
     }
     #notifications.error {
-      background-color: #f8d7da;
-      border: 0.0625rem solid #f5c6cb;
-      color: #721c24;
+      background-color: var(--color-error-bg);
+      border: 0.0625rem solid var(--color-error-border);
+      color: var(--color-error);
     }
 
     /* Navigation */
@@ -214,7 +223,7 @@
       margin: 0;
     }
     nav .nav-container a.active {
-      background-color: #4d148c;
+      background-color: var(--color-brand-purple);
       text-decoration: none;
     }
 
@@ -315,7 +324,7 @@
       padding: 0.5rem;
       text-align: center;
     }
-    #recordsTable th { background-color: #4d148c; color: white; }
+    #recordsTable th { background-color: var(--color-brand-purple); color: white; }
     #recordsTable caption {
       caption-side: top;
       font-weight: bold;
