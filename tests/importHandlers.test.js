@@ -59,6 +59,42 @@ test('handleImportEquipment skips malformed lines', () => {
   expect(win.showError).toHaveBeenCalledWith(expect.stringContaining('line 3'));
 });
 
+test('handleImportEmployees imports values with surrounding spaces', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEmployeeList = jest.fn();
+  class MockFileReader {
+    readAsText(file) {
+      this.onload && this.onload({ target: { result: file.text } });
+    }
+  }
+  win.FileReader = MockFileReader;
+  const csv = 'Badge ID,Employee Name\n 123 ,  John Doe  ';
+  const event = { target: { files: [ { text: csv } ], value: '' } };
+  win.handleImportEmployees(event);
+  const stored = JSON.parse(localStorage.getItem('employees'));
+  expect(stored).toEqual({ '123': 'John Doe' });
+});
+
+test('handleImportEquipment imports values with surrounding spaces', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEquipmentListAdmin = jest.fn();
+  class MockFileReader {
+    readAsText(file) {
+      this.onload && this.onload({ target: { result: file.text } });
+    }
+  }
+  win.FileReader = MockFileReader;
+  const csv = 'Equipment Serial,Equipment Name\n EQ1 ,  Hammer  ';
+  const event = { target: { files: [ { text: csv } ], value: '' } };
+  win.handleImportEquipment(event);
+  const stored = JSON.parse(localStorage.getItem('equipmentItems'));
+  expect(stored).toEqual({ 'EQ1': 'Hammer' });
+});
+
 test('handleImportEmployees surfaces read errors', () => {
   const win = setupDom();
   win.showError = jest.fn();
