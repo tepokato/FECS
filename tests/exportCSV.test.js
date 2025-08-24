@@ -68,29 +68,29 @@ test('exportRecordsCSV escapes quotes in fields', () => {
   spy.mockRestore();
 });
 
-test('exportEmployeesCSV preserves newline characters in names', () => {
+test('exportEmployeesCSV escapes newline characters in names', () => {
   const win = setupDom({ employees: { '1': 'John\r\nDoe' } });
   const spy = jest.spyOn(document.body, 'appendChild');
   win.exportEmployeesCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Badge ID,Employee Name\n"1","John\r\nDoe"\n`;
+  const expected = `Badge ID,Employee Name\n"1","John\\r\\nDoe"\n`;
   expect(csv).toBe(expected);
   spy.mockRestore();
 });
 
-test('exportEquipmentCSV preserves newline characters in names', () => {
+test('exportEquipmentCSV escapes newline characters in names', () => {
   const win = setupDom({ equipmentItems: { 'EQ1': 'Hammer\r\nXL' } });
   const spy = jest.spyOn(document.body, 'appendChild');
   win.exportEquipmentCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer\r\nXL"\n`;
+  const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer\\r\\nXL"\n`;
   expect(csv).toBe(expected);
   spy.mockRestore();
 });
 
-test('exportRecordsCSV preserves newline characters in fields', () => {
+test('exportRecordsCSV escapes newline characters in fields', () => {
   const records = [{
     timestamp: '2023-01-01T00:00:00',
     badge: '1',
@@ -105,7 +105,7 @@ test('exportRecordsCSV preserves newline characters in fields', () => {
   win.exportRecordsCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n"2023-01-01T00:00:00","1","John\r\nDoe","EQ1","Hammer\r\nXL","Check-Out"`;
+  const expected = `Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n"2023-01-01T00:00:00","1","John\\r\\nDoe","EQ1","Hammer\\r\\nXL","Check-Out"`;
   expect(csv).toBe(expected);
   spy.mockRestore();
 });
