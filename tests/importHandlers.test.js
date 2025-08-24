@@ -118,3 +118,18 @@ test('handleImportEquipment restores button after failure', () => {
   expect(button.textContent).toBe('Import Equipment CSV');
   expect(win.showError).toHaveBeenCalled();
 });
+
+test('setLoading restores nested button HTML', () => {
+  const win = setupDom();
+  const button = win.document.createElement('button');
+  const originalHtml = '<span class="label">Import <strong>Data</strong></span>';
+  button.innerHTML = originalHtml;
+  win.document.body.appendChild(button);
+  win.setLoading(button, true, 'Loading...');
+  expect(button.disabled).toBe(true);
+  expect(button.textContent).toBe('Loading...');
+  win.setLoading(button, false);
+  expect(button.disabled).toBe(false);
+  expect(button.innerHTML).toBe(originalHtml);
+  expect(button.dataset.originalHtml).toBeUndefined();
+});
