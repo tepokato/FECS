@@ -135,3 +135,22 @@ test('nav closes on Escape key', () => {
   expect(nav.classList.contains('show')).toBe(false);
   expect(navToggle.getAttribute('aria-expanded')).toBe('false');
 });
+
+test('body is not scrollable when nav is open', () => {
+  const win = setupDom();
+  const navToggle = win.document.getElementById('navToggle');
+  const body = win.document.body;
+
+  expect(body.classList.contains('no-scroll')).toBe(false);
+  expect(win.getComputedStyle(body).overflow).not.toBe('hidden');
+
+  navToggle.click();
+
+  expect(body.classList.contains('no-scroll')).toBe(true);
+  expect(win.getComputedStyle(body).overflow).toBe('hidden');
+
+  navToggle.click();
+
+  expect(body.classList.contains('no-scroll')).toBe(false);
+  expect(win.getComputedStyle(body).overflow).not.toBe('hidden');
+});

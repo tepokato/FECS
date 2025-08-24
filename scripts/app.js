@@ -770,6 +770,7 @@ function closeNav() {
   navToggle.setAttribute('aria-expanded', 'false');
   navToggle.classList.remove('open');
   nav.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('no-scroll');
   updateNavToggle(false);
 }
 
@@ -778,6 +779,7 @@ function openNav() {
   navToggle.setAttribute('aria-expanded', 'true');
   navToggle.classList.add('open');
   nav.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('no-scroll');
   updateNavToggle(true);
   const firstLink = nav.querySelector('a');
   if (firstLink) firstLink.focus();
