@@ -752,11 +752,25 @@ function handleImportEquipment(event) {
 
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('mainNav');
+let navToggleIcon;
+let navToggleText;
+if (navToggle) {
+  navToggleIcon = navToggle.querySelector('.nav-icon');
+  navToggleText = navToggle.querySelector('.nav-text');
+}
+
+function updateNavToggle(isOpen) {
+  navToggle.setAttribute('aria-label', isOpen ? 'Close' : 'Menu');
+  if (navToggleIcon) navToggleIcon.textContent = isOpen ? 'close' : 'menu';
+  if (navToggleText) navToggleText.textContent = isOpen ? 'Close' : 'Menu';
+}
+
 function closeNav() {
   nav.classList.remove('show');
   navToggle.setAttribute('aria-expanded', 'false');
   navToggle.classList.remove('open');
   nav.setAttribute('aria-hidden', 'true');
+  updateNavToggle(false);
 }
 
 function openNav() {
@@ -764,6 +778,7 @@ function openNav() {
   navToggle.setAttribute('aria-expanded', 'true');
   navToggle.classList.add('open');
   nav.setAttribute('aria-hidden', 'false');
+  updateNavToggle(true);
   const firstLink = nav.querySelector('a');
   if (firstLink) firstLink.focus();
 }

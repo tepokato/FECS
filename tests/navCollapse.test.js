@@ -55,6 +55,29 @@ test('nav toggle open class reflects menu state', () => {
   expect(navToggle.classList.contains('open')).toBe(false);
 });
 
+test('nav toggle updates text, icon, and aria-label', () => {
+  const win = setupDom();
+  const navToggle = win.document.getElementById('navToggle');
+  const icon = navToggle.querySelector('.nav-icon');
+  const label = navToggle.querySelector('.nav-text');
+
+  expect(icon.textContent).toBe('menu');
+  expect(label.textContent.trim()).toBe('Menu');
+  expect(navToggle.getAttribute('aria-label')).toBe('Menu');
+
+  navToggle.click();
+
+  expect(icon.textContent).toBe('close');
+  expect(label.textContent.trim()).toBe('Close');
+  expect(navToggle.getAttribute('aria-label')).toBe('Close');
+
+  navToggle.click();
+
+  expect(icon.textContent).toBe('menu');
+  expect(label.textContent.trim()).toBe('Menu');
+  expect(navToggle.getAttribute('aria-label')).toBe('Menu');
+});
+
 test('nav uses white container when menu opened', () => {
   const win = setupDom();
   win.document.getElementById('navToggle').click();
