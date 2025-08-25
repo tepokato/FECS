@@ -35,6 +35,15 @@ function csvEscape(value) {
 let notificationTimer;
 let tempNotificationActive = false;
 
+function clearNotification() {
+  const notificationDiv = document.getElementById('notifications');
+  notificationDiv.classList.remove('visible');
+  notificationDiv.className = '';
+  notificationDiv.textContent = '';
+  tempNotificationActive = false;
+  updateNotifications();
+}
+
 function showNotification(message, type, delay = 3000) {
   const notificationDiv = document.getElementById('notifications');
   if (notificationTimer) {
@@ -47,13 +56,9 @@ function showNotification(message, type, delay = 3000) {
   notificationDiv.classList.add('visible');
 
   if (delay > 0) {
-    notificationTimer = setTimeout(() => {
-      notificationDiv.classList.remove('visible');
-      notificationDiv.className = '';
-      notificationDiv.textContent = '';
-      tempNotificationActive = false;
-      updateNotifications();
-    }, delay);
+    notificationTimer = setTimeout(clearNotification, delay);
+  } else {
+    clearNotification();
   }
 }
 
