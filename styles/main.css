@@ -293,39 +293,39 @@
       justify-content: center;
       margin-bottom: 0.9375rem;
     }
-  #recordFilterForm input {
-    padding: 0.5rem;
-    flex: 1;
-    min-width: 9.375rem;
-  }
-  #recordFilterForm .recordDateContainer {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 9.375rem;
-    gap: 0.625rem;
-  }
-  #recordFilterForm .recordDateContainer input {
-    flex: 1;
-  }
-  #recordDateBtn {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: var(--color-accent);
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #recordDateBtn:hover {
-    background-color: #0066cc;
-  }
-  #recordFilterForm .btn {
-    padding: 0.5rem 0.9375rem;
-    border-radius: 0.5rem;
-  }
+    #recordFilterForm input {
+      padding: 0.5rem;
+      flex: 1;
+      min-width: 9.375rem;
+    }
+    #recordFilterForm .recordDateContainer {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 9.375rem;
+      gap: 0.625rem;
+    }
+    #recordFilterForm .recordDateContainer input {
+      flex: 1;
+    }
+    #recordDateBtn {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: var(--color-accent);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #recordDateBtn:hover {
+      background-color: #0066cc;
+    }
+    #recordFilterForm .btn {
+      padding: 0.5rem 0.9375rem;
+      border-radius: 0.5rem;
+    }
     #recordsTable {
       overflow-x: auto;
     }

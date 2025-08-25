@@ -163,6 +163,6 @@ describe('filterRecords', () => {
 
   test('recordDate input has placeholder text', () => {
     loadDom([]);
-    expect(document.getElementById('recordDate').getAttribute('placeholder')).toBe('Date');
+    expect(document.getElementById('recordDate').getAttribute('placeholder')).toBe('Filter by date');
   });
 });
