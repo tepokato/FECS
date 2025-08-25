@@ -61,6 +61,7 @@ function updateNotifications() {
   notificationDiv.className = '';
   notificationDiv.classList.remove('visible');
   const status = {};
+  const lastStation = {};
   const recs = (typeof records !== 'undefined' && Array.isArray(records)) ? records : [];
   recs.forEach(rec => {
     (rec.equipmentBarcodes || []).forEach(code => {
@@ -70,17 +71,33 @@ function updateNotifications() {
       } else if (rec.action === "Check-In") {
         status[code]--;
       }
+      if (rec.station) {
+        lastStation[code] = rec.station;
+      }
     });
   });
   const overdue = [];
+  const away = [];
   for (let code in status) {
     if (status[code] > 0) {
       const name = (equipmentItems[code] && equipmentItems[code].name) || "Unknown Equipment";
       overdue.push(`${code} (${name})`);
     }
   }
-  if (overdue.length > 0) {
-    notificationDiv.textContent = "Overdue Equipment: " + overdue.join(", ");
+  for (let code in lastStation) {
+    const equipment = equipmentItems[code];
+    const home = equipment && equipment.homeStation;
+    const last = lastStation[code];
+    if (home && last && home !== last) {
+      const name = (equipment && equipment.name) || "Unknown Equipment";
+      away.push(`${code} (${name})`);
+    }
+  }
+  const messages = [];
+  if (overdue.length > 0) messages.push("Overdue Equipment: " + overdue.join(", "));
+  if (away.length > 0) messages.push("Equipment Away From Home: " + away.join(", "));
+  if (messages.length > 0) {
+    notificationDiv.textContent = messages.join(" | ");
     notificationDiv.classList.add('visible');
   } else {
     notificationDiv.textContent = "";
