@@ -199,6 +199,42 @@ function addEquipmentAdmin() {
   clearFieldError(stationInput);
 }
 
+function handleHomeStationUpdate(serial, newHomeStation) {
+  const recs = (typeof records !== 'undefined' && Array.isArray(records)) ? records : (records = []);
+  const related = recs.filter(r => Array.isArray(r.equipmentBarcodes) && r.equipmentBarcodes.includes(serial));
+  const latest = related[related.length - 1];
+  const newNorm = String(newHomeStation || '').toLowerCase();
+  if (latest && typeof latest.station === 'string' && latest.station.toLowerCase() === newNorm) {
+    if (typeof updateNotifications === 'function') updateNotifications();
+    return;
+  }
+  const timestamp = new Date().toISOString();
+  const synthetic = {
+    timestamp,
+    recordDate: timestamp.slice(0,10),
+    badge: '',
+    employeeName: '',
+    station: newHomeStation,
+    equipmentBarcodes: [serial],
+    equipmentNames: [(equipmentItems[serial] && equipmentItems[serial].name) || ''],
+    action: 'Check-In'
+  };
+  recs.push(synthetic);
+  saveToStorage('records', recs);
+  if (typeof updateNotifications === 'function') updateNotifications();
+}
+
+function updateEquipmentHomeStation(serial, newHomeStation) {
+  if (!serial || !equipmentItems[serial]) {
+    showError('Invalid equipment serial or equipment not found!');
+    return;
+  }
+  equipmentItems[serial].homeStation = newHomeStation;
+  saveToStorage('equipmentItems', equipmentItems);
+  handleHomeStationUpdate(serial, newHomeStation);
+  if (typeof displayEquipmentListAdmin === 'function') displayEquipmentListAdmin();
+}
+
 function removeEquipmentAdmin(serial) {
   if (!serial || !equipmentItems[serial]) {
     showError('Invalid equipment serial or equipment not found!');
@@ -220,7 +256,8 @@ const admin = {
   removeEmployee,
   displayEquipmentListAdmin,
   addEquipmentAdmin,
-  removeEquipmentAdmin
+  removeEquipmentAdmin,
+  updateEquipmentHomeStation
 };
 if (typeof module !== 'undefined') module.exports = admin;
 if (typeof window !== 'undefined') Object.assign(window, admin);
