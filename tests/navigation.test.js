@@ -3,8 +3,15 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
-const script = fs.readFileSync(path.resolve(__dirname, '../scripts/app.js'), 'utf8');
 const css = fs.readFileSync(path.resolve(__dirname, '../styles/main.css'), 'utf8');
+const scripts = [
+  '../scripts/storage.js',
+  '../scripts/notifications.js',
+  '../scripts/admin.js',
+  '../scripts/csvParser.js',
+  '../scripts/records.js',
+  '../scripts/app.js'
+].map(p => fs.readFileSync(path.resolve(__dirname, p), 'utf8')).join('\n');
 
 function setupDom() {
   const dom = new JSDOM(html, { url: 'http://localhost', runScripts: 'dangerously' });
@@ -17,7 +24,7 @@ function setupDom() {
   localStorage.setItem('employees', JSON.stringify({}));
   localStorage.setItem('equipmentItems', JSON.stringify({}));
   localStorage.setItem('records', JSON.stringify([]));
-  window.eval(script);
+  window.eval(scripts);
   return window;
 }
 
