@@ -20,7 +20,7 @@ function setupDom() {
   global.localStorage = window.localStorage;
   window.alert = jest.fn();
   localStorage.setItem('employees', JSON.stringify({}));
-  localStorage.setItem('equipmentItems', JSON.stringify({ E1: 'Scanner' }));
+  localStorage.setItem('equipmentItems', JSON.stringify({ E1: { name: 'Scanner', homeStation: '' } }));
   localStorage.setItem('records', JSON.stringify([]));
   window.eval(scripts);
   return window;

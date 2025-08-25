@@ -3,8 +3,10 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   const list = document.getElementById('employeeList');
   list.innerHTML = "";
   const entries = Object.entries(employees).sort((a, b) => a[0].localeCompare(b[0]));
-  const filtered = entries.filter(([badge, name]) =>
-    badge.toLowerCase().includes(filter) || name.toLowerCase().includes(filter)
+  const filtered = entries.filter(([badge, info]) =>
+    badge.toLowerCase().includes(filter) ||
+    info.name.toLowerCase().includes(filter) ||
+    info.homeStation.toLowerCase().includes(filter)
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   page = Math.min(Math.max(page, 0), totalPages - 1);
@@ -16,10 +18,10 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
     placeholder.textContent = 'No employees added yet.';
     list.appendChild(placeholder);
   } else {
-    pageItems.forEach(([badge, name]) => {
+    pageItems.forEach(([badge, info]) => {
       const li = document.createElement('li');
       const textSpan = document.createElement('span');
-      textSpan.textContent = `${badge}: ${name}`;
+      textSpan.textContent = `${badge}: ${info.name} (${info.homeStation})`;
       const del = document.createElement('button');
       del.type = 'button';
       del.className = 'deleteEmployee';
@@ -53,10 +55,13 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
 function addEmployee() {
   const nameInput = document.getElementById('empName');
   const badgeInput = document.getElementById('empBadge');
+  const stationInput = document.getElementById('empStation');
   clearFieldError(nameInput);
   clearFieldError(badgeInput);
+  clearFieldError(stationInput);
   const badge = badgeInput.value.trim();
   const name = nameInput.value.trim();
+  const homeStation = stationInput.value.trim();
   let hasError = false;
   if (!name) {
     setFieldError(nameInput, 'Employee name is required.');
@@ -66,19 +71,24 @@ function addEmployee() {
     setFieldError(badgeInput, 'Badge ID is required.');
     hasError = true;
   }
+  if (!homeStation) {
+    setFieldError(stationInput, 'Home station is required.');
+    hasError = true;
+  }
   if (hasError) return;
   if (employees[badge]) {
     setFieldError(badgeInput, 'Badge ID already exists.');
     showError('Employee with this badge ID already exists!');
     return;
   }
-  employees[badge] = name;
+  employees[badge] = { name, homeStation };
   saveToStorage('employees', employees);
   showSuccess('Employee added successfully!');
   displayEmployeeList();
   document.getElementById('adminForm').reset();
   clearFieldError(nameInput);
   clearFieldError(badgeInput);
+  clearFieldError(stationInput);
 }
 
 function removeEmployee(badge) {
@@ -101,8 +111,10 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   const list = document.getElementById('equipmentListAdmin');
   list.innerHTML = "";
   const entries = Object.entries(equipmentItems).sort((a, b) => a[0].localeCompare(b[0]));
-  const filtered = entries.filter(([serial, name]) =>
-    serial.toLowerCase().includes(filter) || name.toLowerCase().includes(filter)
+  const filtered = entries.filter(([serial, info]) =>
+    serial.toLowerCase().includes(filter) ||
+    info.name.toLowerCase().includes(filter) ||
+    info.homeStation.toLowerCase().includes(filter)
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   page = Math.min(Math.max(page, 0), totalPages - 1);
@@ -114,10 +126,10 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
     placeholder.textContent = 'No equipment added yet.';
     list.appendChild(placeholder);
   } else {
-    pageItems.forEach(([serial, name]) => {
+    pageItems.forEach(([serial, info]) => {
       const li = document.createElement('li');
       const textSpan = document.createElement('span');
-      textSpan.textContent = `${serial}: ${name}`;
+      textSpan.textContent = `${serial}: ${info.name} (${info.homeStation})`;
       const del = document.createElement('button');
       del.type = 'button';
       del.className = 'deleteEquipment';
@@ -151,10 +163,13 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
 function addEquipmentAdmin() {
   const nameInput = document.getElementById('equipName');
   const serialInput = document.getElementById('equipSerial');
+  const stationInput = document.getElementById('equipStation');
   clearFieldError(nameInput);
   clearFieldError(serialInput);
+  clearFieldError(stationInput);
   const serial = serialInput.value.trim();
   const name = nameInput.value.trim();
+  const homeStation = stationInput.value.trim();
   let hasError = false;
   if (!name) {
     setFieldError(nameInput, 'Equipment name is required.');
@@ -164,19 +179,24 @@ function addEquipmentAdmin() {
     setFieldError(serialInput, 'Equipment serial is required.');
     hasError = true;
   }
+  if (!homeStation) {
+    setFieldError(stationInput, 'Home station is required.');
+    hasError = true;
+  }
   if (hasError) return;
   if (equipmentItems[serial]) {
     setFieldError(serialInput, 'Equipment serial already exists.');
     showError('Equipment with this serial already exists!');
     return;
   }
-  equipmentItems[serial] = name;
+  equipmentItems[serial] = { name, homeStation };
   saveToStorage('equipmentItems', equipmentItems);
   showSuccess('Equipment added successfully!');
   displayEquipmentListAdmin();
   document.getElementById('equipmentAdminForm').reset();
   clearFieldError(nameInput);
   clearFieldError(serialInput);
+  clearFieldError(stationInput);
 }
 
 function removeEquipmentAdmin(serial) {
