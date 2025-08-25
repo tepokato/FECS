@@ -157,7 +157,10 @@
         <label for="recordEquipment" class="sr-only">Search by equipment name or serial</label>
         <input type="text" id="recordEquipment" placeholder="Search by equipment name or serial">
         <label for="recordDate" class="sr-only">Filter by date</label>
-        <input type="date" id="recordDate">
+        <div class="recordDateContainer">
+          <input type="date" id="recordDate" placeholder="Filter by date">
+          <button id="recordDateBtn" type="button"><span class="material-symbols-outlined">calendar_month</span></button>
+        </div>
         <button type="submit" id="filterRecordsBtn" class="btn btn-secondary">Search/Filter</button>
         <button type="button" id="clearFiltersBtn" class="btn btn-secondary">Clear Filters</button>
       </form>

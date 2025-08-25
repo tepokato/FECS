@@ -147,4 +147,22 @@ describe('filterRecords', () => {
     expect(rows[1].children[2].textContent).toBe('Alice');
     expect(rows[2].children[2].textContent).toBe('Bob');
   });
+
+  test('recordDateBtn triggers showPicker or focus', () => {
+    const win = loadDom([]);
+    const input = document.getElementById('recordDate');
+    input.showPicker = jest.fn();
+    document.getElementById('recordDateBtn').click();
+    expect(input.showPicker).toHaveBeenCalled();
+
+    input.showPicker = undefined;
+    input.focus = jest.fn();
+    document.getElementById('recordDateBtn').click();
+    expect(input.focus).toHaveBeenCalled();
+  });
+
+  test('recordDate input has placeholder text', () => {
+    loadDom([]);
+    expect(document.getElementById('recordDate').getAttribute('placeholder')).toBe('Filter by date');
+  });
 });
