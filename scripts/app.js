@@ -20,7 +20,7 @@ let employeePage = 0;
 let equipmentPage = 0;
 let employeeFilter = '';
 let equipmentFilter = '';
-
+rebuildEquipmentCache();
 updateNotifications();
 
 const actionBtn = document.getElementById('actionBtn');
@@ -211,6 +211,8 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
   };
   records.push(record);
   saveToStorage('records', records);
+  updateEquipmentCache(record);
+  updateNotifications();
   showSuccess('Record saved locally!');
   this.reset();
   document.getElementById('employeeName').textContent = "";

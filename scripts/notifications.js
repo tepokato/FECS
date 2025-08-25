@@ -1,5 +1,33 @@
 let notificationTimer;
 let tempNotificationActive = false;
+// Cache of equipment -> { status, lastStation }
+// status: positive means checked out more times than checked in
+// lastStation: last known station from records
+let equipmentStatusCache = {};
+
+function updateEquipmentCache(record) {
+  if (!record || !Array.isArray(record.equipmentBarcodes)) return;
+  record.equipmentBarcodes.forEach(code => {
+    if (!equipmentStatusCache[code]) {
+      equipmentStatusCache[code] = { status: 0, lastStation: undefined };
+    }
+    const entry = equipmentStatusCache[code];
+    if (record.action === "Check-Out") {
+      entry.status++;
+    } else if (record.action === "Check-In") {
+      entry.status--;
+    }
+    if (record.station) {
+      entry.lastStation = record.station;
+    }
+  });
+}
+
+function rebuildEquipmentCache() {
+  equipmentStatusCache = {};
+  const recs = (typeof records !== 'undefined' && Array.isArray(records)) ? records : [];
+  recs.forEach(updateEquipmentCache);
+}
 
 function clearNotification() {
   const notificationDiv = document.getElementById('notifications');
@@ -60,34 +88,19 @@ function updateNotifications() {
   const notificationDiv = document.getElementById('notifications');
   notificationDiv.className = '';
   notificationDiv.classList.remove('visible');
-  const status = {};
-  const lastStation = {};
-  const recs = (typeof records !== 'undefined' && Array.isArray(records)) ? records : [];
-  recs.forEach(rec => {
-    (rec.equipmentBarcodes || []).forEach(code => {
-      if (!status[code]) status[code] = 0;
-      if (rec.action === "Check-Out") {
-        status[code]++;
-      } else if (rec.action === "Check-In") {
-        status[code]--;
-      }
-      if (rec.station) {
-        lastStation[code] = rec.station;
-      }
-    });
-  });
+
   const overdue = [];
   const away = [];
-  for (let code in status) {
-    if (status[code] > 0) {
+  for (let code in equipmentStatusCache) {
+    const entry = equipmentStatusCache[code];
+    if (entry.status > 0) {
       const name = (equipmentItems[code] && equipmentItems[code].name) || "Unknown Equipment";
       overdue.push(`${code} (${name})`);
     }
-  }
-  for (let code in lastStation) {
+
     const equipment = equipmentItems[code];
     const home = equipment && equipment.homeStation;
-    const last = lastStation[code];
+    const last = entry.lastStation;
     const homeNorm = typeof home === 'string' ? home.toLowerCase() : home;
     const lastNorm = typeof last === 'string' ? last.toLowerCase() : last;
     if (homeNorm && lastNorm && homeNorm !== lastNorm) {
@@ -95,6 +108,7 @@ function updateNotifications() {
       away.push(`${code} (${name})`);
     }
   }
+
   const messages = [];
   if (overdue.length > 0) messages.push("Overdue Equipment: " + overdue.join(", "));
   if (away.length > 0) messages.push("Equipment Away From Home: " + away.join(", "));
@@ -114,7 +128,9 @@ const notifications = {
   showError,
   setFieldError,
   clearFieldError,
-  updateNotifications
+  updateNotifications,
+  updateEquipmentCache,
+  rebuildEquipmentCache
 };
 if (typeof module !== 'undefined') module.exports = notifications;
 if (typeof window !== 'undefined') Object.assign(window, notifications);
