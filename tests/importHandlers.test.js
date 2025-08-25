@@ -39,10 +39,10 @@ test('handleImportEmployees skips malformed lines', () => {
     }
   }
   win.FileReader = MockFileReader;
-  const event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,John\n456' } ], value: '' } };
+  const event = { target: { files: [ { text: 'Badge ID,Employee Name,Home Station\n123,John,HUB1\n456' } ], value: '' } };
   win.handleImportEmployees(event);
   const stored = JSON.parse(localStorage.getItem('employees'));
-  expect(stored).toEqual({ '123': { name: 'John', homeStation: '' } });
+  expect(stored).toEqual({ '123': { name: 'John', homeStation: 'HUB1' } });
   expect(win.showError).toHaveBeenCalledWith(expect.stringContaining('line 3'));
 });
 
@@ -57,10 +57,10 @@ test('handleImportEquipment skips malformed lines', () => {
     }
   }
   win.FileReader = MockFileReader;
-  const event = { target: { files: [ { text: 'Equipment Serial,Equipment Name\nEQ1,Hammer\nEQ2' } ], value: '' } };
+  const event = { target: { files: [ { text: 'Equipment Serial,Equipment Name,Home Station\nEQ1,Hammer,HUB\nEQ2' } ], value: '' } };
   win.handleImportEquipment(event);
   const stored = JSON.parse(localStorage.getItem('equipmentItems'));
-  expect(stored).toEqual({ 'EQ1': { name: 'Hammer', homeStation: '' } });
+  expect(stored).toEqual({ 'EQ1': { name: 'Hammer', homeStation: 'HUB' } });
   expect(win.showError).toHaveBeenCalledWith(expect.stringContaining('line 3'));
 });
 
@@ -75,11 +75,11 @@ test('handleImportEmployees imports values with surrounding spaces', () => {
     }
   }
   win.FileReader = MockFileReader;
-  const csv = 'Badge ID,Employee Name\n 123 ,  John Doe  ';
+  const csv = 'Badge ID,Employee Name,Home Station\n 123 ,  John Doe  ,  STN1 ';
   const event = { target: { files: [ { text: csv } ], value: '' } };
   win.handleImportEmployees(event);
   const stored = JSON.parse(localStorage.getItem('employees'));
-  expect(stored).toEqual({ '123': { name: 'John Doe', homeStation: '' } });
+  expect(stored).toEqual({ '123': { name: 'John Doe', homeStation: 'STN1' } });
 });
 
 test('handleImportEquipment imports values with surrounding spaces', () => {
@@ -93,7 +93,43 @@ test('handleImportEquipment imports values with surrounding spaces', () => {
     }
   }
   win.FileReader = MockFileReader;
-  const csv = 'Equipment Serial,Equipment Name\n EQ1 ,  Hammer  ';
+  const csv = 'Equipment Serial,Equipment Name,Home Station\n EQ1 ,  Hammer  ,  STN2 ';
+  const event = { target: { files: [ { text: csv } ], value: '' } };
+  win.handleImportEquipment(event);
+  const stored = JSON.parse(localStorage.getItem('equipmentItems'));
+  expect(stored).toEqual({ 'EQ1': { name: 'Hammer', homeStation: 'STN2' } });
+});
+
+test('handleImportEmployees defaults home station when column absent', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEmployeeList = jest.fn();
+  class MockFileReader {
+    readAsText(file) {
+      this.onload && this.onload({ target: { result: file.text } });
+    }
+  }
+  win.FileReader = MockFileReader;
+  const csv = 'Badge ID,Employee Name\n123,John';
+  const event = { target: { files: [ { text: csv } ], value: '' } };
+  win.handleImportEmployees(event);
+  const stored = JSON.parse(localStorage.getItem('employees'));
+  expect(stored).toEqual({ '123': { name: 'John', homeStation: '' } });
+});
+
+test('handleImportEquipment defaults home station when column absent', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEquipmentListAdmin = jest.fn();
+  class MockFileReader {
+    readAsText(file) {
+      this.onload && this.onload({ target: { result: file.text } });
+    }
+  }
+  win.FileReader = MockFileReader;
+  const csv = 'Equipment Serial,Equipment Name\nEQ1,Hammer';
   const event = { target: { files: [ { text: csv } ], value: '' } };
   win.handleImportEquipment(event);
   const stored = JSON.parse(localStorage.getItem('equipmentItems'));
@@ -130,7 +166,7 @@ test('handleImportEmployees shows loading state and restores after success', () 
   }
   win.FileReader = MockFileReader;
   const button = win.document.getElementById('importEmployeesAction');
-  const event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,John' } ], value: '' } };
+  const event = { target: { files: [ { text: 'Badge ID,Employee Name,Home Station\n123,John,' } ], value: '' } };
   win.handleImportEmployees(event);
   expect(button.disabled).toBe(true);
   expect(button.textContent).toBe('Importing...');
@@ -172,9 +208,9 @@ test('handleImportEmployees prompts before overwriting existing IDs', () => {
     }
   }
   win.FileReader = MockFileReader;
-  let event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,Original' } ], value: '' } };
+  let event = { target: { files: [ { text: 'Badge ID,Employee Name,Home Station\n123,Original,' } ], value: '' } };
   win.handleImportEmployees(event);
-  event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,Updated' } ], value: '' } };
+  event = { target: { files: [ { text: 'Badge ID,Employee Name,Home Station\n123,Updated,H2' } ], value: '' } };
   win.handleImportEmployees(event);
   expect(win.confirm).toHaveBeenCalledWith(expect.stringContaining('123'));
   const stored = JSON.parse(localStorage.getItem('employees'));
@@ -193,9 +229,9 @@ test('handleImportEquipment prompts before overwriting existing IDs', () => {
     }
   }
   win.FileReader = MockFileReader;
-  let event = { target: { files: [ { text: 'Equipment Serial,Equipment Name\nEQ1,Hammer' } ], value: '' } };
+  let event = { target: { files: [ { text: 'Equipment Serial,Equipment Name,Home Station\nEQ1,Hammer,' } ], value: '' } };
   win.handleImportEquipment(event);
-  event = { target: { files: [ { text: 'Equipment Serial,Equipment Name\nEQ1,Sledge' } ], value: '' } };
+  event = { target: { files: [ { text: 'Equipment Serial,Equipment Name,Home Station\nEQ1,Sledge,H1' } ], value: '' } };
   win.handleImportEquipment(event);
   expect(win.confirm).toHaveBeenCalledWith(expect.stringContaining('EQ1'));
   const stored = JSON.parse(localStorage.getItem('equipmentItems'));
