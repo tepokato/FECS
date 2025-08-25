@@ -36,3 +36,15 @@ test('updateNotifications flags away-from-home equipment and clears when returne
   expect(notificationDiv.classList.contains('visible')).toBe(false);
 });
 
+test('updateNotifications ignores case differences in station names', () => {
+  setupDom();
+  global.equipmentItems = { E1: { name: 'Scanner', homeStation: 'Alpha' } };
+  global.records = [
+    { station: 'alpha', equipmentBarcodes: ['E1'], action: 'Check-In' }
+  ];
+  updateNotifications();
+  const notificationDiv = document.getElementById('notifications');
+  expect(notificationDiv.textContent).toBe('');
+  expect(notificationDiv.classList.contains('visible')).toBe(false);
+});
+

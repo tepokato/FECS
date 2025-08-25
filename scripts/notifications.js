@@ -88,7 +88,9 @@ function updateNotifications() {
     const equipment = equipmentItems[code];
     const home = equipment && equipment.homeStation;
     const last = lastStation[code];
-    if (home && last && home !== last) {
+    const homeNorm = typeof home === 'string' ? home.toLowerCase() : home;
+    const lastNorm = typeof last === 'string' ? last.toLowerCase() : last;
+    if (homeNorm && lastNorm && homeNorm !== lastNorm) {
       const name = (equipment && equipment.name) || "Unknown Equipment";
       away.push(`${code} (${name})`);
     }
