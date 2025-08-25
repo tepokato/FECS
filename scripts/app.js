@@ -198,11 +198,13 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
       equipmentNamesList.push((equipmentItems[code] && equipmentItems[code].name) || 'Unknown equipment');
     }
   });
+  const station = badge.slice(0, 3);
   const record = {
     timestamp: new Date().toISOString(),
     recordDate: new Date().toISOString().substring(0,10),
     badge: badge,
     employeeName: (employees[badge] && employees[badge].name) || 'Unknown employee',
+    station: station,
     equipmentBarcodes: equipmentBarcodes,
     equipmentNames: equipmentNamesList,
     action: action

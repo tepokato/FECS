@@ -19,7 +19,7 @@ function setupDom() {
   global.document = window.document;
   global.localStorage = window.localStorage;
   window.alert = jest.fn();
-  localStorage.setItem('employees', JSON.stringify({ '123': { name: 'John Doe', homeStation: '' } }));
+  localStorage.setItem('employees', JSON.stringify({ '123456': { name: 'John Doe', homeStation: '' } }));
   localStorage.setItem('equipmentItems', JSON.stringify({ 'E1': { name: 'Scanner', homeStation: '' } }));
   localStorage.setItem('records', JSON.stringify([]));
   window.eval(scripts);
@@ -46,7 +46,7 @@ test('action dropdown toggles', () => {
 test('selected action stored on checkout submit', () => {
   const win = setupDom();
   const { document } = win;
-  document.getElementById('badge').value = '123';
+  document.getElementById('badge').value = '123456';
   document.getElementById('equipment0').value = 'E1';
   document.getElementById('actionBtn').click();
   document.querySelector('#actionMenu button[data-value="Check-Out"]').click();
@@ -60,5 +60,6 @@ test('selected action stored on checkout submit', () => {
   const records = JSON.parse(localStorage.getItem('records'));
   expect(records.length).toBe(1);
   expect(records[0].action).toBe('Check-Out');
+  expect(records[0].station).toBe('123');
 });
 
