@@ -169,6 +169,14 @@ function handleImportEmployees(event) {
       let badge = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
       if (badge && name) {
+        if (employees[badge]) {
+          const overwrite = typeof confirm === 'function'
+            ? confirm(`Badge ID ${badge} already exists. Overwrite?`)
+            : true;
+          if (!overwrite) {
+            continue;
+          }
+        }
         employees[badge] = name;
       }
     }
@@ -220,6 +228,14 @@ function handleImportEquipment(event) {
       let serial = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
       if (serial && name) {
+        if (equipmentItems[serial]) {
+          const overwrite = typeof confirm === 'function'
+            ? confirm(`Equipment ID ${serial} already exists. Overwrite?`)
+            : true;
+          if (!overwrite) {
+            continue;
+          }
+        }
         equipmentItems[serial] = name;
       }
     }
