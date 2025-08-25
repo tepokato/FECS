@@ -49,3 +49,17 @@ test('nav is visible by default', () => {
   expect(win.getComputedStyle(nav).display).not.toBe('none');
 });
 
+test('pressing Tab on last menu item closes dropdown', () => {
+  const win = setupDom();
+  const btn = win.document.getElementById('actionBtn');
+  const menu = win.document.getElementById('actionMenu');
+  // open the dropdown
+  btn.click();
+  const items = menu.querySelectorAll('button');
+  const lastItem = items[items.length - 1];
+  lastItem.focus();
+  lastItem.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Tab' }));
+  expect(menu.classList.contains('hidden')).toBe(true);
+  expect(win.document.activeElement).toBe(btn);
+});
+

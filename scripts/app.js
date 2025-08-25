@@ -857,6 +857,9 @@ function setupDropdown(button, menu, onSelect) {
       } else if (e.key === 'Escape') {
         e.preventDefault();
         closeMenu();
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        closeMenu();
       }
     });
   });
