@@ -94,6 +94,9 @@ Data is stored in the browser's `localStorage`, and CSV files are generated at r
 ### CSV Import/Export
 - Export the activity log as a CSV file from the records view.
 - Import existing employee or equipment lists via CSV through the Admin panel.
+  - Employee CSV columns: `Badge ID`, `Employee Name`, `Home Station` (optional)
+  - Equipment CSV columns: `Equipment Serial`, `Equipment Name`, `Home Station` (optional)
+  - Legacy CSVs without the `Home Station` column default the value to blank
 
 ### Record Filtering
 - Use the search box to filter records by employee, equipment, or date.

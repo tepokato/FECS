@@ -41,7 +41,7 @@ test('exportEmployeesCSV escapes quotes in names', () => {
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
   const row = csv.trim().split('\n')[1];
-  expect(row).toBe('"1","John ""JJ"" Doe"');
+  expect(row).toBe('"1","John ""JJ"" Doe",""');
   spy.mockRestore();
 });
 
@@ -52,7 +52,7 @@ test('exportEquipmentCSV escapes quotes in names', () => {
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
   const row = csv.trim().split('\n')[1];
-  expect(row).toBe('"EQ1","Hammer ""XL"""');
+  expect(row).toBe('"EQ1","Hammer ""XL""",""');
   spy.mockRestore();
 });
 
@@ -83,7 +83,7 @@ test('exportEmployeesCSV escapes newline characters in names', () => {
   win.exportEmployeesCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Badge ID,Employee Name\n"1","John\r\nDoe"\n`;
+  const expected = `Badge ID,Employee Name,Home Station\n"1","John\r\nDoe",""\n`;
   expect(csv).toBe(expected);
   const parsed = parseCSV(csv);
   expect(parsed[1][1]).toBe('John\r\nDoe');
@@ -96,7 +96,7 @@ test('exportEquipmentCSV escapes newline characters in names', () => {
   win.exportEquipmentCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer\r\nXL"\n`;
+  const expected = `Equipment Serial,Equipment Name,Home Station\n"EQ1","Hammer\r\nXL",""\n`;
   expect(csv).toBe(expected);
   const parsed = parseCSV(csv);
   expect(parsed[1][1]).toBe('Hammer\r\nXL');
@@ -144,6 +144,28 @@ test('exportRecordsCSV leaves blank cells for missing fields', () => {
   spy.mockRestore();
 });
 
+test('exportEmployeesCSV includes home station field', () => {
+  const win = setupDom({ employees: { '1': { name: 'John Doe', homeStation: 'STN1' } } });
+  const spy = jest.spyOn(document.body, 'appendChild');
+  win.exportEmployeesCSV();
+  const link = spy.mock.calls[0][0];
+  const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+  const row = csv.trim().split('\n')[1];
+  expect(row).toBe('"1","John Doe","STN1"');
+  spy.mockRestore();
+});
+
+test('exportEquipmentCSV includes home station field', () => {
+  const win = setupDom({ equipmentItems: { 'EQ1': { name: 'Hammer', homeStation: 'H1' } } });
+  const spy = jest.spyOn(document.body, 'appendChild');
+  win.exportEquipmentCSV();
+  const link = spy.mock.calls[0][0];
+  const csv = decodeURI(link.href).split('charset=utf-8,')[1];
+  const row = csv.trim().split('\n')[1];
+  expect(row).toBe('"EQ1","Hammer","H1"');
+  spy.mockRestore();
+});
+
 test('exportEmployeesCSV ignores inherited prototype properties', () => {
   Object.prototype.protoEmployee = 'Prototype';
   try {
@@ -152,7 +174,7 @@ test('exportEmployeesCSV ignores inherited prototype properties', () => {
     win.exportEmployeesCSV();
     const link = spy.mock.calls[0][0];
     const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-    const expected = `Badge ID,Employee Name\n"1","John Doe"\n`;
+    const expected = `Badge ID,Employee Name,Home Station\n"1","John Doe",""\n`;
     expect(csv).toBe(expected);
     spy.mockRestore();
   } finally {
@@ -168,7 +190,7 @@ test('exportEquipmentCSV ignores inherited prototype properties', () => {
     win.exportEquipmentCSV();
     const link = spy.mock.calls[0][0];
     const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-    const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer"\n`;
+    const expected = `Equipment Serial,Equipment Name,Home Station\n"EQ1","Hammer",""\n`;
     expect(csv).toBe(expected);
     spy.mockRestore();
   } finally {

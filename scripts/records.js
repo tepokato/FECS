@@ -95,9 +95,9 @@ function exportRecordsCSV() {
 
 function exportEmployeesCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Badge ID,Employee Name\n";
+  csvContent += "Badge ID,Employee Name,Home Station\n";
   Object.entries(employees).forEach(([badge, info]) => {
-    csvContent += `"${csvEscape(badge)}","${csvEscape(info.name)}"\n`;
+    csvContent += `"${csvEscape(badge)}","${csvEscape(info.name)}","${csvEscape(info.homeStation ?? '')}"\n`;
   });
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
@@ -109,9 +109,9 @@ function exportEmployeesCSV() {
 
 function exportEquipmentCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Equipment Serial,Equipment Name\n";
+  csvContent += "Equipment Serial,Equipment Name,Home Station\n";
   Object.entries(equipmentItems).forEach(([serial, info]) => {
-    csvContent += `"${csvEscape(serial)}","${csvEscape(info.name)}"\n`;
+    csvContent += `"${csvEscape(serial)}","${csvEscape(info.name)}","${csvEscape(info.homeStation ?? '')}"\n`;
   });
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
@@ -170,6 +170,7 @@ function handleImportEmployees(event) {
       }
       let badge = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
+      let homeStation = parts[2] ? parts[2].replace(/^"|"$/g, '').trim() : '';
       if (badge && name) {
         if (employees[badge]) {
           const overwrite = typeof confirm === 'function'
@@ -179,7 +180,7 @@ function handleImportEmployees(event) {
             continue;
           }
         }
-        employees[badge] = { name, homeStation: '' };
+        employees[badge] = { name, homeStation };
       }
     }
     saveToStorage("employees", employees);
@@ -229,6 +230,7 @@ function handleImportEquipment(event) {
       }
       let serial = parts[0].replace(/^"|"$/g, '').trim();
       let name = parts[1].replace(/^"|"$/g, '').trim();
+      let homeStation = parts[2] ? parts[2].replace(/^"|"$/g, '').trim() : '';
       if (serial && name) {
         if (equipmentItems[serial]) {
           const overwrite = typeof confirm === 'function'
@@ -238,7 +240,7 @@ function handleImportEquipment(event) {
             continue;
           }
         }
-        equipmentItems[serial] = { name, homeStation: '' };
+        equipmentItems[serial] = { name, homeStation };
       }
     }
     saveToStorage("equipmentItems", equipmentItems);
