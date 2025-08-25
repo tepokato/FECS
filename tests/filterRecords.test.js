@@ -3,7 +3,14 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
-const script = fs.readFileSync(path.resolve(__dirname, '../scripts/app.js'), 'utf8');
+const scripts = [
+  '../scripts/storage.js',
+  '../scripts/notifications.js',
+  '../scripts/admin.js',
+  '../scripts/csvParser.js',
+  '../scripts/records.js',
+  '../scripts/app.js'
+].map(p => fs.readFileSync(path.resolve(__dirname, p), 'utf8')).join('\n');
 
 function loadDom(records) {
   const dom = new JSDOM(html, { url: 'http://localhost', runScripts: 'dangerously' });
@@ -13,7 +20,7 @@ function loadDom(records) {
   global.localStorage = window.localStorage;
   window.alert = jest.fn();
   localStorage.setItem('records', JSON.stringify(records));
-  window.eval(script);
+  window.eval(scripts);
   return window;
 }
 

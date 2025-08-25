@@ -4,7 +4,14 @@ const { JSDOM } = require('jsdom');
 const { parseCSV } = require('../scripts/csvParser');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
-const script = fs.readFileSync(path.resolve(__dirname, '../scripts/app.js'), 'utf8');
+const scripts = [
+  '../scripts/storage.js',
+  '../scripts/notifications.js',
+  '../scripts/admin.js',
+  '../scripts/csvParser.js',
+  '../scripts/records.js',
+  '../scripts/app.js'
+].map(p => fs.readFileSync(path.resolve(__dirname, p), 'utf8')).join('\n');
 
 function setupDom({ employees = {}, equipmentItems = {}, records = [] } = {}) {
   const dom = new JSDOM(html, { url: 'http://localhost', runScripts: 'dangerously' });
@@ -16,7 +23,7 @@ function setupDom({ employees = {}, equipmentItems = {}, records = [] } = {}) {
   localStorage.setItem('employees', JSON.stringify(employees));
   localStorage.setItem('equipmentItems', JSON.stringify(equipmentItems));
   localStorage.setItem('records', JSON.stringify(records));
-  window.eval(script);
+  window.eval(scripts);
   window.HTMLAnchorElement.prototype.click = jest.fn();
   return window;
 }
