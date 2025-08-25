@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
-const { updateNotifications } = require('../scripts/notifications');
+const { updateNotifications, rebuildEquipmentCache, updateEquipmentCache } = require('../scripts/notifications');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
 
@@ -25,12 +25,15 @@ test('updateNotifications flags away-from-home equipment and clears when returne
   global.records = [
     { station: 'B', equipmentBarcodes: ['E1'], action: 'Check-In' }
   ];
+  rebuildEquipmentCache();
   updateNotifications();
   const notificationDiv = document.getElementById('notifications');
   expect(notificationDiv.textContent).toBe('Equipment Away From Home: E1 (Scanner)');
   expect(notificationDiv.classList.contains('visible')).toBe(true);
 
-  global.records.push({ station: 'A', equipmentBarcodes: ['E1'], action: 'Check-In' });
+  const newRec = { station: 'A', equipmentBarcodes: ['E1'], action: 'Check-In' };
+  global.records.push(newRec);
+  updateEquipmentCache(newRec);
   updateNotifications();
   expect(notificationDiv.textContent).toBe('');
   expect(notificationDiv.classList.contains('visible')).toBe(false);
@@ -42,6 +45,7 @@ test('updateNotifications ignores case differences in station names', () => {
   global.records = [
     { station: 'alpha', equipmentBarcodes: ['E1'], action: 'Check-In' }
   ];
+  rebuildEquipmentCache();
   updateNotifications();
   const notificationDiv = document.getElementById('notifications');
   expect(notificationDiv.textContent).toBe('');

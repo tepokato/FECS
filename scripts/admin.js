@@ -221,6 +221,7 @@ function handleHomeStationUpdate(serial, newHomeStation) {
   };
   recs.push(synthetic);
   saveToStorage('records', recs);
+  if (typeof updateEquipmentCache === 'function') updateEquipmentCache(synthetic);
   if (typeof updateNotifications === 'function') updateNotifications();
 }
 
