@@ -17,12 +17,13 @@ function displayRecords(recArray) {
     container.innerHTML = "<p>No records found.</p>";
     return;
   }
-  let html = "<table><caption>Equipment check-in/out records</caption><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
+  let html = "<table><caption>Equipment check-in/out records</caption><tr><th>Timestamp</th><th>Badge</th><th>Name</th><th>Station</th><th>Equipment Barcodes</th><th>Equipment Names</th><th>Action</th></tr>";
   recArray.forEach(rec => {
     html += `<tr>
           <td>${escapeHtml(rec.timestamp)}</td>
           <td>${escapeHtml(rec.badge)}</td>
           <td>${escapeHtml(rec.employeeName)}</td>
+          <td>${escapeHtml(rec.station ?? '')}</td>
           <td>${escapeHtml((rec.equipmentBarcodes ?? []).join('; '))}</td>
           <td>${escapeHtml((rec.equipmentNames ?? []).join('; '))}</td>
           <td>${escapeHtml(rec.action)}</td>
@@ -73,11 +74,12 @@ function exportRecordsCSV() {
     }
     return;
   }
-  const header = "Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n";
+  const header = "Timestamp,Employee Badge ID,Employee Name,Station,Equipment Barcodes,Equipment Names,Action\n";
   const rows = records.map(rec =>
     `"${csvEscape(rec.timestamp ?? '')}",` +
     `"${csvEscape(rec.badge ?? '')}",` +
     `"${csvEscape(rec.employeeName ?? '')}",` +
+    `"${csvEscape(rec.station ?? '')}",` +
     `"${csvEscape((rec.equipmentBarcodes ?? []).join('; ') ?? '')}",` +
     `"${csvEscape((rec.equipmentNames ?? []).join('; ') ?? '')}",` +
     `"${csvEscape(rec.action ?? '')}"`

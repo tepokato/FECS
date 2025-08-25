@@ -62,8 +62,8 @@ describe('filterRecords', () => {
     win.filterRecords();
     const rows = document.querySelectorAll('#recordsTable table tr');
     expect(rows).toHaveLength(2);
-    expect(rows[1].children[3].textContent).toBe('EQ1');
-    expect(rows[1].children[4].textContent).toBe('Laptop');
+    expect(rows[1].children[4].textContent).toBe('EQ1');
+    expect(rows[1].children[5].textContent).toBe('Laptop');
   });
 
   test('Date filtering returns records with the selected date', () => {

@@ -61,6 +61,7 @@ test('exportRecordsCSV escapes quotes in fields', () => {
   timestamp: '2023-01-01T00:00:00',
   badge: '1',
   employeeName: 'John "JJ" Doe',
+  station: 'AAA',
   equipmentBarcodes: ['EQ1'],
   equipmentNames: ['Hammer "XL"'],
   action: 'Check-Out',
@@ -72,7 +73,7 @@ test('exportRecordsCSV escapes quotes in fields', () => {
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
   const row = csv.split('\n')[1];
-  expect(row).toBe('"2023-01-01T00:00:00","1","John ""JJ"" Doe","EQ1","Hammer ""XL""","Check-Out"');
+  expect(row).toBe('"2023-01-01T00:00:00","1","John ""JJ"" Doe","AAA","EQ1","Hammer ""XL""","Check-Out"');
   spy.mockRestore();
 });
 
@@ -107,6 +108,7 @@ test('exportRecordsCSV escapes newline characters in fields', () => {
     timestamp: '2023-01-01T00:00:00',
     badge: '1',
     employeeName: 'John\r\nDoe',
+    station: 'AAA',
     equipmentBarcodes: ['EQ1'],
     equipmentNames: ['Hammer\r\nXL'],
     action: 'Check-Out',
@@ -117,11 +119,11 @@ test('exportRecordsCSV escapes newline characters in fields', () => {
   win.exportRecordsCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n"2023-01-01T00:00:00","1","John\r\nDoe","EQ1","Hammer\r\nXL","Check-Out"`;
+  const expected = `Timestamp,Employee Badge ID,Employee Name,Station,Equipment Barcodes,Equipment Names,Action\n"2023-01-01T00:00:00","1","John\r\nDoe","AAA","EQ1","Hammer\r\nXL","Check-Out"`;
   expect(csv).toBe(expected);
   const parsed = parseCSV(csv);
   expect(parsed[1][2]).toBe('John\r\nDoe');
-  expect(parsed[1][4]).toBe('Hammer\r\nXL');
+  expect(parsed[1][5]).toBe('Hammer\r\nXL');
   spy.mockRestore();
 });
 
@@ -138,7 +140,7 @@ test('exportRecordsCSV leaves blank cells for missing fields', () => {
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
   const row = csv.split('\n')[1];
-  expect(row).toBe('"2023-01-01T00:00:00","","","","",""');
+  expect(row).toBe('"2023-01-01T00:00:00","","","","","",""');
   spy.mockRestore();
 });
 
