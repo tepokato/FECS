@@ -1,30 +1,39 @@
-function parseCSVLine(line) {
-  if (line.endsWith('\r')) {
-    line = line.slice(0, -1);
-  }
-  const result = [];
+function parseCSV(text) {
+  const rows = [];
   let current = '';
+  let row = [];
   let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
     if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
+      if (inQuotes && text[i + 1] === '"') {
         current += '"';
         i++;
       } else {
         inQuotes = !inQuotes;
       }
     } else if (char === ',' && !inQuotes) {
-      result.push(current);
+      row.push(current);
+      current = '';
+    } else if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (char === '\r' && text[i + 1] === '\n') {
+        i++;
+      }
+      row.push(current);
+      rows.push(row);
+      row = [];
       current = '';
     } else {
       current += char;
     }
   }
-  result.push(current);
-  return result;
+  if (current !== '' || row.length > 0) {
+    row.push(current);
+    rows.push(row);
+  }
+  return rows;
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { parseCSVLine };
+  module.exports = { parseCSV };
 }

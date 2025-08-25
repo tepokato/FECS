@@ -28,10 +28,7 @@ function saveToStorage(key, data) {
 }
 
 function csvEscape(value) {
-  return String(value)
-    .replace(/\r/g, '\\r')
-    .replace(/\n/g, '\\n')
-    .replace(/"/g, '""');
+  return String(value).replace(/"/g, '""');
 }
 
 /* ---------- Notification System ---------- */
@@ -690,13 +687,11 @@ function handleImportEmployees(event) {
   };
   reader.onload = function(e) {
     const text = e.target.result;
-    const lines = text.split("\n");
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].replace(/\r$/, '');
-      if (line.trim() === "") continue;
-      const parts = parseCSVLine(line);
+    const rows = parseCSV(text);
+    for (let i = 1; i < rows.length; i++) {
+      const parts = rows[i];
       if (parts.length < 2) {
-        showError(`Skipping malformed line ${i + 1}: ${line}`);
+        showError(`Skipping malformed line ${i + 1}: ${parts.join(',')}`);
         continue;
       }
       let badge = parts[0].replace(/^"|"$/g, '').trim();
@@ -735,13 +730,11 @@ function handleImportEquipment(event) {
   };
   reader.onload = function(e) {
     const text = e.target.result;
-    const lines = text.split("\n");
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].replace(/\r$/, '');
-      if (line.trim() === "") continue;
-      const parts = parseCSVLine(line);
+    const rows = parseCSV(text);
+    for (let i = 1; i < rows.length; i++) {
+      const parts = rows[i];
       if (parts.length < 2) {
-        showError(`Skipping malformed line ${i + 1}: ${line}`);
+        showError(`Skipping malformed line ${i + 1}: ${parts.join(',')}`);
         continue;
       }
       let serial = parts[0].replace(/^"|"$/g, '').trim();

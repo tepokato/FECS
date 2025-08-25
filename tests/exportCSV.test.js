@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
+const { parseCSV } = require('../scripts/csvParser');
 
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
 const script = fs.readFileSync(path.resolve(__dirname, '../scripts/app.js'), 'utf8');
@@ -74,8 +75,10 @@ test('exportEmployeesCSV escapes newline characters in names', () => {
   win.exportEmployeesCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Badge ID,Employee Name\n"1","John\\r\\nDoe"\n`;
+  const expected = `Badge ID,Employee Name\n"1","John\r\nDoe"\n`;
   expect(csv).toBe(expected);
+  const parsed = parseCSV(csv);
+  expect(parsed[1][1]).toBe('John\r\nDoe');
   spy.mockRestore();
 });
 
@@ -85,8 +88,10 @@ test('exportEquipmentCSV escapes newline characters in names', () => {
   win.exportEquipmentCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer\\r\\nXL"\n`;
+  const expected = `Equipment Serial,Equipment Name\n"EQ1","Hammer\r\nXL"\n`;
   expect(csv).toBe(expected);
+  const parsed = parseCSV(csv);
+  expect(parsed[1][1]).toBe('Hammer\r\nXL');
   spy.mockRestore();
 });
 
@@ -105,8 +110,11 @@ test('exportRecordsCSV escapes newline characters in fields', () => {
   win.exportRecordsCSV();
   const link = spy.mock.calls[0][0];
   const csv = decodeURI(link.href).split('charset=utf-8,')[1];
-  const expected = `Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n"2023-01-01T00:00:00","1","John\\r\\nDoe","EQ1","Hammer\\r\\nXL","Check-Out"`;
+  const expected = `Timestamp,Employee Badge ID,Employee Name,Equipment Barcodes,Equipment Names,Action\n"2023-01-01T00:00:00","1","John\r\nDoe","EQ1","Hammer\r\nXL","Check-Out"`;
   expect(csv).toBe(expected);
+  const parsed = parseCSV(csv);
+  expect(parsed[1][2]).toBe('John\r\nDoe');
+  expect(parsed[1][4]).toBe('Hammer\r\nXL');
   spy.mockRestore();
 });
 
