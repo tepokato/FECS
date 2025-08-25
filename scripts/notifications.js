@@ -75,7 +75,7 @@ function updateNotifications() {
   const overdue = [];
   for (let code in status) {
     if (status[code] > 0) {
-      const name = equipmentItems[code] || "Unknown Equipment";
+      const name = (equipmentItems[code] && equipmentItems[code].name) || "Unknown Equipment";
       overdue.push(`${code} (${name})`);
     }
   }

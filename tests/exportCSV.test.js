@@ -35,7 +35,7 @@ afterEach(() => {
 });
 
 test('exportEmployeesCSV escapes quotes in names', () => {
-  const win = setupDom({ employees: { '1': 'John "JJ" Doe' } });
+  const win = setupDom({ employees: { '1': { name: 'John "JJ" Doe', homeStation: '' } } });
   const spy = jest.spyOn(document.body, 'appendChild');
   win.exportEmployeesCSV();
   const link = spy.mock.calls[0][0];
@@ -46,7 +46,7 @@ test('exportEmployeesCSV escapes quotes in names', () => {
 });
 
 test('exportEquipmentCSV escapes quotes in names', () => {
-  const win = setupDom({ equipmentItems: { 'EQ1': 'Hammer "XL"' } });
+  const win = setupDom({ equipmentItems: { 'EQ1': { name: 'Hammer "XL"', homeStation: '' } } });
   const spy = jest.spyOn(document.body, 'appendChild');
   win.exportEquipmentCSV();
   const link = spy.mock.calls[0][0];
@@ -77,7 +77,7 @@ test('exportRecordsCSV escapes quotes in fields', () => {
 });
 
 test('exportEmployeesCSV escapes newline characters in names', () => {
-  const win = setupDom({ employees: { '1': 'John\r\nDoe' } });
+  const win = setupDom({ employees: { '1': { name: 'John\r\nDoe', homeStation: '' } } });
   const spy = jest.spyOn(document.body, 'appendChild');
   win.exportEmployeesCSV();
   const link = spy.mock.calls[0][0];
@@ -90,7 +90,7 @@ test('exportEmployeesCSV escapes newline characters in names', () => {
 });
 
 test('exportEquipmentCSV escapes newline characters in names', () => {
-  const win = setupDom({ equipmentItems: { 'EQ1': 'Hammer\r\nXL' } });
+  const win = setupDom({ equipmentItems: { 'EQ1': { name: 'Hammer\r\nXL', homeStation: '' } } });
   const spy = jest.spyOn(document.body, 'appendChild');
   win.exportEquipmentCSV();
   const link = spy.mock.calls[0][0];
@@ -145,7 +145,7 @@ test('exportRecordsCSV leaves blank cells for missing fields', () => {
 test('exportEmployeesCSV ignores inherited prototype properties', () => {
   Object.prototype.protoEmployee = 'Prototype';
   try {
-    const win = setupDom({ employees: { '1': 'John Doe' } });
+    const win = setupDom({ employees: { '1': { name: 'John Doe', homeStation: '' } } });
     const spy = jest.spyOn(document.body, 'appendChild');
     win.exportEmployeesCSV();
     const link = spy.mock.calls[0][0];
@@ -161,7 +161,7 @@ test('exportEmployeesCSV ignores inherited prototype properties', () => {
 test('exportEquipmentCSV ignores inherited prototype properties', () => {
   Object.prototype.protoEquipment = 'Prototype';
   try {
-    const win = setupDom({ equipmentItems: { 'EQ1': 'Hammer' } });
+    const win = setupDom({ equipmentItems: { 'EQ1': { name: 'Hammer', homeStation: '' } } });
     const spy = jest.spyOn(document.body, 'appendChild');
     win.exportEquipmentCSV();
     const link = spy.mock.calls[0][0];

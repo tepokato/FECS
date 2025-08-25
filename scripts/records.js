@@ -94,8 +94,8 @@ function exportRecordsCSV() {
 function exportEmployeesCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
   csvContent += "Badge ID,Employee Name\n";
-  Object.entries(employees).forEach(([badge, name]) => {
-    csvContent += `"${csvEscape(badge)}","${csvEscape(name)}"\n`;
+  Object.entries(employees).forEach(([badge, info]) => {
+    csvContent += `"${csvEscape(badge)}","${csvEscape(info.name)}"\n`;
   });
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
@@ -108,8 +108,8 @@ function exportEmployeesCSV() {
 function exportEquipmentCSV() {
   let csvContent = "data:text/csv;charset=utf-8,";
   csvContent += "Equipment Serial,Equipment Name\n";
-  Object.entries(equipmentItems).forEach(([serial, name]) => {
-    csvContent += `"${csvEscape(serial)}","${csvEscape(name)}"\n`;
+  Object.entries(equipmentItems).forEach(([serial, info]) => {
+    csvContent += `"${csvEscape(serial)}","${csvEscape(info.name)}"\n`;
   });
   const link = document.createElement("a");
   link.href = encodeURI(csvContent);
@@ -177,7 +177,7 @@ function handleImportEmployees(event) {
             continue;
           }
         }
-        employees[badge] = name;
+        employees[badge] = { name, homeStation: '' };
       }
     }
     saveToStorage("employees", employees);
@@ -236,7 +236,7 @@ function handleImportEquipment(event) {
             continue;
           }
         }
-        equipmentItems[serial] = name;
+        equipmentItems[serial] = { name, homeStation: '' };
       }
     }
     saveToStorage("equipmentItems", equipmentItems);

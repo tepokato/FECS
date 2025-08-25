@@ -42,7 +42,7 @@ test('handleImportEmployees skips malformed lines', () => {
   const event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,John\n456' } ], value: '' } };
   win.handleImportEmployees(event);
   const stored = JSON.parse(localStorage.getItem('employees'));
-  expect(stored).toEqual({ '123': 'John' });
+  expect(stored).toEqual({ '123': { name: 'John', homeStation: '' } });
   expect(win.showError).toHaveBeenCalledWith(expect.stringContaining('line 3'));
 });
 
@@ -60,7 +60,7 @@ test('handleImportEquipment skips malformed lines', () => {
   const event = { target: { files: [ { text: 'Equipment Serial,Equipment Name\nEQ1,Hammer\nEQ2' } ], value: '' } };
   win.handleImportEquipment(event);
   const stored = JSON.parse(localStorage.getItem('equipmentItems'));
-  expect(stored).toEqual({ 'EQ1': 'Hammer' });
+  expect(stored).toEqual({ 'EQ1': { name: 'Hammer', homeStation: '' } });
   expect(win.showError).toHaveBeenCalledWith(expect.stringContaining('line 3'));
 });
 
@@ -79,7 +79,7 @@ test('handleImportEmployees imports values with surrounding spaces', () => {
   const event = { target: { files: [ { text: csv } ], value: '' } };
   win.handleImportEmployees(event);
   const stored = JSON.parse(localStorage.getItem('employees'));
-  expect(stored).toEqual({ '123': 'John Doe' });
+  expect(stored).toEqual({ '123': { name: 'John Doe', homeStation: '' } });
 });
 
 test('handleImportEquipment imports values with surrounding spaces', () => {
@@ -97,7 +97,7 @@ test('handleImportEquipment imports values with surrounding spaces', () => {
   const event = { target: { files: [ { text: csv } ], value: '' } };
   win.handleImportEquipment(event);
   const stored = JSON.parse(localStorage.getItem('equipmentItems'));
-  expect(stored).toEqual({ 'EQ1': 'Hammer' });
+  expect(stored).toEqual({ 'EQ1': { name: 'Hammer', homeStation: '' } });
 });
 
 test('handleImportEmployees surfaces read errors', () => {
@@ -178,7 +178,7 @@ test('handleImportEmployees prompts before overwriting existing IDs', () => {
   win.handleImportEmployees(event);
   expect(win.confirm).toHaveBeenCalledWith(expect.stringContaining('123'));
   const stored = JSON.parse(localStorage.getItem('employees'));
-  expect(stored).toEqual({ '123': 'Original' });
+  expect(stored).toEqual({ '123': { name: 'Original', homeStation: '' } });
 });
 
 test('handleImportEquipment prompts before overwriting existing IDs', () => {
@@ -199,7 +199,7 @@ test('handleImportEquipment prompts before overwriting existing IDs', () => {
   win.handleImportEquipment(event);
   expect(win.confirm).toHaveBeenCalledWith(expect.stringContaining('EQ1'));
   const stored = JSON.parse(localStorage.getItem('equipmentItems'));
-  expect(stored).toEqual({ 'EQ1': 'Hammer' });
+  expect(stored).toEqual({ 'EQ1': { name: 'Hammer', homeStation: '' } });
 });
 
 test('setLoading restores nested button HTML', () => {

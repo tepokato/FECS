@@ -1,6 +1,17 @@
 /* ---------- Initialization ---------- */
 let employees = loadFromStorage('employees', {});
 let equipmentItems = loadFromStorage('equipmentItems', {});
+// Migrate any legacy string entries to objects
+for (const [badge, data] of Object.entries(employees)) {
+  if (typeof data === 'string') {
+    employees[badge] = { name: data, homeStation: '' };
+  }
+}
+for (const [serial, data] of Object.entries(equipmentItems)) {
+  if (typeof data === 'string') {
+    equipmentItems[serial] = { name: data, homeStation: '' };
+  }
+}
 let records = loadFromStorage('records', []);
 let equipmentIdCounter = 1;
 
@@ -119,7 +130,7 @@ function lookupEmployee() {
     return;
   }
   if (employees[badge]) {
-    nameDisplay.textContent = employees[badge];
+    nameDisplay.textContent = employees[badge].name;
   } else {
     nameDisplay.textContent = 'Unknown employee';
   }
@@ -147,7 +158,7 @@ function lookupEquipment(event) {
     return;
   }
   if (equipmentItems[code]) {
-    nameDisplay.textContent = equipmentItems[code];
+    nameDisplay.textContent = equipmentItems[code].name;
     input.disabled = true;
   } else {
     nameDisplay.textContent = 'Unknown equipment';
@@ -184,14 +195,14 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
     const code = input.value.trim();
     if (code) {
       equipmentBarcodes.push(code);
-      equipmentNamesList.push(equipmentItems[code] || 'Unknown equipment');
+      equipmentNamesList.push((equipmentItems[code] && equipmentItems[code].name) || 'Unknown equipment');
     }
   });
   const record = {
     timestamp: new Date().toISOString(),
     recordDate: new Date().toISOString().substring(0,10),
     badge: badge,
-    employeeName: employees[badge] || 'Unknown employee',
+    employeeName: (employees[badge] && employees[badge].name) || 'Unknown employee',
     equipmentBarcodes: equipmentBarcodes,
     equipmentNames: equipmentNamesList,
     action: action
@@ -243,7 +254,7 @@ document.getElementById('equipmentAdminForm').addEventListener('submit', (e) => 
   addEquipmentAdmin();
 });
 
-['empName','empBadge','equipName','equipSerial'].forEach(id => {
+['empName','empBadge','empStation','equipName','equipSerial','equipStation'].forEach(id => {
   const el = document.getElementById(id);
   if (el) {
     el.addEventListener('input', () => clearFieldError(el));
