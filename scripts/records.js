@@ -254,6 +254,21 @@ function handleImportEquipment(event) {
   reader.readAsText(file);
 }
 
+if (typeof document !== 'undefined') {
+  const recordDateBtn = document.getElementById('recordDateBtn');
+  if (recordDateBtn) {
+    recordDateBtn.addEventListener('click', () => {
+      const dateInput = document.getElementById('recordDate');
+      if (!dateInput) return;
+      if (typeof dateInput.showPicker === 'function') {
+        dateInput.showPicker();
+      } else {
+        dateInput.focus();
+      }
+    });
+  }
+}
+
 const recordsModule = {
   csvEscape,
   escapeHtml,
