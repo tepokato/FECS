@@ -160,6 +160,48 @@ test('handleImportEquipment restores button after failure', () => {
   expect(win.showError).toHaveBeenCalled();
 });
 
+test('handleImportEmployees prompts before overwriting existing IDs', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEmployeeList = jest.fn();
+  win.confirm = jest.fn().mockReturnValue(false);
+  class MockFileReader {
+    readAsText(file) {
+      this.onload && this.onload({ target: { result: file.text } });
+    }
+  }
+  win.FileReader = MockFileReader;
+  let event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,Original' } ], value: '' } };
+  win.handleImportEmployees(event);
+  event = { target: { files: [ { text: 'Badge ID,Employee Name\n123,Updated' } ], value: '' } };
+  win.handleImportEmployees(event);
+  expect(win.confirm).toHaveBeenCalledWith(expect.stringContaining('123'));
+  const stored = JSON.parse(localStorage.getItem('employees'));
+  expect(stored).toEqual({ '123': 'Original' });
+});
+
+test('handleImportEquipment prompts before overwriting existing IDs', () => {
+  const win = setupDom();
+  win.showError = jest.fn();
+  win.showSuccess = jest.fn();
+  win.displayEquipmentListAdmin = jest.fn();
+  win.confirm = jest.fn().mockReturnValue(false);
+  class MockFileReader {
+    readAsText(file) {
+      this.onload && this.onload({ target: { result: file.text } });
+    }
+  }
+  win.FileReader = MockFileReader;
+  let event = { target: { files: [ { text: 'Equipment Serial,Equipment Name\nEQ1,Hammer' } ], value: '' } };
+  win.handleImportEquipment(event);
+  event = { target: { files: [ { text: 'Equipment Serial,Equipment Name\nEQ1,Sledge' } ], value: '' } };
+  win.handleImportEquipment(event);
+  expect(win.confirm).toHaveBeenCalledWith(expect.stringContaining('EQ1'));
+  const stored = JSON.parse(localStorage.getItem('equipmentItems'));
+  expect(stored).toEqual({ 'EQ1': 'Hammer' });
+});
+
 test('setLoading restores nested button HTML', () => {
   const win = setupDom();
   const button = win.document.createElement('button');
