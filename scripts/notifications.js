@@ -5,6 +5,10 @@ let tempNotificationActive = false;
 // lastStation: last known station from records
 let equipmentStatusCache = {};
 
+/**
+ * Update the equipment status cache with a single record entry.
+ * @param {Object} record
+ */
 function updateEquipmentCache(record) {
   if (!record || !Array.isArray(record.equipmentBarcodes)) return;
   record.equipmentBarcodes.forEach(code => {
@@ -23,12 +27,18 @@ function updateEquipmentCache(record) {
   });
 }
 
+/**
+ * Rebuild the entire equipment status cache from stored records.
+ */
 function rebuildEquipmentCache() {
   equipmentStatusCache = {};
   const recs = (typeof records !== 'undefined' && Array.isArray(records)) ? records : [];
   recs.forEach(updateEquipmentCache);
 }
 
+/**
+ * Clear the current notification and recalculate status messages.
+ */
 function clearNotification() {
   const notificationDiv = document.getElementById('notifications');
   notificationDiv.classList.remove('visible');
@@ -38,6 +48,12 @@ function clearNotification() {
   updateNotifications();
 }
 
+/**
+ * Display a notification message for a limited duration.
+ * @param {string} message
+ * @param {string} type
+ * @param {number} delay
+ */
 function showNotification(message, type, delay = 3000) {
   const notificationDiv = document.getElementById('notifications');
   if (notificationTimer) {
@@ -56,14 +72,29 @@ function showNotification(message, type, delay = 3000) {
   }
 }
 
+/**
+ * Convenience helper for success notifications.
+ * @param {string} message
+ * @param {number} delay
+ */
 function showSuccess(message, delay) {
   showNotification(message, 'success', delay);
 }
 
+/**
+ * Convenience helper for error notifications.
+ * @param {string} message
+ * @param {number} delay
+ */
 function showError(message, delay) {
   showNotification(message, 'error', delay);
 }
 
+/**
+ * Mark a form input as invalid and display an inline error message.
+ * @param {HTMLElement} input
+ * @param {string} message
+ */
 function setFieldError(input, message) {
   const errorSpan = input.parentElement.querySelector('.error-message');
   if (errorSpan) {
@@ -73,6 +104,10 @@ function setFieldError(input, message) {
   input.setAttribute('aria-invalid', 'true');
 }
 
+/**
+ * Clear validation styling and messages for a form input.
+ * @param {HTMLElement} input
+ */
 function clearFieldError(input) {
   const errorSpan = input.parentElement.querySelector('.error-message');
   if (errorSpan) {
@@ -82,6 +117,9 @@ function clearFieldError(input) {
   input.removeAttribute('aria-invalid');
 }
 
+/**
+ * Compute and display overdue/away equipment notifications.
+ */
 function updateNotifications() {
   if (tempNotificationActive) return;
 
