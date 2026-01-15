@@ -27,6 +27,10 @@ const actionBtn = document.getElementById('actionBtn');
 const actionMenu = document.getElementById('actionMenu');
 
 /* ---------- Navigation ---------- */
+/**
+ * Show the requested section and update navigation state.
+ * @param {string} section
+ */
 function showSection(section) {
   // Hide all sections
   document.querySelectorAll('.section').forEach(el => el.classList.add('hidden'));
@@ -54,6 +58,9 @@ function showSection(section) {
 }
 
 /* ---------- Check-Out Functions ---------- */
+/**
+ * Add a new equipment input row to the checkout form.
+ */
 function addEquipmentField() {
   const equipmentList = document.getElementById('equipmentList');
   const container = document.createElement('div');
@@ -95,6 +102,10 @@ function addEquipmentField() {
   updateRemoveButtons();
 }
 
+/**
+ * Remove an equipment input row and keep at least one available.
+ * @param {HTMLButtonElement} button
+ */
 function removeEquipmentField(button) {
   const equipmentList = document.getElementById('equipmentList');
   if (equipmentList.children.length > 1) {
@@ -107,6 +118,9 @@ function removeEquipmentField(button) {
   }
 }
 
+/**
+ * Toggle remove buttons based on whether an input is locked.
+ */
 function updateRemoveButtons() {
   const equipmentItems = document.querySelectorAll('#equipmentList .equipment-item');
   equipmentItems.forEach(item => {
@@ -120,6 +134,9 @@ function updateRemoveButtons() {
   });
 }
 
+/**
+ * Look up an employee name for the entered badge and display it inline.
+ */
 function lookupEmployee() {
   const badgeInput = document.getElementById('badge');
   const badge = badgeInput.value.trim();
@@ -136,6 +153,10 @@ function lookupEmployee() {
   }
 }
 
+/**
+ * Validate equipment barcode input and lock completed fields.
+ * @param {Event} event
+ */
 function lookupEquipment(event) {
   const input = event.target;
   const code = input.value.trim();
@@ -265,6 +286,12 @@ document.getElementById('equipmentAdminForm').addEventListener('submit', (e) => 
   }
 });
 
+/**
+ * Configure an accessible dropdown menu tied to a button.
+ * @param {HTMLButtonElement} button
+ * @param {HTMLElement} menu
+ * @param {(value: string, text: string) => void} onSelect
+ */
 function setupDropdown(button, menu, onSelect) {
   const items = Array.from(menu.querySelectorAll('button'));
   items.forEach((item, idx) => {

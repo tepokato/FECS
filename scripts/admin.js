@@ -1,3 +1,8 @@
+/**
+ * Render the employee list with pagination and filtering.
+ * @param {number} page
+ * @param {string} filter
+ */
 function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   filter = (filter || '').toLowerCase();
   const list = document.getElementById('employeeList');
@@ -52,6 +57,9 @@ function displayEmployeeList(page = employeePage, filter = employeeFilter) {
   if (pageIndicator) pageIndicator.textContent = `Page ${page + 1} of ${totalPages}`;
 }
 
+/**
+ * Add a new employee based on the admin form inputs.
+ */
 function addEmployee() {
   const nameInput = document.getElementById('empName');
   const badgeInput = document.getElementById('empBadge');
@@ -91,6 +99,10 @@ function addEmployee() {
   clearFieldError(stationInput);
 }
 
+/**
+ * Remove an employee after confirming intent.
+ * @param {string} badge
+ */
 function removeEmployee(badge) {
   if (!badge || !employees[badge]) {
     showError('Invalid badge ID or employee not found!');
@@ -106,6 +118,11 @@ function removeEmployee(badge) {
   displayEmployeeList();
 }
 
+/**
+ * Render the equipment list with pagination and filtering.
+ * @param {number} page
+ * @param {string} filter
+ */
 function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilter) {
   filter = (filter || '').toLowerCase();
   const list = document.getElementById('equipmentListAdmin');
@@ -160,6 +177,9 @@ function displayEquipmentListAdmin(page = equipmentPage, filter = equipmentFilte
   if (pageIndicator) pageIndicator.textContent = `Page ${page + 1} of ${totalPages}`;
 }
 
+/**
+ * Add a new equipment item based on the admin form inputs.
+ */
 function addEquipmentAdmin() {
   const nameInput = document.getElementById('equipName');
   const serialInput = document.getElementById('equipSerial');
@@ -199,6 +219,11 @@ function addEquipmentAdmin() {
   clearFieldError(stationInput);
 }
 
+/**
+ * Record a synthetic check-in when home station changes to keep records consistent.
+ * @param {string} serial
+ * @param {string} newHomeStation
+ */
 function handleHomeStationUpdate(serial, newHomeStation) {
   const recs = (typeof records !== 'undefined' && Array.isArray(records)) ? records : (records = []);
   const related = recs.filter(r => Array.isArray(r.equipmentBarcodes) && r.equipmentBarcodes.includes(serial));
@@ -225,6 +250,11 @@ function handleHomeStationUpdate(serial, newHomeStation) {
   if (typeof updateNotifications === 'function') updateNotifications();
 }
 
+/**
+ * Update the home station for an equipment item and sync records.
+ * @param {string} serial
+ * @param {string} newHomeStation
+ */
 function updateEquipmentHomeStation(serial, newHomeStation) {
   if (!serial || !equipmentItems[serial]) {
     showError('Invalid equipment serial or equipment not found!');
@@ -236,6 +266,10 @@ function updateEquipmentHomeStation(serial, newHomeStation) {
   if (typeof displayEquipmentListAdmin === 'function') displayEquipmentListAdmin();
 }
 
+/**
+ * Remove an equipment item after confirming intent.
+ * @param {string} serial
+ */
 function removeEquipmentAdmin(serial) {
   if (!serial || !equipmentItems[serial]) {
     showError('Invalid equipment serial or equipment not found!');

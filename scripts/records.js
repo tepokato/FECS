@@ -1,7 +1,17 @@
+/**
+ * Escape CSV fields by doubling quotes so the values remain well-formed.
+ * @param {string} value
+ * @returns {string}
+ */
 function csvEscape(value) {
   return String(value).replace(/"/g, '""');
 }
 
+/**
+ * Escape HTML output to prevent injection into the records table.
+ * @param {string} str
+ * @returns {string}
+ */
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -11,6 +21,26 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+/**
+ * Build a CSV data URI and trigger a download for the provided rows.
+ * @param {string} filename
+ * @param {string} header
+ * @param {string[]} rows
+ */
+function triggerCsvDownload(filename, header, rows) {
+  const csvContent = 'data:text/csv;charset=utf-8,' + header + rows.join("\n");
+  const link = document.createElement('a');
+  link.href = encodeURI(csvContent);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/**
+ * Render the records table for the supplied record array.
+ * @param {Array} recArray
+ */
 function displayRecords(recArray) {
   const container = document.getElementById('recordsTable');
   if (!recArray.length) {
@@ -33,6 +63,9 @@ function displayRecords(recArray) {
   container.innerHTML = html;
 }
 
+/**
+ * Filter records based on search inputs and render the results.
+ */
 function filterRecords() {
   const search = document.getElementById('recordSearch').value.trim().toLowerCase();
   const equipSearch = document.getElementById('recordEquipment').value.trim().toLowerCase();
@@ -60,6 +93,9 @@ function filterRecords() {
   displayRecords(filtered);
 }
 
+/**
+ * Clear record filters and show all records.
+ */
 function clearFilters() {
   document.getElementById('recordSearch').value = "";
   document.getElementById('recordEquipment').value = "";
@@ -67,6 +103,9 @@ function clearFilters() {
   displayRecords(records);
 }
 
+/**
+ * Export all records to a CSV download.
+ */
 function exportRecordsCSV() {
   if (!records.length) {
     if (typeof showError === 'function') {
@@ -84,47 +123,44 @@ function exportRecordsCSV() {
     `"${csvEscape((rec.equipmentNames ?? []).join('; ') ?? '')}",` +
     `"${csvEscape(rec.action ?? '')}"`
   );
-  const csvContent = 'data:text/csv;charset=utf-8,' + header + rows.join("\n");
-  const link = document.createElement('a');
-  link.href = encodeURI(csvContent);
-  link.download = `Records_${new Date().toISOString().substring(0,10)}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  triggerCsvDownload(`Records_${new Date().toISOString().substring(0,10)}.csv`, header, rows);
 }
 
+/**
+ * Export employees to a CSV download.
+ */
 function exportEmployeesCSV() {
-  let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Badge ID,Employee Name,Home Station\n";
-  Object.entries(employees).forEach(([badge, info]) => {
-    csvContent += `"${csvEscape(badge)}","${csvEscape(info.name)}","${csvEscape(info.homeStation ?? '')}"\n`;
-  });
-  const link = document.createElement("a");
-  link.href = encodeURI(csvContent);
-  link.download = "employees.csv";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const header = "Badge ID,Employee Name,Home Station\n";
+  const rows = Object.entries(employees).map(([badge, info]) =>
+    `"${csvEscape(badge)}","${csvEscape(info.name)}","${csvEscape(info.homeStation ?? '')}"`
+  );
+  triggerCsvDownload("employees.csv", header, rows);
 }
 
+/**
+ * Export equipment list to a CSV download.
+ */
 function exportEquipmentCSV() {
-  let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Equipment Serial,Equipment Name,Home Station\n";
-  Object.entries(equipmentItems).forEach(([serial, info]) => {
-    csvContent += `"${csvEscape(serial)}","${csvEscape(info.name)}","${csvEscape(info.homeStation ?? '')}"\n`;
-  });
-  const link = document.createElement("a");
-  link.href = encodeURI(csvContent);
-  link.download = "equipment.csv";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const header = "Equipment Serial,Equipment Name,Home Station\n";
+  const rows = Object.entries(equipmentItems).map(([serial, info]) =>
+    `"${csvEscape(serial)}","${csvEscape(info.name)}","${csvEscape(info.homeStation ?? '')}"`
+  );
+  triggerCsvDownload("equipment.csv", header, rows);
 }
 
+/**
+ * Open the hidden file input for employee CSV imports.
+ */
 function triggerImportEmployees() {
   document.getElementById("importEmployeesFile").click();
 }
 
+/**
+ * Toggle a loading state on import buttons to prevent double actions.
+ * @param {HTMLButtonElement} button
+ * @param {boolean} loading
+ * @param {string} text
+ */
 function setLoading(button, loading, text = 'Importing...') {
   if (!button) return;
   if (loading) {
@@ -140,6 +176,10 @@ function setLoading(button, loading, text = 'Importing...') {
   }
 }
 
+/**
+ * Parse and apply employee CSV data from an uploaded file.
+ * @param {Event} event
+ */
 function handleImportEmployees(event) {
   const input = event.target;
   const button = document.getElementById('importEmployeesAction');
@@ -196,10 +236,17 @@ function handleImportEmployees(event) {
   reader.readAsText(file);
 }
 
+/**
+ * Open the hidden file input for equipment CSV imports.
+ */
 function triggerImportEquipment() {
   document.getElementById("importEquipmentFile").click();
 }
 
+/**
+ * Parse and apply equipment CSV data from an uploaded file.
+ * @param {Event} event
+ */
 function handleImportEquipment(event) {
   const input = event.target;
   const button = document.getElementById('importEquipmentAction');
@@ -256,6 +303,9 @@ function handleImportEquipment(event) {
   reader.readAsText(file);
 }
 
+/**
+ * Wire up the record date picker button if the element exists.
+ */
 if (typeof document !== 'undefined') {
   const recordDateBtn = document.getElementById('recordDateBtn');
   if (recordDateBtn) {

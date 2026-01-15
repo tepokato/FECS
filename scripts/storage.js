@@ -1,3 +1,9 @@
+/**
+ * Load JSON data from localStorage with a fallback if missing or invalid.
+ * @param {string} key
+ * @param {any} fallback
+ * @returns {any}
+ */
 function loadFromStorage(key, fallback) {
   const item = localStorage.getItem(key);
   if (!item) return fallback;
@@ -15,6 +21,11 @@ function loadFromStorage(key, fallback) {
   }
 }
 
+/**
+ * Persist JSON-serializable data to localStorage.
+ * @param {string} key
+ * @param {any} data
+ */
 function saveToStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }

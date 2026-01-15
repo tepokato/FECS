@@ -1,3 +1,8 @@
+/**
+ * Parse CSV text into an array of rows while handling quoted values.
+ * @param {string} text
+ * @returns {string[][]}
+ */
 function parseCSV(text) {
   const rows = [];
   let current = '';
