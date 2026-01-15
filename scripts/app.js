@@ -372,3 +372,5 @@ setupDropdown(actionBtn, actionMenu, (value, text) => {
   document.getElementById('action').value = value;
   actionBtn.textContent = text;
 });
+
+showSection('checkout');
